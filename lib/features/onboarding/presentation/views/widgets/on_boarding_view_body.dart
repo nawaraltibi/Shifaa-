@@ -1,7 +1,9 @@
 // on_boarding_view_body.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shifaa/core/utils/app_images.dart';
+import 'package:shifaa/features/auth/presentation/views/signup_view.dart';
 import 'package:shifaa/features/onboarding/presentation/views/widgets/on_boarding_page_view_item.dart';
 import 'package:shifaa/features/onboarding/presentation/views/widgets/page_view_animated_button.dart';
 import 'package:shifaa/generated/l10n.dart';
@@ -35,14 +37,14 @@ class _OnBoardingViewBodyState extends State<OnBoardingViewBody> {
     ),
   ];
 
-  void _nextPage() {
+  void _nextPage(BuildContext context) {
     if (_currentPage < onboardingPages.length - 1) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
     } else {
-      // Navigate to next screen
+      context.goNamed(SignupView.routeName);
     }
   }
 
@@ -55,7 +57,7 @@ class _OnBoardingViewBodyState extends State<OnBoardingViewBody> {
         PageViewAnimatedButton(
           currentPage: _currentPage,
           totalPages: 3,
-          onPressed: _nextPage,
+          onPressed: () => _nextPage(context),
         ),
         SizedBox(height: 70.h),
       ],

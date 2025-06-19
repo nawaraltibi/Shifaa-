@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shifaa/core/utils/app_text_styles.dart';
 
 class OnBoardingData {
@@ -28,7 +27,7 @@ class OnBoardingPageViewItem extends StatelessWidget {
         children: [
           Expanded(child: Image.asset(data.image)),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 40.w),
+            padding: const EdgeInsets.symmetric(horizontal: 40),
             child: Text(
               data.title(context),
               style: AppTextStyles.semiBold22,
@@ -37,7 +36,7 @@ class OnBoardingPageViewItem extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Text(
               data.subtitle(context),
               style: AppTextStyles.regular18.copyWith(
@@ -46,7 +45,7 @@ class OnBoardingPageViewItem extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
           ),
-          SizedBox(height: 55.h),
+          const SizedBox(height: 55),
         ],
       ),
     );

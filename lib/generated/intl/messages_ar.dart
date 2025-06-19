@@ -22,6 +22,14 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "Shifaa": MessageLookupByLibrary.simpleMessage("شفاء!"),
+        "firstName": MessageLookupByLibrary.simpleMessage("الاسم الأول"),
+        "forgotPassword":
+            MessageLookupByLibrary.simpleMessage("هل نسيت كلمة المرور؟"),
+        "haveAnAccount":
+            MessageLookupByLibrary.simpleMessage("هل لديك حساب بالفعل؟"),
+        "lastName": MessageLookupByLibrary.simpleMessage("اسم العائلة"),
+        "login": MessageLookupByLibrary.simpleMessage("تسجيل الدخول"),
         "onBoardingSubtitle1": MessageLookupByLibrary.simpleMessage(
             "احجز المواعيد، استعرض السجلات، وتابع صحتك في تطبيق واحد."),
         "onBoardingSubtitle2": MessageLookupByLibrary.simpleMessage(
@@ -33,6 +41,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "onBoardingTitle2":
             MessageLookupByLibrary.simpleMessage("تواصل مع أطباء موثوقين"),
         "onBoardingTitle3":
-            MessageLookupByLibrary.simpleMessage("صحتك، بين يديك")
+            MessageLookupByLibrary.simpleMessage("صحتك، بين يديك"),
+        "password": MessageLookupByLibrary.simpleMessage("كلمة المرور"),
+        "phoneNumber": MessageLookupByLibrary.simpleMessage("رقم الهاتف"),
+        "pleaseEnterFirstName":
+            MessageLookupByLibrary.simpleMessage("يرجى إدخال الاسم الأول"),
+        "pleaseEnterLastName":
+            MessageLookupByLibrary.simpleMessage("يرجى إدخال اسم العائلة"),
+        "pleaseEnterPhone":
+            MessageLookupByLibrary.simpleMessage("يرجى إدخال رقم الهاتف"),
+        "signup": MessageLookupByLibrary.simpleMessage("إنشاء حساب"),
+        "welcome": MessageLookupByLibrary.simpleMessage("مرحباً بك في")
       };
 }

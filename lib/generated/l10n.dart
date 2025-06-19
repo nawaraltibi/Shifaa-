@@ -109,6 +109,136 @@ class S {
       args: [],
     );
   }
+
+  /// `Welcome to`
+  String get welcome {
+    return Intl.message(
+      'Welcome to',
+      name: 'welcome',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Shifaa!`
+  String get Shifaa {
+    return Intl.message(
+      'Shifaa!',
+      name: 'Shifaa',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `First Name`
+  String get firstName {
+    return Intl.message(
+      'First Name',
+      name: 'firstName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Last Name`
+  String get lastName {
+    return Intl.message(
+      'Last Name',
+      name: 'lastName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password`
+  String get password {
+    return Intl.message(
+      'Password',
+      name: 'password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sign up`
+  String get signup {
+    return Intl.message(
+      'Sign up',
+      name: 'signup',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Login`
+  String get login {
+    return Intl.message(
+      'Login',
+      name: 'login',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Forgot password?`
+  String get forgotPassword {
+    return Intl.message(
+      'Forgot password?',
+      name: 'forgotPassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Phone Number`
+  String get phoneNumber {
+    return Intl.message(
+      'Phone Number',
+      name: 'phoneNumber',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Already have an account? `
+  String get haveAnAccount {
+    return Intl.message(
+      'Already have an account? ',
+      name: 'haveAnAccount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter your first name`
+  String get pleaseEnterFirstName {
+    return Intl.message(
+      'Please enter your first name',
+      name: 'pleaseEnterFirstName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter your last name`
+  String get pleaseEnterLastName {
+    return Intl.message(
+      'Please enter your last name',
+      name: 'pleaseEnterLastName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter your phone number`
+  String get pleaseEnterPhone {
+    return Intl.message(
+      'Please enter your phone number',
+      name: 'pleaseEnterPhone',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

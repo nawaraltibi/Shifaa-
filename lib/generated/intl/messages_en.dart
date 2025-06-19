@@ -22,6 +22,14 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "Shifaa": MessageLookupByLibrary.simpleMessage("Shifaa!"),
+        "firstName": MessageLookupByLibrary.simpleMessage("First Name"),
+        "forgotPassword":
+            MessageLookupByLibrary.simpleMessage("Forgot password?"),
+        "haveAnAccount":
+            MessageLookupByLibrary.simpleMessage("Already have an account? "),
+        "lastName": MessageLookupByLibrary.simpleMessage("Last Name"),
+        "login": MessageLookupByLibrary.simpleMessage("Login"),
         "onBoardingSubtitle1": MessageLookupByLibrary.simpleMessage(
             "Book appointments, view records, and track your health all in one app."),
         "onBoardingSubtitle2": MessageLookupByLibrary.simpleMessage(
@@ -33,6 +41,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "onBoardingTitle2": MessageLookupByLibrary.simpleMessage(
             "Connect With Trusted Doctors"),
         "onBoardingTitle3":
-            MessageLookupByLibrary.simpleMessage("Your Health, Your Control")
+            MessageLookupByLibrary.simpleMessage("Your Health, Your Control"),
+        "password": MessageLookupByLibrary.simpleMessage("Password"),
+        "phoneNumber": MessageLookupByLibrary.simpleMessage("Phone Number"),
+        "pleaseEnterFirstName": MessageLookupByLibrary.simpleMessage(
+            "Please enter your first name"),
+        "pleaseEnterLastName":
+            MessageLookupByLibrary.simpleMessage("Please enter your last name"),
+        "pleaseEnterPhone": MessageLookupByLibrary.simpleMessage(
+            "Please enter your phone number"),
+        "signup": MessageLookupByLibrary.simpleMessage("Sign up"),
+        "welcome": MessageLookupByLibrary.simpleMessage("Welcome to")
       };
 }

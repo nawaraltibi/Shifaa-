@@ -38,7 +38,7 @@ class Shifaa extends StatelessWidget {
             GlobalCupertinoLocalizations.delegate,
           ],
           supportedLocales: S.delegate.supportedLocales,
-          locale: const Locale('en', 'US'),
+          locale: const Locale('en'),
         );
       },
     );

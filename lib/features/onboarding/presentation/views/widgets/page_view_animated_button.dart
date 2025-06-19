@@ -26,7 +26,7 @@ class PageViewAnimatedButton extends StatelessWidget {
           alignment: Alignment.center,
           children: [
             SizedBox(
-              width: 67, // كبرنا الدائرة شوي
+              width: 67,
               height: 67,
               child: CustomPaint(
                 painter: _DashedCirclePainter(
@@ -34,7 +34,7 @@ class PageViewAnimatedButton extends StatelessWidget {
                   strokeWidth: 3,
                   color: Colors.green,
                   dashCount: totalPages,
-                  gapRatio: 0.2, // قللنا الفراغ بين الخطوط
+                  gapRatio: 0.2,
                 ),
               ),
             ),
@@ -63,7 +63,7 @@ class _DashedCirclePainter extends CustomPainter {
   final double strokeWidth;
   final Color color;
   final int dashCount;
-  final double gapRatio; // نسبة الفراغ بين الخطوط (0-1)
+  final double gapRatio;
 
   _DashedCirclePainter({
     required this.progress,
@@ -97,11 +97,10 @@ class _DashedCirclePainter extends CustomPainter {
       double dashProgress;
 
       if (progress >= endProgress) {
-        dashProgress = 1.0; // هذا الخط كامل
+        dashProgress = 1.0;
       } else if (progress <= startProgress) {
-        dashProgress = 0.0; // هذا الخط ما نرسمه
+        dashProgress = 0.0;
       } else {
-        // نرسم الجزء اللي تم إنجازه من هذا الخط
         dashProgress = (progress - startProgress) * dashCount;
         dashProgress = dashProgress.clamp(0.0, 1.0);
       }
