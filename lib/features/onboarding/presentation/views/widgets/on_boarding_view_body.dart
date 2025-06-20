@@ -1,9 +1,8 @@
-// on_boarding_view_body.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shifaa/core/utils/app_images.dart';
-import 'package:shifaa/features/auth/presentation/views/signup_view.dart';
+import 'package:shifaa/features/auth/presentation/views/login_view.dart';
 import 'package:shifaa/features/onboarding/presentation/views/widgets/on_boarding_page_view_item.dart';
 import 'package:shifaa/features/onboarding/presentation/views/widgets/page_view_animated_button.dart';
 import 'package:shifaa/generated/l10n.dart';
@@ -44,7 +43,7 @@ class _OnBoardingViewBodyState extends State<OnBoardingViewBody> {
         curve: Curves.easeInOut,
       );
     } else {
-      context.goNamed(SignupView.routeName);
+      context.goNamed(LoginView.routeName);
     }
   }
 
@@ -56,7 +55,7 @@ class _OnBoardingViewBodyState extends State<OnBoardingViewBody> {
         const SizedBox(height: 16),
         PageViewAnimatedButton(
           currentPage: _currentPage,
-          totalPages: 3,
+          totalPages: onboardingPages.length,
           onPressed: () => _nextPage(context),
         ),
         SizedBox(height: 70.h),
@@ -68,11 +67,7 @@ class _OnBoardingViewBodyState extends State<OnBoardingViewBody> {
     return Expanded(
       child: PageView.builder(
         controller: _pageController,
-        onPageChanged: (index) {
-          setState(() {
-            _currentPage = index;
-          });
-        },
+        onPageChanged: (index) => setState(() => _currentPage = index),
         itemCount: onboardingPages.length,
         itemBuilder: (context, index) {
           return OnBoardingPageViewItem(data: onboardingPages[index]);

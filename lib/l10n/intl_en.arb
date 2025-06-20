@@ -20,5 +20,13 @@
     "pleaseEnterLastName": "Please enter your last name",
     "pleaseEnterPhone": "Please enter your phone number",
     "dontHaveAccount": "Don't have an account? ",
-    "singUpNow":"Sign up "
+    "singUpNow": "Sign up ",
+    "invalidPhoneFormat": "Please enter a valid Syrian number like 9XX XXX XXX",
+    "syrianPhoneHint": "9XX XXX XXX",
+    "verifyOtp": "Verify OTP",
+    "weSentCodeTo": "We have sent a code to",
+    "resendCodeIn": "Resend code in ",
+    "pleaseEnterOtp": "Please enter all 4 digits of the OTP.",
+    "continueText": "Continue",
+    "enterPassword": "Please enter a password"
 }

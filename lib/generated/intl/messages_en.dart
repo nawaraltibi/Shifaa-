@@ -23,13 +23,18 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "Shifaa": MessageLookupByLibrary.simpleMessage("Shifaa!"),
+        "continueText": MessageLookupByLibrary.simpleMessage("Continue"),
         "dontHaveAccount":
             MessageLookupByLibrary.simpleMessage("Don\'t have an account? "),
+        "enterPassword":
+            MessageLookupByLibrary.simpleMessage("Please enter a password"),
         "firstName": MessageLookupByLibrary.simpleMessage("First Name"),
         "forgotPassword":
             MessageLookupByLibrary.simpleMessage("Forgot password?"),
         "haveAnAccount":
             MessageLookupByLibrary.simpleMessage("Already have an account? "),
+        "invalidPhoneFormat": MessageLookupByLibrary.simpleMessage(
+            "Please enter a valid Syrian number like 9XX XXX XXX"),
         "lastName": MessageLookupByLibrary.simpleMessage("Last Name"),
         "login": MessageLookupByLibrary.simpleMessage("Login"),
         "onBoardingSubtitle1": MessageLookupByLibrary.simpleMessage(
@@ -50,10 +55,17 @@ class MessageLookup extends MessageLookupByLibrary {
             "Please enter your first name"),
         "pleaseEnterLastName":
             MessageLookupByLibrary.simpleMessage("Please enter your last name"),
+        "pleaseEnterOtp": MessageLookupByLibrary.simpleMessage(
+            "Please enter all 4 digits of the OTP."),
         "pleaseEnterPhone": MessageLookupByLibrary.simpleMessage(
             "Please enter your phone number"),
+        "resendCodeIn": MessageLookupByLibrary.simpleMessage("Resend code in "),
         "signup": MessageLookupByLibrary.simpleMessage("Sign up"),
         "singUpNow": MessageLookupByLibrary.simpleMessage("Sign up "),
+        "syrianPhoneHint": MessageLookupByLibrary.simpleMessage("9XX XXX XXX"),
+        "verifyOtp": MessageLookupByLibrary.simpleMessage("Verify OTP"),
+        "weSentCodeTo":
+            MessageLookupByLibrary.simpleMessage("We have sent a code to"),
         "welcome": MessageLookupByLibrary.simpleMessage("Welcome to")
       };
 }

@@ -27,44 +27,48 @@ class _CustomPasswordFieldState extends State<CustomPasswordField> {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: widget.controller,
-      keyboardType: TextInputType.visiblePassword,
-      obscureText: _obscureText,
-      validator: widget.validator,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      decoration: InputDecoration(
-        contentPadding: const EdgeInsets.all(16),
-        hintText: widget.hintText ?? 'Password',
-        hintStyle: AppTextStyles.regular15.copyWith(
-          color: const Color(0xFF989898),
-        ),
-        suffixIcon: IconButton(
-          icon: Icon(
-            _obscureText ? Icons.visibility_off : Icons.visibility,
-            color: AppColors.primaryAppColor,
+    return Directionality(
+      textDirection: TextDirection.ltr,
+      child: TextFormField(
+        textDirection: TextDirection.ltr,
+        controller: widget.controller,
+        keyboardType: TextInputType.visiblePassword,
+        obscureText: _obscureText,
+        validator: widget.validator,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.all(16),
+          hintText: widget.hintText ?? 'Password',
+          hintStyle: AppTextStyles.regular15.copyWith(
+            color: const Color(0xFF989898),
           ),
-          onPressed: _togglePasswordVisibility,
-        ),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: Color(0xFFC8C8C8), width: 2),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(
-            color: AppColors.primaryAppColor,
-            width: 2,
+          suffixIcon: IconButton(
+            icon: Icon(
+              _obscureText ? Icons.visibility_off : Icons.visibility,
+              color: AppColors.primaryAppColor,
+            ),
+            onPressed: _togglePasswordVisibility,
           ),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: Colors.red, width: 2),
-        ),
-        focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: Colors.red, width: 2),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(color: Color(0xFFC8C8C8), width: 2),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(
+              color: AppColors.primaryAppColor,
+              width: 2,
+            ),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(color: Colors.red, width: 2),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(color: Colors.red, width: 2),
+          ),
         ),
       ),
     );

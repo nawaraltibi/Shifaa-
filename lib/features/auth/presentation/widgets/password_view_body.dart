@@ -40,14 +40,14 @@ class _PasswordViewBodyState extends State<PasswordViewBody> {
                 controller: _passwordController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter a password';
+                    return S.of(context).enterPassword;
                   }
                   return null;
                 },
               ),
-              SizedBox(height: 50.h),
+              SizedBox(height: 40.h),
               CustomButton(
-                text: S.of(context).password,
+                text: S.of(context).continueText,
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     context.goNamed(PasswordView.routeName);

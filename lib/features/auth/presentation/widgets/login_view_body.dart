@@ -3,8 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shifaa/core/utils/app_text_styles.dart';
 import 'package:shifaa/core/widgets/custom_button.dart';
-import 'package:shifaa/features/auth/presentation/views/password_view.dart';
 import 'package:shifaa/features/auth/presentation/views/signup_view.dart';
+import 'package:shifaa/features/auth/presentation/views/verify_otp_view.dart';
 import 'package:shifaa/features/auth/presentation/widgets/auth_template.dart';
 import 'package:shifaa/features/auth/presentation/widgets/auth_title.dart';
 import 'package:shifaa/features/auth/presentation/widgets/on_tap_text.dart';
@@ -37,12 +37,19 @@ class _LoginViewBodyState extends State<LoginViewBody> {
               SizedBox(height: 60.h),
               Text(S.of(context).phoneNumber, style: AppTextStyles.medium16),
               const SizedBox(height: 5),
-              PhoneNumberTextField(
+              PhoneNumberField(
                 controller: _phoneController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return S.of(context).pleaseEnterPhone;
                   }
+
+                  final digits = value.replaceAll(RegExp(r'\D'), '');
+
+                  if (digits.length != 9 || !digits.startsWith('9')) {
+                    return S.of(context).invalidPhoneFormat;
+                  }
+
                   return null;
                 },
               ),
@@ -51,7 +58,16 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                 text: S.of(context).login,
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    context.goNamed(PasswordView.routeName);
+                    final raw = _phoneController.text.replaceAll(
+                      RegExp(r'\D'),
+                      '',
+                    );
+                    final fullNumber = '+963$raw';
+
+                    context.goNamed(
+                      VerifyOtpView.routeName,
+                      queryParams: {'phone': fullNumber},
+                    );
                   }
                 },
               ),
@@ -64,9 +80,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                   Text(S.of(context).dontHaveAccount),
                   OnTapBlueText(
                     text: S.of(context).singUpNow,
-                    onTap: () {
-                      context.goNamed(SignupView.routeName);
-                    },
+                    onTap: () => context.goNamed(SignupView.routeName),
                   ),
                 ],
               ),

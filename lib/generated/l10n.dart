@@ -259,6 +259,86 @@ class S {
       args: [],
     );
   }
+
+  /// `Please enter a valid Syrian number like 9XX XXX XXX`
+  String get invalidPhoneFormat {
+    return Intl.message(
+      'Please enter a valid Syrian number like 9XX XXX XXX',
+      name: 'invalidPhoneFormat',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `9XX XXX XXX`
+  String get syrianPhoneHint {
+    return Intl.message(
+      '9XX XXX XXX',
+      name: 'syrianPhoneHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Verify OTP`
+  String get verifyOtp {
+    return Intl.message(
+      'Verify OTP',
+      name: 'verifyOtp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `We have sent a code to`
+  String get weSentCodeTo {
+    return Intl.message(
+      'We have sent a code to',
+      name: 'weSentCodeTo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Resend code in `
+  String get resendCodeIn {
+    return Intl.message(
+      'Resend code in ',
+      name: 'resendCodeIn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter all 4 digits of the OTP.`
+  String get pleaseEnterOtp {
+    return Intl.message(
+      'Please enter all 4 digits of the OTP.',
+      name: 'pleaseEnterOtp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Continue`
+  String get continueText {
+    return Intl.message(
+      'Continue',
+      name: 'continueText',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter a password`
+  String get enterPassword {
+    return Intl.message(
+      'Please enter a password',
+      name: 'enterPassword',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

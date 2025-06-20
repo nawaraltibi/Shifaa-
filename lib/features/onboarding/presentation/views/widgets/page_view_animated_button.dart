@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shifaa/core/utils/app_colors.dart';
 
 class PageViewAnimatedButton extends StatelessWidget {
-  final int currentPage; // 0-based index
+  final int currentPage;
   final int totalPages;
   final VoidCallback onPressed;
 
@@ -70,7 +70,7 @@ class _DashedCirclePainter extends CustomPainter {
     required this.strokeWidth,
     required this.color,
     required this.dashCount,
-    this.gapRatio = 0.4, // قيمة افتراضية تمنع null
+    this.gapRatio = 0.4,
   });
 
   @override
@@ -83,17 +83,14 @@ class _DashedCirclePainter extends CustomPainter {
 
     final radius = (size.width / 2) - strokeWidth / 2;
     final center = Offset(size.width / 2, size.height / 2);
-
     const totalAngle = 2 * 3.141592653589793;
     final dashAngle = totalAngle / dashCount;
-
     final gapAngle = dashAngle * gapRatio;
     final drawAngle = dashAngle - gapAngle;
 
     for (int i = 0; i < dashCount; i++) {
       double startProgress = i / dashCount;
       double endProgress = (i + 1) / dashCount;
-
       double dashProgress;
 
       if (progress >= endProgress) {

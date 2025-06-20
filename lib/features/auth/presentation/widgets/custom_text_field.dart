@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shifaa/core/utils/app_colors.dart';
 import 'package:shifaa/core/utils/app_text_styles.dart';
 
@@ -10,6 +11,8 @@ class CustomTextField extends StatelessWidget {
   final Widget? suffixIcon;
   final bool obscureText;
   final String? Function(String?)? validator;
+  final List<TextInputFormatter>? inputFormatters;
+  final TextDirection? textDirection; // <-- Added optional textDirection
 
   const CustomTextField({
     Key? key,
@@ -20,6 +23,8 @@ class CustomTextField extends StatelessWidget {
     this.suffixIcon,
     this.obscureText = false,
     this.validator,
+    this.inputFormatters,
+    this.textDirection, // <-- Accept in constructor
   }) : super(key: key);
 
   @override
@@ -29,7 +34,9 @@ class CustomTextField extends StatelessWidget {
       keyboardType: keyboardType,
       obscureText: obscureText,
       validator: validator,
-      autovalidateMode: AutovalidateMode.onUserInteraction, // 👈 هذه الإضافة
+      inputFormatters: inputFormatters,
+      textDirection: textDirection, // <-- Use here, nullable, so optional
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.all(16),
         hintText: hintText,
