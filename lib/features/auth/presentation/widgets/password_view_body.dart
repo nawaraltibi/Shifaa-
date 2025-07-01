@@ -25,39 +25,36 @@ class _PasswordViewBodyState extends State<PasswordViewBody> {
   Widget build(BuildContext context) {
     return AuthTemplate(
       margin: 320,
-      child: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 90.h),
-              AuthTitle(text: S.of(context).password),
-              SizedBox(height: 50.h),
-              Text(S.of(context).password, style: AppTextStyles.medium16),
-              const SizedBox(height: 5),
-              CustomPasswordField(
-                controller: _passwordController,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return S.of(context).enterPassword;
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 40.h),
-              CustomButton(
-                text: S.of(context).continueText,
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    context.goNamed(PasswordView.routeName);
-                  }
-                },
-              ),
-              SizedBox(height: 56.h),
-              OnTapBlueText(text: S.of(context).forgotPassword, onTap: () {}),
-            ],
-          ),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            AuthTitle(text: S.of(context).password),
+            SizedBox(height: 50.h),
+            Text(S.of(context).password, style: AppTextStyles.medium16),
+            const SizedBox(height: 5),
+            CustomPasswordField(
+              controller: _passwordController,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return S.of(context).enterPassword;
+                }
+                return null;
+              },
+            ),
+            SizedBox(height: 40.h),
+            CustomButton(
+              text: S.of(context).continueText,
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  context.goNamed(PasswordView.routeName);
+                }
+              },
+            ),
+            SizedBox(height: 56.h),
+            OnTapBlueText(text: S.of(context).forgotPassword, onTap: () {}),
+          ],
         ),
       ),
     );

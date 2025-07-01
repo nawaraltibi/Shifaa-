@@ -30,7 +30,6 @@ class OtpFieldItem extends StatelessWidget {
             FocusScope.of(context).requestFocus(nextFocusNode);
           }
         },
-
         keyboardType: TextInputType.number,
         textAlign: TextAlign.center,
         inputFormatters: [

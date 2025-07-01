@@ -11,12 +11,15 @@ class OtpField extends StatefulWidget {
 }
 
 class _OtpFieldState extends State<OtpField> {
-  late final List<FocusNode> _focusNodes;
+  late List<FocusNode> _focusNodes;
 
   @override
   void initState() {
     super.initState();
-    _focusNodes = List.generate(4, (_) => FocusNode());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _focusNodes.first.requestFocus();
+    });
+    _focusNodes = List.generate(widget.controllers.length, (_) => FocusNode());
   }
 
   @override
@@ -33,13 +36,16 @@ class _OtpFieldState extends State<OtpField> {
       textDirection: TextDirection.ltr,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: List.generate(4, (index) {
-          return OtpFieldItem(
+        children: List.generate(
+          widget.controllers.length,
+          (index) => OtpFieldItem(
             controller: widget.controllers[index],
             focusNode: _focusNodes[index],
-            nextFocusNode: index < 3 ? _focusNodes[index + 1] : null,
-          );
-        }),
+            nextFocusNode: index < _focusNodes.length - 1
+                ? _focusNodes[index + 1]
+                : null,
+          ),
+        ),
       ),
     );
   }

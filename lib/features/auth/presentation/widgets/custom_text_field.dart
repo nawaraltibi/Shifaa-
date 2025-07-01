@@ -12,7 +12,10 @@ class CustomTextField extends StatelessWidget {
   final bool obscureText;
   final String? Function(String?)? validator;
   final List<TextInputFormatter>? inputFormatters;
-  final TextDirection? textDirection; // <-- Added optional textDirection
+  final TextDirection? textDirection;
+  final bool? readOnly;
+  final void Function()? onTap;
+  final String? errorText;
 
   const CustomTextField({
     Key? key,
@@ -24,47 +27,46 @@ class CustomTextField extends StatelessWidget {
     this.obscureText = false,
     this.validator,
     this.inputFormatters,
-    this.textDirection, // <-- Accept in constructor
+    this.textDirection,
+    this.readOnly,
+    this.onTap,
+    this.errorText,
   }) : super(key: key);
+
+  // ✅ Reusable border builder method
+  OutlineInputBorder _buildOutlineInputBorder(Color color, [double width = 2]) {
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8),
+      borderSide: BorderSide(color: color, width: width),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      onTap: onTap,
+      readOnly: readOnly ?? false,
       controller: controller,
       keyboardType: keyboardType,
       obscureText: obscureText,
       validator: validator,
       inputFormatters: inputFormatters,
-      textDirection: textDirection, // <-- Use here, nullable, so optional
+      textDirection: textDirection,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: InputDecoration(
-        contentPadding: const EdgeInsets.all(16),
+        errorText: errorText,
+        contentPadding: const EdgeInsets.all(14),
         hintText: hintText,
         hintStyle: AppTextStyles.regular15.copyWith(
           color: const Color(0xFF989898),
         ),
         prefixIcon: prefixIcon,
         suffixIcon: suffixIcon,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: Color(0xFFC8C8C8), width: 2),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(
-            color: AppColors.primaryAppColor,
-            width: 2,
-          ),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: Colors.red, width: 2),
-        ),
-        focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: Colors.red, width: 2),
-        ),
+        border: _buildOutlineInputBorder(const Color(0xFFC8C8C8)),
+        enabledBorder: _buildOutlineInputBorder(const Color(0xFFC8C8C8)),
+        focusedBorder: _buildOutlineInputBorder(AppColors.primaryAppColor),
+        errorBorder: _buildOutlineInputBorder(Colors.red),
+        focusedErrorBorder: _buildOutlineInputBorder(Colors.red),
       ),
     );
   }

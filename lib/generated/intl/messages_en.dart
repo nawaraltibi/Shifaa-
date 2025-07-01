@@ -23,20 +23,25 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "Shifaa": MessageLookupByLibrary.simpleMessage("Shifaa!"),
+        "age": MessageLookupByLibrary.simpleMessage("Age"),
         "continueText": MessageLookupByLibrary.simpleMessage("Continue"),
+        "done": MessageLookupByLibrary.simpleMessage("Done"),
         "dontHaveAccount":
             MessageLookupByLibrary.simpleMessage("Don\'t have an account? "),
         "enterPassword":
             MessageLookupByLibrary.simpleMessage("Please enter a password"),
+        "female": MessageLookupByLibrary.simpleMessage("Female"),
         "firstName": MessageLookupByLibrary.simpleMessage("First Name"),
         "forgotPassword":
             MessageLookupByLibrary.simpleMessage("Forgot password?"),
+        "gender": MessageLookupByLibrary.simpleMessage("Gender"),
         "haveAnAccount":
             MessageLookupByLibrary.simpleMessage("Already have an account? "),
         "invalidPhoneFormat": MessageLookupByLibrary.simpleMessage(
             "Please enter a valid Syrian number like 9XX XXX XXX"),
         "lastName": MessageLookupByLibrary.simpleMessage("Last Name"),
         "login": MessageLookupByLibrary.simpleMessage("Login"),
+        "male": MessageLookupByLibrary.simpleMessage("Male"),
         "onBoardingSubtitle1": MessageLookupByLibrary.simpleMessage(
             "Book appointments, view records, and track your health all in one app."),
         "onBoardingSubtitle2": MessageLookupByLibrary.simpleMessage(
@@ -51,6 +56,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Your Health, Your Control"),
         "password": MessageLookupByLibrary.simpleMessage("Password"),
         "phoneNumber": MessageLookupByLibrary.simpleMessage("Phone Number"),
+        "pleaseEnterAge": MessageLookupByLibrary.simpleMessage(
+            "Please select your date of birth"),
         "pleaseEnterFirstName": MessageLookupByLibrary.simpleMessage(
             "Please enter your first name"),
         "pleaseEnterLastName":
@@ -59,6 +66,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Please enter all 4 digits of the OTP."),
         "pleaseEnterPhone": MessageLookupByLibrary.simpleMessage(
             "Please enter your phone number"),
+        "profileSetup": MessageLookupByLibrary.simpleMessage("Profile Setup"),
         "resendCodeIn": MessageLookupByLibrary.simpleMessage("Resend code in "),
         "signup": MessageLookupByLibrary.simpleMessage("Sign up"),
         "singUpNow": MessageLookupByLibrary.simpleMessage("Sign up "),

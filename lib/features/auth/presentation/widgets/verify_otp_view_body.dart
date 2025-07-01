@@ -21,6 +21,30 @@ class VerifyOtpViewBody extends StatefulWidget {
 }
 
 class _VerifyOtpViewBodyState extends State<VerifyOtpViewBody> {
+  @override
+  Widget build(BuildContext context) {
+    return AuthTemplate(
+      margin: 205.h,
+      child: Column(
+        children: [
+          AuthTitle(text: S.of(context).verifyOtp),
+          SizedBox(height: 50.h),
+          _buildPhoneInfo(),
+          SizedBox(height: 40.h),
+          OtpField(controllers: _otpControllers),
+          _buildOtpError(),
+          SizedBox(height: 40.h),
+          CustomButton(
+            text: S.of(context).continueText,
+            onPressed: () => _onContinuePressed(context),
+          ),
+          SizedBox(height: 35.h),
+          _buildCountdownTimer(),
+        ],
+      ),
+    );
+  }
+
   final List<TextEditingController> _otpControllers = List.generate(
     4,
     (_) => TextEditingController(),
@@ -28,11 +52,34 @@ class _VerifyOtpViewBodyState extends State<VerifyOtpViewBody> {
 
   int _secondsRemaining = 45;
   Timer? _timer;
+  String? _otpError;
 
   @override
   void initState() {
     super.initState();
     _startCountdown();
+    _addOtpListeners();
+  }
+
+  void _addOtpListeners() {
+    for (var controller in _otpControllers) {
+      controller.addListener(_onOtpChanged);
+    }
+  }
+
+  void _removeOtpListeners() {
+    for (var controller in _otpControllers) {
+      controller.removeListener(_onOtpChanged);
+    }
+  }
+
+  void _onOtpChanged() {
+    bool allFilled = _otpControllers.every(
+      (controller) => controller.text.isNotEmpty,
+    );
+    if (allFilled && _otpError != null) {
+      setState(() => _otpError = null);
+    }
   }
 
   void _startCountdown() {
@@ -40,20 +87,9 @@ class _VerifyOtpViewBodyState extends State<VerifyOtpViewBody> {
       if (_secondsRemaining == 0) {
         timer.cancel();
       } else {
-        setState(() {
-          _secondsRemaining--;
-        });
+        setState(() => _secondsRemaining--);
       }
     });
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    for (var controller in _otpControllers) {
-      controller.dispose();
-    }
-    super.dispose();
   }
 
   void _onContinuePressed(BuildContext context) {
@@ -61,65 +97,60 @@ class _VerifyOtpViewBodyState extends State<VerifyOtpViewBody> {
       (controller) => controller.text.isNotEmpty,
     );
     if (!allFilled) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(S.of(context).pleaseEnterOtp),
-          backgroundColor: Colors.red.shade400,
-          behavior: SnackBarBehavior.floating,
-          margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-        ),
-      );
+      setState(() => _otpError = S.of(context).pleaseEnterOtp);
     } else {
+      setState(() => _otpError = null);
       context.goNamed(SignupView.routeName);
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return AuthTemplate(
-      margin: 205.h,
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(height: 100.h),
-            AuthTitle(text: S.of(context).verifyOtp),
-            SizedBox(height: 50.h),
-            Text(S.of(context).weSentCodeTo, style: AppTextStyles.regular12),
-            Text(
-              widget.phoneNumber,
-              style: AppTextStyles.regular14.copyWith(
-                color: AppColors.primaryAppColor,
-              ),
-            ),
-            SizedBox(height: 40.h),
-            OtpField(controllers: _otpControllers),
-            SizedBox(height: 55.h),
-            CustomButton(
-              text: S.of(context).continueText,
-              onPressed: () => _onContinuePressed(context),
-            ),
-            SizedBox(height: 35.h),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  S.of(context).resendCodeIn,
-                  style: AppTextStyles.regular14,
-                ),
-                Text(
-                  '00:${_secondsRemaining.toString().padLeft(2, '0')}',
-                  style: AppTextStyles.regular14.copyWith(
-                    color: AppColors.primaryAppColor,
-                  ),
-                ),
-              ],
-            ),
-          ],
+  Widget _buildPhoneInfo() {
+    return Column(
+      children: [
+        Text(S.of(context).weSentCodeTo, style: AppTextStyles.regular12),
+        Text(
+          widget.phoneNumber,
+          style: AppTextStyles.regular14.copyWith(
+            color: AppColors.primaryAppColor,
+          ),
         ),
+      ],
+    );
+  }
+
+  Widget _buildOtpError() {
+    if (_otpError == null) return const SizedBox.shrink();
+    return Padding(
+      padding: EdgeInsets.only(top: 12.h),
+      child: Text(
+        _otpError!,
+        style: AppTextStyles.regular12.copyWith(color: Colors.red),
       ),
     );
+  }
+
+  Widget _buildCountdownTimer() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(S.of(context).resendCodeIn, style: AppTextStyles.regular14),
+        Text(
+          '00:${_secondsRemaining.toString().padLeft(2, '0')}',
+          style: AppTextStyles.regular14.copyWith(
+            color: AppColors.primaryAppColor,
+          ),
+        ),
+      ],
+    );
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _removeOtpListeners();
+    for (var controller in _otpControllers) {
+      controller.dispose();
+    }
+    super.dispose();
   }
 }

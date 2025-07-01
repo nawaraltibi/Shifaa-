@@ -23,20 +23,25 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "Shifaa": MessageLookupByLibrary.simpleMessage("شفاء!"),
+        "age": MessageLookupByLibrary.simpleMessage("العمر"),
         "continueText": MessageLookupByLibrary.simpleMessage("استمرار"),
+        "done": MessageLookupByLibrary.simpleMessage("استمرار"),
         "dontHaveAccount":
             MessageLookupByLibrary.simpleMessage("ليس لديك حساب؟ "),
         "enterPassword":
             MessageLookupByLibrary.simpleMessage("يرجى إدخال كلمة المرور"),
+        "female": MessageLookupByLibrary.simpleMessage("أنثى"),
         "firstName": MessageLookupByLibrary.simpleMessage("الاسم الأول"),
         "forgotPassword":
             MessageLookupByLibrary.simpleMessage("هل نسيت كلمة المرور؟"),
+        "gender": MessageLookupByLibrary.simpleMessage("الجنس"),
         "haveAnAccount":
             MessageLookupByLibrary.simpleMessage("هل لديك حساب بالفعل؟"),
         "invalidPhoneFormat": MessageLookupByLibrary.simpleMessage(
             "يرجى إدخال رقم سوري صحيح مثل 9XX XXX XXX"),
         "lastName": MessageLookupByLibrary.simpleMessage("اسم العائلة"),
         "login": MessageLookupByLibrary.simpleMessage("تسجيل الدخول"),
+        "male": MessageLookupByLibrary.simpleMessage("ذكر"),
         "onBoardingSubtitle1": MessageLookupByLibrary.simpleMessage(
             "احجز المواعيد، استعرض السجلات، وتابع صحتك في تطبيق واحد."),
         "onBoardingSubtitle2": MessageLookupByLibrary.simpleMessage(
@@ -51,6 +56,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("صحتك، بين يديك"),
         "password": MessageLookupByLibrary.simpleMessage("كلمة المرور"),
         "phoneNumber": MessageLookupByLibrary.simpleMessage("رقم الهاتف"),
+        "pleaseEnterAge":
+            MessageLookupByLibrary.simpleMessage("يرجى اختيار تاريخ الميلاد"),
         "pleaseEnterFirstName":
             MessageLookupByLibrary.simpleMessage("يرجى إدخال الاسم الأول"),
         "pleaseEnterLastName":
@@ -59,6 +66,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "يرجى إدخال جميع أرقام الرمز الأربعة."),
         "pleaseEnterPhone":
             MessageLookupByLibrary.simpleMessage("يرجى إدخال رقم الهاتف"),
+        "profileSetup":
+            MessageLookupByLibrary.simpleMessage("إعداد الملف الشخصي"),
         "resendCodeIn":
             MessageLookupByLibrary.simpleMessage("إعادة إرسال الرمز خلال "),
         "signup": MessageLookupByLibrary.simpleMessage("إنشاء حساب"),

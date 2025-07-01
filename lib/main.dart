@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shifaa/core/utils/app_routes.dart';
 import 'generated/l10n.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Hide system UI overlays globally
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+
   runApp(const Shifaa());
 }
 
@@ -17,11 +23,12 @@ class Shifaa extends StatelessWidget {
       designSize: const Size(375, 812),
       minTextAdapt: true,
       splitScreenMode: true,
-      builder: (context, child){
+      builder: (context, child) {
         return MaterialApp.router(
           title: 'Shifaa App',
           debugShowCheckedModeBanner: false,
           routerConfig: AppRouter.router,
+
           theme: ThemeData(
             fontFamily: 'Inter',
             scaffoldBackgroundColor: Colors.white,

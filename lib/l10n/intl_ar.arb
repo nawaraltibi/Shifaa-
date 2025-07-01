@@ -28,5 +28,13 @@
     "resendCodeIn": "إعادة إرسال الرمز خلال ",
     "pleaseEnterOtp": "يرجى إدخال جميع أرقام الرمز الأربعة.",
     "continueText": "استمرار",
-    "enterPassword": "يرجى إدخال كلمة المرور"
+    "enterPassword": "يرجى إدخال كلمة المرور",
+    "profileSetup": "إعداد الملف الشخصي",
+    "age": "العمر",
+    "gender": "الجنس",
+    "male": "ذكر",
+    "female": "أنثى",
+    "done": "استمرار",
+    "pleaseEnterAge": "يرجى اختيار تاريخ الميلاد"
+
 }

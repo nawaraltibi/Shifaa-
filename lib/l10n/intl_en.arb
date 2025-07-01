@@ -28,5 +28,13 @@
     "resendCodeIn": "Resend code in ",
     "pleaseEnterOtp": "Please enter all 4 digits of the OTP.",
     "continueText": "Continue",
-    "enterPassword": "Please enter a password"
+    "enterPassword": "Please enter a password",
+    "profileSetup": "Profile Setup",
+    "age": "Age",
+    "gender": "Gender",
+    "male": "Male",
+    "female": "Female",
+    "done": "Done",
+    "pleaseEnterAge": "Please select your date of birth"
+
 }

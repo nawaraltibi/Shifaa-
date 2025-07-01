@@ -1,15 +1,23 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:shifaa/core/utils/app_images.dart';
 
 class AuthWhiteContainer extends StatelessWidget {
   const AuthWhiteContainer({
-    super.key,
+    Key? key,
     required this.child,
     required this.margin,
-  });
+    this.imageTopMargin,
+    this.containerTopPadding,
+    this.containerTopMargin,
+  }) : super(key: key);
   final Widget child;
   final double margin;
+  final double? imageTopMargin;
+  final double? containerTopPadding;
+  final double? containerTopMargin;
   @override
   Widget build(BuildContext context) {
     return Positioned.fill(
@@ -28,18 +36,20 @@ class AuthWhiteContainer extends StatelessWidget {
                 topRight: Radius.circular(35.r),
               ),
             ),
-            child: SizedBox(
+            child: Container(
+              padding: EdgeInsets.only(top: containerTopPadding ?? 20.h),
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
+              margin: EdgeInsets.only(top: containerTopMargin ?? 80.h),
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 30.w),
-                child: child,
+                child: SingleChildScrollView(child: child),
               ),
             ),
           ),
           Positioned(
             right: 35.w,
-            top: margin - 37.h,
+            top: imageTopMargin ?? margin - 105.h,
             child: Image.asset(Assets.imagesDoctorElement),
           ),
         ],
