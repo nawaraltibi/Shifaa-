@@ -66,7 +66,6 @@ class _ProfileSetupViewBodyState extends State<ProfileSetupViewBody> {
     });
 
     if (isValid && !_showAgeError) {
-      // Proceed with submission
       print("Form is valid, proceed to next step.");
     }
   }

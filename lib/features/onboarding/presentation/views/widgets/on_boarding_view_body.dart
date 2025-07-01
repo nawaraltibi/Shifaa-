@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shifaa/core/utils/app_images.dart';
 import 'package:shifaa/features/auth/presentation/views/login_view.dart';
 import 'package:shifaa/features/onboarding/presentation/views/widgets/on_boarding_page_view_item.dart';
@@ -36,13 +37,15 @@ class _OnBoardingViewBodyState extends State<OnBoardingViewBody> {
     ),
   ];
 
-  void _nextPage(BuildContext context) {
+  void _nextPage(BuildContext context) async {
     if (_currentPage < onboardingPages.length - 1) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
     } else {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('alreadyLaunched', true);
       context.goNamed(LoginView.routeName);
     }
   }
