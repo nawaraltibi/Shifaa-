@@ -3,8 +3,12 @@ import 'package:dio/dio.dart';
 class ApiInterceptor extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    // Example: Add Authorization header if needed
-    // options.headers['Authorization'] = 'Bearer YOUR_TOKEN';
+    // Set common headers if needed
+    options.headers.addAll({
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      // 'Accept-Language': 'ar', // Optionally set dynamically from locale
+    });
 
     // You can also log the request
     print("➡️ API Request: ${options.method} ${options.uri}");
@@ -16,17 +20,22 @@ class ApiInterceptor extends Interceptor {
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    // You can log response here if needed
     print(
       "✅ API Response: ${response.statusCode} ${response.requestOptions.uri}",
     );
+    print("Response Body: ${response.data}");
+
     super.onResponse(response, handler);
   }
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
-    // You can log errors here
     print("❌ API Error: ${err.type} | ${err.message}");
+
+    // Optional: log full response if available
+    if (err.response != null) {
+      print("Error Response Body: ${err.response?.data}");
+    }
 
     super.onError(err, handler);
   }

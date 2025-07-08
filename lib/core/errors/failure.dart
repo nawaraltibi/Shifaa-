@@ -28,15 +28,36 @@ class ServerFailure extends Failure {
       case DioExceptionType.connectionError:
         return const ServerFailure('No internet connection');
       case DioExceptionType.unknown:
-      return const ServerFailure('Unexpected error occurred');
+        return const ServerFailure('Unexpected error occurred');
     }
   }
 
   factory ServerFailure.fromResponse(int statusCode, dynamic data) {
     const defaultMsg = 'An error occurred. Please try again.';
 
+    if (statusCode == 200 || statusCode == 201) {
+      return ServerFailure(data['message'] ?? 'Success');
+    }
+
     if (data is Map && data['message'] is String) {
-      return ServerFailure(data['message']);
+      final msg = data['message'] as String;
+
+      if (statusCode == 422 && data['errors'] is Map<String, dynamic>) {
+        final errors = data['errors'] as Map<String, dynamic>;
+        final detailedErrors = errors.entries
+            .map((e) => "${e.key}: ${(e.value as List).join(", ")}")
+            .join("\n");
+        return ServerFailure("$msg\n$detailedErrors");
+      }
+
+      if (statusCode == 400 ||
+          statusCode == 401 ||
+          statusCode == 403 ||
+          statusCode == 404) {
+        return ServerFailure(msg);
+      }
+
+      return ServerFailure(msg);
     }
 
     switch (statusCode) {
@@ -45,6 +66,15 @@ class ServerFailure extends Failure {
       case 403:
       case 404:
         return ServerFailure(data?['error']?['message'] ?? defaultMsg);
+      case 422:
+        if (data is Map && data['errors'] is Map<String, dynamic>) {
+          final errors = data['errors'] as Map<String, dynamic>;
+          final detailedErrors = errors.entries
+              .map((e) => "${e.key}: ${(e.value as List).join(", ")}")
+              .join("\n");
+          return ServerFailure(detailedErrors);
+        }
+        return ServerFailure(data?['message'] ?? defaultMsg);
       case 500:
         return const ServerFailure('Server error. Try again later.');
       default:

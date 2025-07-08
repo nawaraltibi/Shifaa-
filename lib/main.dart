@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shifaa/core/functions/setup_service_locator.dart';
 import 'package:shifaa/core/utils/app_routes.dart';
 import 'generated/l10n.dart';
 
@@ -10,6 +11,8 @@ void main() {
 
   // Hide system UI overlays globally
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+
+  setupServiceLocator();
 
   runApp(const Shifaa());
 }

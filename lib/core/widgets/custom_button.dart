@@ -4,16 +4,24 @@ import 'package:shifaa/core/utils/app_colors.dart';
 import 'package:shifaa/core/utils/app_text_styles.dart';
 
 class CustomButton extends StatelessWidget {
-  const CustomButton({super.key, required this.text, required this.onPressed});
+  const CustomButton({
+    super.key,
+    required this.text,
+    required this.onPressed,
+    this.isLoading = false,
+  });
+
   final String text;
   final void Function() onPressed;
+  final bool isLoading;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       height: 46.h,
       child: TextButton(
-        onPressed: onPressed,
+        onPressed: isLoading ? null : onPressed,
         style: TextButton.styleFrom(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.r),
@@ -22,7 +30,16 @@ class CustomButton extends StatelessWidget {
           foregroundColor: Colors.white,
           backgroundColor: AppColors.primaryAppColor,
         ),
-        child: Text(text),
+        child: isLoading
+            ? SizedBox(
+                width: 22.w,
+                height: 22.w,
+                child: const CircularProgressIndicator(
+                  strokeWidth: 2.5,
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                ),
+              )
+            : Text(text),
       ),
     );
   }

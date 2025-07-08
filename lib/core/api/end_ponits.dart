@@ -1,15 +1,16 @@
 class EndPoint {
-  static const String baseUrl = "https://your-api-base-url.com/api/v1/";
+  static const String baseUrl = "https://shifaa-backend.onrender.com/api/";
 
-  static const String login = "auth/login";
-  static const String register = "auth/register";
-  static String getUser(String id) => "users/$id";
+  static const String sendOtp = "patient/send-otp";
+  static const String verifyOtp = "patient/login";
+  static const String register = "patient/register";
+  static const String verifyPassword = "patient/verify-password";
 }
 
 class ApiKey {
   static const String status = "status";
-  static const String errorMessage = "errorMessage";
   static const String message = "message";
   static const String token = "token";
   static const String data = "data";
+  static const String error = "error";
 }
