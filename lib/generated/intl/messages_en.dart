@@ -30,6 +30,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Don\'t have an account? "),
         "enterPassword":
             MessageLookupByLibrary.simpleMessage("Please enter a password"),
+        "errorTitle": MessageLookupByLibrary.simpleMessage("Error"),
         "female": MessageLookupByLibrary.simpleMessage("Female"),
         "firstName": MessageLookupByLibrary.simpleMessage("First Name"),
         "forgotPassword":
@@ -37,11 +38,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "gender": MessageLookupByLibrary.simpleMessage("Gender"),
         "haveAnAccount":
             MessageLookupByLibrary.simpleMessage("Already have an account? "),
-        "invalidPhoneFormat": MessageLookupByLibrary.simpleMessage(
-            "Please enter a valid Syrian number like 9XX XXX XXX"),
+        "invalidOtp": MessageLookupByLibrary.simpleMessage("Invali OTP"),
+        "invalidPhoneFormat":
+            MessageLookupByLibrary.simpleMessage("Please enter a valid number"),
         "lastName": MessageLookupByLibrary.simpleMessage("Last Name"),
         "login": MessageLookupByLibrary.simpleMessage("Login"),
         "male": MessageLookupByLibrary.simpleMessage("Male"),
+        "noInternet":
+            MessageLookupByLibrary.simpleMessage("No internet connection"),
         "onBoardingSubtitle1": MessageLookupByLibrary.simpleMessage(
             "Book appointments, view records, and track your health all in one app."),
         "onBoardingSubtitle2": MessageLookupByLibrary.simpleMessage(
@@ -71,7 +75,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "signup": MessageLookupByLibrary.simpleMessage("Sign up"),
         "singUpNow": MessageLookupByLibrary.simpleMessage("Sign up "),
         "syrianPhoneHint": MessageLookupByLibrary.simpleMessage("9XX XXX XXX"),
+        "timeout": MessageLookupByLibrary.simpleMessage(
+            "Connection timed out, please try again"),
         "verifyOtp": MessageLookupByLibrary.simpleMessage("Verify OTP"),
+        "warningTitle": MessageLookupByLibrary.simpleMessage("Warning"),
         "weSentCodeTo":
             MessageLookupByLibrary.simpleMessage("We have sent a code to"),
         "welcome": MessageLookupByLibrary.simpleMessage("Welcome to")

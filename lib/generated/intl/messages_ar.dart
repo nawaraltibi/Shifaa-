@@ -30,6 +30,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("ليس لديك حساب؟ "),
         "enterPassword":
             MessageLookupByLibrary.simpleMessage("يرجى إدخال كلمة المرور"),
+        "errorTitle": MessageLookupByLibrary.simpleMessage("خطأ"),
         "female": MessageLookupByLibrary.simpleMessage("أنثى"),
         "firstName": MessageLookupByLibrary.simpleMessage("الاسم الأول"),
         "forgotPassword":
@@ -37,11 +38,15 @@ class MessageLookup extends MessageLookupByLibrary {
         "gender": MessageLookupByLibrary.simpleMessage("الجنس"),
         "haveAnAccount":
             MessageLookupByLibrary.simpleMessage("هل لديك حساب بالفعل؟"),
-        "invalidPhoneFormat": MessageLookupByLibrary.simpleMessage(
-            "يرجى إدخال رقم سوري صحيح مثل 9XX XXX XXX"),
+        "invalidOtp":
+            MessageLookupByLibrary.simpleMessage("رمز التحقق غير صحيح"),
+        "invalidPhoneFormat":
+            MessageLookupByLibrary.simpleMessage("يرجى إدخال رقم صحيح"),
         "lastName": MessageLookupByLibrary.simpleMessage("اسم العائلة"),
         "login": MessageLookupByLibrary.simpleMessage("تسجيل الدخول"),
         "male": MessageLookupByLibrary.simpleMessage("ذكر"),
+        "noInternet":
+            MessageLookupByLibrary.simpleMessage("لا يوجد اتصال بالإنترنت"),
         "onBoardingSubtitle1": MessageLookupByLibrary.simpleMessage(
             "احجز المواعيد، استعرض السجلات، وتابع صحتك في تطبيق واحد."),
         "onBoardingSubtitle2": MessageLookupByLibrary.simpleMessage(
@@ -73,7 +78,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "signup": MessageLookupByLibrary.simpleMessage("إنشاء حساب"),
         "singUpNow": MessageLookupByLibrary.simpleMessage("أنشئ حساب "),
         "syrianPhoneHint": MessageLookupByLibrary.simpleMessage("9XX XXX XXX"),
+        "timeout": MessageLookupByLibrary.simpleMessage(
+            "انتهت مهلة الاتصال، حاول مجددًا"),
         "verifyOtp": MessageLookupByLibrary.simpleMessage("تأكيد الرمز"),
+        "warningTitle": MessageLookupByLibrary.simpleMessage("تحذير"),
         "weSentCodeTo":
             MessageLookupByLibrary.simpleMessage("لقد أرسلنا رمزًا إلى"),
         "welcome": MessageLookupByLibrary.simpleMessage("مرحباً بك في")

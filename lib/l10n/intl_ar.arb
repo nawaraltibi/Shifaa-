@@ -21,7 +21,7 @@
     "pleaseEnterPhone": "يرجى إدخال رقم الهاتف",
     "dontHaveAccount": "ليس لديك حساب؟ ",
     "singUpNow": "أنشئ حساب ",
-    "invalidPhoneFormat": "يرجى إدخال رقم سوري صحيح مثل 9XX XXX XXX",
+    "invalidPhoneFormat": "يرجى إدخال رقم صحيح",
     "syrianPhoneHint": "9XX XXX XXX",
     "verifyOtp": "تأكيد الرمز",
     "weSentCodeTo": "لقد أرسلنا رمزًا إلى",
@@ -35,6 +35,10 @@
     "male": "ذكر",
     "female": "أنثى",
     "done": "استمرار",
-    "pleaseEnterAge": "يرجى اختيار تاريخ الميلاد"
-
+    "pleaseEnterAge": "يرجى اختيار تاريخ الميلاد",
+    "noInternet": "لا يوجد اتصال بالإنترنت",
+    "timeout": "انتهت مهلة الاتصال، حاول مجددًا",
+    "errorTitle": "خطأ",
+    "warningTitle": "تحذير",
+    "invalidOtp":"رمز التحقق غير صحيح"
 }

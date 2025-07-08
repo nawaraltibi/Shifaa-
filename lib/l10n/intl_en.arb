@@ -21,7 +21,7 @@
     "pleaseEnterPhone": "Please enter your phone number",
     "dontHaveAccount": "Don't have an account? ",
     "singUpNow": "Sign up ",
-    "invalidPhoneFormat": "Please enter a valid Syrian number like 9XX XXX XXX",
+    "invalidPhoneFormat": "Please enter a valid number",
     "syrianPhoneHint": "9XX XXX XXX",
     "verifyOtp": "Verify OTP",
     "weSentCodeTo": "We have sent a code to",
@@ -35,6 +35,11 @@
     "male": "Male",
     "female": "Female",
     "done": "Done",
-    "pleaseEnterAge": "Please select your date of birth"
+    "pleaseEnterAge": "Please select your date of birth",
+    "noInternet": "No internet connection",
+    "timeout": "Connection timed out, please try again",
+    "errorTitle": "Error",
+    "warningTitle": "Warning",
+        "invalidOtp":"Invali OTP"
 
 }

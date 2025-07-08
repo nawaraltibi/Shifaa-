@@ -7,7 +7,10 @@ class SendOtpInitial extends SendOtpState {}
 
 class SendOtpLoading extends SendOtpState {}
 
-class SendOtpSuccess extends SendOtpState {}
+class SendOtpSuccess extends SendOtpState {
+  final String phoneNumber;
+  SendOtpSuccess(this.phoneNumber);
+}
 
 class SendOtpError extends SendOtpState {
   final String message;

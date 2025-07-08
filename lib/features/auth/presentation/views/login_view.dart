@@ -11,8 +11,10 @@ class LoginView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    // ignore: prefer_const_constructors
+    return Scaffold(
       resizeToAvoidBottomInset: false,
+      // ignore: prefer_const_constructors
       body: LoginViewBlocProvider(),
     );
   }
@@ -25,7 +27,8 @@ class LoginViewBlocProvider extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => SendOtpCubit(getIt<SendOtpUseCase>()),
-      child: const LoginViewBody(),
+      // ignore: prefer_const_constructors
+      child: LoginViewBody(),
     );
   }
 }

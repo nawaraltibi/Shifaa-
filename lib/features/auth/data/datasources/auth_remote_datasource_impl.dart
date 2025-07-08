@@ -11,4 +11,17 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<void> sendOtp(String phoneNumber) async {
     await api.post(EndPoint.sendOtp, data: {"phone_number": phoneNumber});
   }
+
+  @override
+  Future<String> verifyOtp(String phoneNumber, String otp) async {
+    final response = await api.post(
+      EndPoint.verifyOtp,
+      data: {"phone_number": phoneNumber, "otp": otp},
+    );
+
+    final token = response['data']['token'];
+    print('VerifyOtp response: $response');
+
+    return token;
+  }
 }

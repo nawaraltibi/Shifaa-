@@ -260,10 +260,10 @@ class S {
     );
   }
 
-  /// `Please enter a valid Syrian number like 9XX XXX XXX`
+  /// `Please enter a valid number`
   String get invalidPhoneFormat {
     return Intl.message(
-      'Please enter a valid Syrian number like 9XX XXX XXX',
+      'Please enter a valid number',
       name: 'invalidPhoneFormat',
       desc: '',
       args: [],
@@ -405,6 +405,56 @@ class S {
     return Intl.message(
       'Please select your date of birth',
       name: 'pleaseEnterAge',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No internet connection`
+  String get noInternet {
+    return Intl.message(
+      'No internet connection',
+      name: 'noInternet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connection timed out, please try again`
+  String get timeout {
+    return Intl.message(
+      'Connection timed out, please try again',
+      name: 'timeout',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error`
+  String get errorTitle {
+    return Intl.message(
+      'Error',
+      name: 'errorTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Warning`
+  String get warningTitle {
+    return Intl.message(
+      'Warning',
+      name: 'warningTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invali OTP`
+  String get invalidOtp {
+    return Intl.message(
+      'Invali OTP',
+      name: 'invalidOtp',
       desc: '',
       args: [],
     );

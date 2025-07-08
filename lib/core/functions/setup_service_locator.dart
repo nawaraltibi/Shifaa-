@@ -5,7 +5,7 @@ import 'package:shifaa/core/api/dio_consumer.dart';
 import 'package:shifaa/core/api/end_ponits.dart';
 import 'package:shifaa/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:shifaa/features/auth/data/datasources/auth_remote_datasource_impl.dart';
-import 'package:shifaa/features/auth/data/repos/auth_repository_impl.dart';
+import 'package:shifaa/features/auth/data/repos/auth_repo_impl.dart';
 import 'package:shifaa/features/auth/domain/repos/auth_repo.dart';
 import 'package:shifaa/features/auth/domain/usecases/send_otp_usecase.dart';
 import 'package:shifaa/features/auth/domain/usecases/verify_otp_usecase.dart';
@@ -37,7 +37,7 @@ void setupServiceLocator() {
 
   // Use Cases
   getIt.registerLazySingleton(() => SendOtpUseCase(getIt<AuthRepository>()));
-  // getIt.registerLazySingleton(() => VerifyOtpUseCase(getIt<AuthRepository>()));
+  getIt.registerLazySingleton(() => VerifyOtpUseCase(getIt<AuthRepository>()));
   // getIt.registerLazySingleton(() => RegisterPatientUseCase(getIt<AuthRepository>()));
   // getIt.registerLazySingleton(() => VerifyPasswordUseCase(getIt<AuthRepository>()));
 }
