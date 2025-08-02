@@ -10,9 +10,9 @@ class DioConsumer extends ApiConsumer {
   DioConsumer({required this.dio}) {
     dio.options
       ..baseUrl = EndPoint.baseUrl
-      ..connectTimeout = const Duration(seconds: 5)
-      ..sendTimeout = const Duration(seconds: 5)
-      ..receiveTimeout = const Duration(seconds: 8);
+      ..connectTimeout = const Duration(seconds: 20)
+      ..sendTimeout = const Duration(seconds: 20)
+      ..receiveTimeout = const Duration(seconds: 20);
 
     dio.interceptors.add(ApiInterceptor());
     dio.interceptors.add(

@@ -9,7 +9,7 @@ class DoctorStatsItem extends StatelessWidget {
     required this.icon,
     required this.statNum,
     required this.statName,
-    this.showPlus = true, // هذا هو الباراميتر الجديد
+    this.showPlus = true,
   });
   final IconData icon;
   final double statNum;

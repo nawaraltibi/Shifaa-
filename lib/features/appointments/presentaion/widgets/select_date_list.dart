@@ -4,14 +4,16 @@ import 'package:intl/intl.dart';
 import 'package:shifaa/features/appointments/presentaion/widgets/day_container.dart';
 
 class SelectDateList extends StatefulWidget {
-  final List<String> availableDays; // e.g. ['monday', 'wednesday']
+  final List<String> availableDays;
   final DateTime selectedDate;
+  final DateTime currentMonth; // الشهر من الكيوبت
   final Function(DateTime date) onDateSelected;
 
   const SelectDateList({
     super.key,
     required this.availableDays,
     required this.selectedDate,
+    required this.currentMonth,
     required this.onDateSelected,
   });
 
@@ -21,19 +23,43 @@ class SelectDateList extends StatefulWidget {
 
 class _SelectDateListState extends State<SelectDateList> {
   late List<DateTime> monthDates;
+  late DateTime _localSelectedDate; // تاريخ محلي يتلون فورًا
 
   @override
   void initState() {
     super.initState();
-    final now = DateTime.now();
-    final daysInMonth = DateTime(now.year, now.month + 1, 0).day;
+    _generateMonthDates();
+    _localSelectedDate = widget.selectedDate;
+  }
 
-    monthDates =
-        List.generate(daysInMonth, (i) {
-              return DateTime(now.year, now.month, i + 1);
-            })
-            .where((date) => !date.isBefore(now))
-            .toList(); // 👈 فلترة التواريخ قبل اليوم
+  @override
+  void didUpdateWidget(covariant SelectDateList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    // إذا تغيّر الشهر أو التاريخ من الكيوبت → نزامن
+    if (oldWidget.currentMonth != widget.currentMonth ||
+        oldWidget.selectedDate != widget.selectedDate) {
+      _generateMonthDates();
+      _localSelectedDate = widget.selectedDate;
+    }
+  }
+
+  void _generateMonthDates() {
+    final today = DateTime.now();
+    final year = widget.currentMonth.year;
+    final month = widget.currentMonth.month;
+    final daysInMonth = DateTime(year, month + 1, 0).day;
+
+    monthDates = List.generate(daysInMonth, (i) {
+      return DateTime(year, month, i + 1);
+    });
+
+    // إذا الشهر الحالي فقط → نحذف الأيام الماضية
+    if (year == today.year && month == today.month) {
+      monthDates = monthDates.where((date) {
+        return !date.isBefore(DateTime(today.year, today.month, today.day));
+      }).toList();
+    }
   }
 
   @override
@@ -42,8 +68,7 @@ class _SelectDateListState extends State<SelectDateList> {
       spacing: 15.w,
       runSpacing: 10.h,
       children: monthDates.map((date) {
-        final dayOfWeek = date.weekday; // 1 (Mon) - 7 (Sun)
-        final formattedDay = _weekdayToString(dayOfWeek);
+        final formattedDay = _weekdayToString(date.weekday);
         final isAvailable = widget.availableDays.contains(
           formattedDay.toLowerCase(),
         );
@@ -53,11 +78,14 @@ class _SelectDateListState extends State<SelectDateList> {
               ? formattedDay
               : formattedDay.substring(0, 3),
           date: date.day.toString(),
-          isSelected: _isSameDay(date, widget.selectedDate),
+          isSelected: _isSameDay(date, _localSelectedDate), // محلي
           isAvailable: isAvailable,
           onTap: () {
             if (isAvailable) {
-              widget.onDateSelected(date);
+              setState(() {
+                _localSelectedDate = date; // يلون فورًا
+              });
+              widget.onDateSelected(date); // يبعث للكيوبت
             }
           },
         );
@@ -66,10 +94,9 @@ class _SelectDateListState extends State<SelectDateList> {
   }
 
   String _weekdayToString(int weekday) {
-    // نستخدم أي تاريخ مع weekday محدد لنحصل على اسمه بصيغة locale
-    final now = DateTime.now();
-    final date = now.subtract(Duration(days: now.weekday - weekday));
-    return DateFormat.EEEE(Intl.getCurrentLocale()).format(date);
+    return DateFormat.EEEE(
+      Intl.getCurrentLocale(),
+    ).format(DateTime(2024, 1, weekday));
   }
 
   bool _isSameDay(DateTime a, DateTime b) =>
