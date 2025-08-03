@@ -26,6 +26,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "about_doctor": MessageLookupByLibrary.simpleMessage("About Doctor"),
         "age": MessageLookupByLibrary.simpleMessage("Age"),
         "book": MessageLookupByLibrary.simpleMessage("Book"),
+        "bookSuccess":
+            MessageLookupByLibrary.simpleMessage("Booking successful!"),
+        "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
+        "confirmBooking":
+            MessageLookupByLibrary.simpleMessage("Confirm Booking"),
+        "confirmBookingMessage": MessageLookupByLibrary.simpleMessage(
+            "Are you sure you want to book the appointment on:"),
         "continueText": MessageLookupByLibrary.simpleMessage("Continue"),
         "done": MessageLookupByLibrary.simpleMessage("Done"),
         "dontHaveAccount":
@@ -51,8 +58,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "male": MessageLookupByLibrary.simpleMessage("Male"),
         "noInternet":
             MessageLookupByLibrary.simpleMessage("No internet connection"),
+        "noScheduleFound": MessageLookupByLibrary.simpleMessage(
+            "No suitable schedule found for booking"),
         "no_slots": MessageLookupByLibrary.simpleMessage(
             "No available time slots for this day."),
+        "ok": MessageLookupByLibrary.simpleMessage("Ok"),
         "onBoardingSubtitle1": MessageLookupByLibrary.simpleMessage(
             "Book appointments, view records, and track your health all in one app."),
         "onBoardingSubtitle2": MessageLookupByLibrary.simpleMessage(

@@ -52,5 +52,11 @@
     "select_date": "Select Date",
     "select_time": "Select Time",
     "no_slots": "No available time slots for this day.",
-    "book": "Book"
+    "book": "Book",
+     "bookSuccess": "Booking successful!",
+  "confirmBooking": "Confirm Booking",
+  "confirmBookingMessage": "Are you sure you want to book the appointment on:",
+  "cancel": "Cancel",
+  "ok": "Ok",
+  "noScheduleFound": "No suitable schedule found for booking"
 }

@@ -10,12 +10,14 @@ class CustomButton extends StatelessWidget {
     required this.onPressed,
     this.isLoading = false,
     this.borderRadius,
+    this.color = AppColors.primaryAppColor,
   });
 
   final String text;
   final void Function()? onPressed;
   final bool isLoading;
   final double? borderRadius;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,7 @@ class CustomButton extends StatelessWidget {
           ),
           textStyle: AppTextStyles.semiBold18.copyWith(fontSize: 16.5.sp),
           foregroundColor: Colors.white,
-          backgroundColor: AppColors.primaryAppColor,
+          backgroundColor: color,
         ),
         child: isLoading
             ? SizedBox(

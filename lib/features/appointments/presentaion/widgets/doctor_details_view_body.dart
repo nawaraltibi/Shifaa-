@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:shifaa/core/utils/app_colors.dart';
 import 'package:shifaa/core/utils/app_images.dart';
+import 'package:shifaa/core/utils/app_text_styles.dart';
 import 'package:shifaa/core/widgets/custom_button.dart';
 import 'package:shifaa/features/appointments/data/models/doctor_schedule_model.dart';
+import 'package:shifaa/features/appointments/presentaion/cubits/appointment_cubit/appointment_cubit.dart';
+import 'package:shifaa/features/appointments/presentaion/cubits/appointment_cubit/appointment_state.dart';
 import 'package:shifaa/features/appointments/presentaion/cubits/doctor_details_cubit/doctor_details_cubit.dart';
 import 'package:shifaa/features/appointments/presentaion/cubits/doctor_details_cubit/doctor_details_cubit_state.dart';
 import 'package:shifaa/features/appointments/presentaion/cubits/doctor_schedule_cubit/doctor_schedule_cubit.dart';
@@ -43,28 +47,87 @@ class _DoctorDetailsViewBodyState extends State<DoctorDetailsViewBody> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<DoctorDetailsCubit, DoctorDetailsState>(
-      listener: (context, state) {
-        if (state is DoctorDetailsSuccess) {
-          setState(() => detailsLoaded = true);
-        } else if (state is DoctorDetailsError) {
-          _showError(context, state.message);
-        }
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<DoctorDetailsCubit, DoctorDetailsState>(
+          listener: (context, state) {
+            if (state is DoctorDetailsSuccess) {
+              setState(() => detailsLoaded = true);
+            } else if (state is DoctorDetailsError) {
+              _showError(context, state.message);
+            }
+          },
+        ),
+        BlocListener<AppointmentCubit, AppointmentState>(
+          listener: (context, state) {
+            if (state is AppointmentLoading) {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (_) => const Center(
+                  child: CircularProgressIndicator(
+                    color: AppColors.primaryAppColor,
+                  ),
+                ),
+              );
+            } else {
+              if (Navigator.canPop(context)) {
+                Navigator.of(context, rootNavigator: true).pop();
+              }
+
+              if (state is AppointmentSuccess) {
+                // ✅ تم ترجمة النص هنا
+                _showSnackBar(
+                  context,
+                  // "تم الحجز بنجاح "
+                  S
+                      .of(context)
+                      .bookSuccess, // يجب أن يكون هذا المفتاح موجودًا في ملف الترجمة
+                  type: SnackBarType.success,
+                );
+
+                if (_selectedDate != null) {
+                  context
+                      .read<DoctorScheduleCubit>()
+                      .selectDateAndFetchSchedule(
+                        widget.doctorId,
+                        _selectedDate!,
+                      );
+                }
+
+                setState(() {
+                  _selectedTimeSlot = null;
+                });
+              } else if (state is AppointmentError) {
+                _showSnackBar(context, state.message, type: SnackBarType.error);
+              }
+            }
+          },
+        ),
+      ],
       child: BlocBuilder<DoctorScheduleCubit, DoctorScheduleState>(
         builder: (context, scheduleState) {
           if (!detailsLoaded) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+              child: CircularProgressIndicator(
+                color: AppColors.primaryAppColor,
+              ),
+            );
           }
 
           if (scheduleState is DoctorScheduleLoading &&
               scheduleState is! DoctorScheduleDateLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+              child: CircularProgressIndicator(
+                backgroundColor: AppColors.primaryAppColor,
+              ),
+            );
           }
 
           if (scheduleState is DoctorScheduleError) {
             return Center(child: Text('Error: ${scheduleState.message}'));
           }
+
           return _buildContent();
         },
       ),
@@ -167,18 +230,235 @@ class _DoctorDetailsViewBodyState extends State<DoctorDetailsViewBody> {
             CustomButton(
               text: S.of(context).book,
               onPressed: () {
-                if (_selectedDate != null && _selectedTimeSlot != null) {
-                  debugPrint(
-                    "Booking for: $_selectedDate at $_selectedTimeSlot",
+                if (_selectedDate == null) {
+                  // ✅ تم ترجمة هذا النص
+                  _showSnackBar(
+                    context,
+                    S.of(context).select_date,
+                    type: SnackBarType.error,
                   );
-                  // هون لاحقًا تبعتهم للـ API
-                } else {
-                  debugPrint("Please select date & time first!");
+                  return;
                 }
+
+                if (_selectedTimeSlot == null) {
+                  // ✅ تم ترجمة هذا النص
+                  _showSnackBar(
+                    context,
+                    S.of(context).select_time,
+                    type: SnackBarType.error,
+                  );
+                  return;
+                }
+
+                _showConfirmationDialog(context);
               },
               borderRadius: 35.r,
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  void _showConfirmationDialog(BuildContext context) {
+    if (_selectedDate == null || _selectedTimeSlot == null) return;
+
+    final formattedDate = DateFormat('EEEE, dd/MM/yyyy').format(_selectedDate!);
+    final fullDateTimeString = _selectedTimeSlot!;
+    final time = fullDateTimeString.contains('-')
+        ? fullDateTimeString.split('-').last.trim()
+        : fullDateTimeString;
+
+    final formattedDateTime = '$formattedDate - $time';
+
+    showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          backgroundColor: Colors.white,
+          title: Row(
+            children: [
+              const Icon(
+                Icons.event_available,
+                color: AppColors.primaryAppColor,
+              ),
+              const SizedBox(width: 8),
+              // ✅ تم ترجمة هذا النص
+              Text(
+                S.of(context).confirmBooking, // مفتاح جديد
+                style: AppTextStyles.semiBold18.copyWith(fontSize: 20.sp),
+              ),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // ✅ تم ترجمة هذا النص
+              Text(
+                S.of(context).confirmBookingMessage, // مفتاح جديد
+                style: AppTextStyles.regular15,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 15),
+              Text(
+                formattedDateTime,
+                style: AppTextStyles.semiBold18.copyWith(
+                  fontSize: 16.sp,
+                  color: AppColors.primaryAppColor,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 20.h),
+              Row(
+                children: [
+                  SizedBox(
+                    height: 40.h,
+                    width: 110.w,
+                    child: CustomButton(
+                      // ✅ تم ترجمة هذا النص
+                      text: S.of(context).cancel, // مفتاح جديد
+                      onPressed: () => Navigator.pop(context),
+                      borderRadius: 35.r,
+                      color: const Color(0xFFFF6F61),
+                    ),
+                  ),
+                  const Spacer(),
+                  SizedBox(
+                    height: 40.h,
+                    width: 110.w,
+                    child: CustomButton(
+                      // ✅ تم ترجمة هذا النص
+                      text: S.of(context).ok, // مفتاح جديد
+                      onPressed: () {
+                        if (_selectedDate == null || _selectedTimeSlot == null)
+                          return;
+
+                        final datePart = DateFormat(
+                          'yyyy-MM-dd',
+                        ).format(_selectedDate!);
+
+                        final rawTime = _selectedTimeSlot!.contains('-')
+                            ? _selectedTimeSlot!.split('-').last.trim()
+                            : _selectedTimeSlot!;
+
+                        final parsedTime = DateFormat("h:mm a").parse(rawTime);
+                        final timePart = DateFormat("HH:mm").format(parsedTime);
+
+                        final startTime = "$datePart $timePart";
+
+                        final scheduleState = context
+                            .read<DoctorScheduleCubit>()
+                            .state;
+
+                        int? doctorScheduleId;
+
+                        if (scheduleState is DoctorScheduleSuccess) {
+                          for (final schedule in scheduleState.schedule) {
+                            if ((schedule.availableSlots ?? []).contains(
+                              timePart,
+                            )) {
+                              doctorScheduleId = schedule.id;
+                              break;
+                            }
+                          }
+                        }
+
+                        if (doctorScheduleId == null) {
+                          Navigator.pop(context); // يسكر الـ dialog
+                          // ✅ تم ترجمة هذا النص
+                          _showSnackBar(
+                            context,
+                            S.of(context).noScheduleFound, // مفتاح جديد
+                            type: SnackBarType.error,
+                          );
+                          return;
+                        }
+
+                        context.read<AppointmentCubit>().bookAppointment(
+                          startTime: startTime,
+                          doctorScheduleId: doctorScheduleId,
+                        );
+
+                        Navigator.pop(context); // يسكر فقط Dialog التأكيد
+                      },
+                      borderRadius: 35.r,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _showSnackBar(
+    BuildContext context,
+    String message, {
+    SnackBarType type = SnackBarType.info,
+  }) {
+    Color backgroundColor;
+    IconData icon;
+    Color iconColor = Colors.white;
+
+    switch (type) {
+      case SnackBarType.success:
+        backgroundColor = Colors.green.shade600;
+        icon = Icons.check_circle_outline;
+        break;
+      case SnackBarType.error:
+        backgroundColor = Colors.red.shade700;
+        icon = Icons.error_outline;
+        break;
+      case SnackBarType.warning:
+        backgroundColor = Colors.orange.shade700;
+        icon = Icons.warning_amber_rounded;
+        break;
+      case SnackBarType.info:
+      default:
+        backgroundColor = Colors.blueGrey.shade700;
+        icon = Icons.info_outline;
+        break;
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        behavior: SnackBarBehavior.floating,
+        backgroundColor:
+            Colors.transparent, // خلفية شفافة عشان نقدر نرسم الكارد
+        elevation: 0,
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        content: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+          decoration: BoxDecoration(
+            color: backgroundColor,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: backgroundColor.withOpacity(0.6),
+                blurRadius: 8,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              Icon(icon, color: iconColor, size: 26),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Text(
+                  message,
+                  style: const TextStyle(color: Colors.white, fontSize: 16),
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -210,7 +490,7 @@ class _DoctorDetailsViewBodyState extends State<DoctorDetailsViewBody> {
                 selectedDate: scheduleState.selectedDate,
                 onDateSelected: (date) {
                   setState(() {
-                    _selectedDate = date; // خزّن التاريخ
+                    _selectedDate = date;
                   });
                   context
                       .read<DoctorScheduleCubit>()
@@ -229,7 +509,9 @@ class _DoctorDetailsViewBodyState extends State<DoctorDetailsViewBody> {
     return BlocBuilder<DoctorScheduleCubit, DoctorScheduleState>(
       builder: (context, scheduleState) {
         if (scheduleState is DoctorScheduleLoading) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(
+            child: CircularProgressIndicator(color: AppColors.primaryAppColor),
+          );
         }
 
         if (scheduleState is DoctorScheduleDateLoading) {
@@ -238,7 +520,11 @@ class _DoctorDetailsViewBodyState extends State<DoctorDetailsViewBody> {
             children: [
               SelectTimeTitle(slotsCount: 0),
               SizedBox(height: 14),
-              Center(child: CircularProgressIndicator()),
+              Center(
+                child: CircularProgressIndicator(
+                  color: AppColors.primaryAppColor,
+                ),
+              ),
             ],
           );
         }
@@ -248,20 +534,12 @@ class _DoctorDetailsViewBodyState extends State<DoctorDetailsViewBody> {
           final selectedDate = scheduleState.selectedDate;
 
           final dayName = DateFormat('EEEE').format(selectedDate).toLowerCase();
-          final scheduleForDay = currentSchedule.firstWhere(
-            (s) => s.dayOfWeek.toLowerCase() == dayName,
-            orElse: () => DoctorScheduleModel(
-              id: -1,
-              dayOfWeek: '',
-              startTime: '',
-              endTime: '',
-              sessionDuration: 0,
-              type: '',
-              slots: [],
-            ),
-          );
+          final slotsForSelectedDay = currentSchedule
+              .where((s) => s.dayOfWeek.toLowerCase() == dayName)
+              .expand((s) => s.availableSlots ?? [])
+              .toList();
 
-          final slotsCount = scheduleForDay.slots.length;
+          final slotsCount = slotsForSelectedDay.length;
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -274,7 +552,7 @@ class _DoctorDetailsViewBodyState extends State<DoctorDetailsViewBody> {
                 onSlotSelected: (fullDateTime) {
                   debugPrint("Selected: $fullDateTime");
                   setState(() {
-                    _selectedTimeSlot = fullDateTime; // خزّن الساعة
+                    _selectedTimeSlot = fullDateTime;
                   });
                 },
               ),
@@ -293,3 +571,5 @@ class _DoctorDetailsViewBodyState extends State<DoctorDetailsViewBody> {
     );
   }
 }
+
+enum SnackBarType { success, error, warning, info }

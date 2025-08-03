@@ -3,8 +3,13 @@ import 'package:get_it/get_it.dart';
 
 import 'package:shifaa/core/api/dio_consumer.dart';
 import 'package:shifaa/core/api/end_ponits.dart';
+import 'package:shifaa/features/appointments/data/data_sources/doctor_appointment/doctor_details/doctor_appointment_remote_data_source.dart';
+import 'package:shifaa/features/appointments/data/data_sources/doctor_appointment/doctor_details/doctor_appointment_remote_data_source_impl.dart';
+import 'package:shifaa/features/appointments/domain/repos/doctor_appointment_repo/doctor_appointment_repo.dart';
+import 'package:shifaa/features/appointments/domain/repos/doctor_appointment_repo/doctor_appointment_repo_impl.dart';
 import 'package:shifaa/features/appointments/domain/repos/doctor_schedule_repo/doctor_schedule_repo.dart';
 import 'package:shifaa/features/appointments/domain/repos/doctor_schedule_repo/doctor_schedule_repo_impl.dart';
+import 'package:shifaa/features/appointments/domain/usecases/book_appointment_use_case.dart';
 import 'package:shifaa/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:shifaa/features/auth/data/datasources/auth_remote_datasource_impl.dart';
 import 'package:shifaa/features/auth/data/repos/auth_repo_impl.dart';
@@ -76,5 +81,17 @@ void setupServiceLocator() {
 
   getIt.registerLazySingleton(
     () => GetDoctorScheduleUseCase(getIt<DoctorScheduleRepository>()),
+  );
+  // ✅ Appointment Feature
+  getIt.registerLazySingleton<AppointmentRemoteDataSource>(
+    () => AppointmentRemoteDataSourceImpl(getIt<DioConsumer>()),
+  );
+
+  getIt.registerLazySingleton<AppointmentRepository>(
+    () => AppointmentRepositoryImpl(getIt<AppointmentRemoteDataSource>()),
+  );
+
+  getIt.registerLazySingleton(
+    () => BookAppointmentUseCase(getIt<AppointmentRepository>()),
   );
 }

@@ -579,6 +579,66 @@ class S {
       args: [],
     );
   }
+
+  /// `Booking successful!`
+  String get bookSuccess {
+    return Intl.message(
+      'Booking successful!',
+      name: 'bookSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm Booking`
+  String get confirmBooking {
+    return Intl.message(
+      'Confirm Booking',
+      name: 'confirmBooking',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to book the appointment on:`
+  String get confirmBookingMessage {
+    return Intl.message(
+      'Are you sure you want to book the appointment on:',
+      name: 'confirmBookingMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel`
+  String get cancel {
+    return Intl.message(
+      'Cancel',
+      name: 'cancel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ok`
+  String get ok {
+    return Intl.message(
+      'Ok',
+      name: 'ok',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No suitable schedule found for booking`
+  String get noScheduleFound {
+    return Intl.message(
+      'No suitable schedule found for booking',
+      name: 'noScheduleFound',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

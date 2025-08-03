@@ -6,6 +6,7 @@ class EndPoint {
   static const String verifyOtp = "patient/login";
   static const String register = "patient/register";
   static const String verifyPassword = "patient/verify-password";
+  static const String appointment = "appointments";
 
   // ديناميكية
   static String doctorDetails(String doctorId) => "doctors/$doctorId";

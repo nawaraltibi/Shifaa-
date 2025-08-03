@@ -80,20 +80,15 @@ class DoctorScheduleCubit extends Cubit<DoctorScheduleState> {
     result.fold((failure) => emit(DoctorScheduleError(failure.message)), (
       daySchedule,
     ) {
-      // 👇 بدل ما تمسح كل الـ schedules، حدّث بس اليوم المختار
       final updatedSchedules = List<DoctorScheduleModel>.from(_schedules);
 
       final dayName = DateFormat('EEEE').format(newSelectedDate).toLowerCase();
 
-      final index = updatedSchedules.indexWhere(
-        (s) => s.dayOfWeek.toLowerCase() == dayName,
-      );
+      // ❌ احذف كل الفترات السابقة لنفس اليوم
+      updatedSchedules.removeWhere((s) => s.dayOfWeek.toLowerCase() == dayName);
 
-      if (index != -1) {
-        updatedSchedules[index] = daySchedule.first; // حدّث اليوم الحالي
-      } else {
-        updatedSchedules.add(daySchedule.first); // ضيفه إذا مش موجود
-      }
+      // ✅ أضف كل الفترات الجديدة من الريسبونس
+      updatedSchedules.addAll(daySchedule);
 
       emit(
         DoctorScheduleSuccess(updatedSchedules, _currentMonth, _selectedDate),

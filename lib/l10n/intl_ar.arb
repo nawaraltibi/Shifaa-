@@ -52,5 +52,11 @@
     "select_date": "اختر يوماً",
     "select_time": "اختر وقتاً",
     "no_slots": "لا توجد أوقات متاحة في هذا اليوم.",
-    "book": "احجز"
+    "book": "احجز",
+     "bookSuccess": "تم الحجز بنجاح!",
+  "confirmBooking": "تأكيد الحجز",
+  "confirmBookingMessage": "هل أنت متأكد من حجز الموعد في:",
+  "cancel": "إلغاء",
+  "ok": "تأكيد",
+  "noScheduleFound": "لم يتم العثور على فترة مناسبة للحجز"
 }

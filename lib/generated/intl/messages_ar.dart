@@ -26,6 +26,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "about_doctor": MessageLookupByLibrary.simpleMessage("لمحة عن الطبيب"),
         "age": MessageLookupByLibrary.simpleMessage("العمر"),
         "book": MessageLookupByLibrary.simpleMessage("احجز"),
+        "bookSuccess": MessageLookupByLibrary.simpleMessage("تم الحجز بنجاح!"),
+        "cancel": MessageLookupByLibrary.simpleMessage("إلغاء"),
+        "confirmBooking": MessageLookupByLibrary.simpleMessage("تأكيد الحجز"),
+        "confirmBookingMessage": MessageLookupByLibrary.simpleMessage(
+            "هل أنت متأكد من حجز الموعد في:"),
         "continueText": MessageLookupByLibrary.simpleMessage("استمرار"),
         "done": MessageLookupByLibrary.simpleMessage("استمرار"),
         "dontHaveAccount":
@@ -51,8 +56,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "male": MessageLookupByLibrary.simpleMessage("ذكر"),
         "noInternet":
             MessageLookupByLibrary.simpleMessage("لا يوجد اتصال بالإنترنت"),
+        "noScheduleFound": MessageLookupByLibrary.simpleMessage(
+            "لم يتم العثور على فترة مناسبة للحجز"),
         "no_slots": MessageLookupByLibrary.simpleMessage(
             "لا توجد أوقات متاحة في هذا اليوم."),
+        "ok": MessageLookupByLibrary.simpleMessage("تأكيد"),
         "onBoardingSubtitle1": MessageLookupByLibrary.simpleMessage(
             "احجز المواعيد، استعرض السجلات، وتابع صحتك في تطبيق واحد."),
         "onBoardingSubtitle2": MessageLookupByLibrary.simpleMessage(

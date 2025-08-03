@@ -34,7 +34,10 @@ class _TimeSlotsListState extends State<TimeSlotsList> {
         .where((s) => s.dayOfWeek.toLowerCase() == selectedDay)
         .toList();
 
-    final slots = [for (final s in filteredSchedules) ...s.slots];
+    final slots = [
+      for (final s in filteredSchedules)
+        if (s.availableSlots != null) ...s.availableSlots!,
+    ];
 
     if (slots.isEmpty) {
       return Text(S.of(context).no_slots);
@@ -46,6 +49,7 @@ class _TimeSlotsListState extends State<TimeSlotsList> {
     ).format(widget.selectedDate);
 
     return Container(
+      width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 20.h),
       decoration: const BoxDecoration(
         color: Color(0xFFF5F7FF),
