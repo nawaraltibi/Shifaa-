@@ -9,12 +9,17 @@ abstract class Failure {
 }
 
 class ServerFailure extends Failure {
-  const ServerFailure(super.message);
+  final int? statusCode;
+
+  const ServerFailure(String message, {this.statusCode}) : super(message);
 
   @override
   String toString() => message;
 
   factory ServerFailure.fromDiorError(DioException e) {
+    print(
+      '❌ DioException: ${e.response?.statusCode} | Data: ${e.response?.data}',
+    );
     switch (e.type) {
       case DioExceptionType.connectionTimeout:
         return const ServerFailure('Connection timeout with server');
@@ -41,8 +46,17 @@ class ServerFailure extends Failure {
   factory ServerFailure.fromResponse(int statusCode, dynamic data) {
     const defaultMsg = 'An error occurred. Please try again.';
 
+    if (data is String && data.startsWith('<!DOCTYPE html>')) {
+      return const ServerFailure(
+        'Server returned an HTML error page (likely 500 Internal Server Error)',
+        statusCode: 500,
+      );
+    }
     if (statusCode == 200 || statusCode == 201) {
-      return ServerFailure(data['message'] ?? 'Success');
+      return ServerFailure(
+        data['message'] ?? 'Success',
+        statusCode: statusCode,
+      );
     }
 
     if (data is Map && data['message'] is String) {
@@ -53,17 +67,17 @@ class ServerFailure extends Failure {
         final detailedErrors = errors.entries
             .map((e) => "${e.key}: ${(e.value as List).join(", ")}")
             .join("\n");
-        return ServerFailure("$msg\n$detailedErrors");
+        return ServerFailure("$msg\n$detailedErrors", statusCode: statusCode);
       }
 
       if (statusCode == 400 ||
           statusCode == 401 ||
           statusCode == 403 ||
           statusCode == 404) {
-        return ServerFailure(msg);
+        return ServerFailure(msg, statusCode: statusCode);
       }
 
-      return ServerFailure(msg);
+      return ServerFailure(msg, statusCode: statusCode);
     }
 
     switch (statusCode) {
@@ -71,20 +85,33 @@ class ServerFailure extends Failure {
       case 401:
       case 403:
       case 404:
-        return ServerFailure(data?['error']?['message'] ?? defaultMsg);
+        return ServerFailure(
+          data?['error']?['message'] ?? defaultMsg,
+          statusCode: statusCode,
+        );
       case 422:
         if (data is Map && data['errors'] is Map<String, dynamic>) {
           final errors = data['errors'] as Map<String, dynamic>;
           final detailedErrors = errors.entries
               .map((e) => "${e.key}: ${(e.value as List).join(", ")}")
               .join("\n");
-          return ServerFailure(detailedErrors);
+          return ServerFailure(detailedErrors, statusCode: statusCode);
         }
-        return ServerFailure(data?['message'] ?? defaultMsg);
+        return ServerFailure(
+          data?['message'] ?? defaultMsg,
+          statusCode: statusCode,
+        );
       case 500:
-        return const ServerFailure('Server error. Try again later.');
+        final msg = (data is Map && data['message'] is String)
+            ? data['message']
+            : data.toString(); // fallback to raw body if structure unknown
+        return ServerFailure(
+          msg ?? 'Server error. Try again later.',
+          statusCode: 500,
+        );
+
       default:
-        return const ServerFailure(defaultMsg);
+        return ServerFailure(defaultMsg, statusCode: statusCode);
     }
   }
 }

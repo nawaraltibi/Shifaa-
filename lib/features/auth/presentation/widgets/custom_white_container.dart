@@ -48,7 +48,7 @@ class CustomWhiteContainer extends StatelessWidget {
           top: -90.h,
           right: 35.w,
           child: Image.asset(
-            Assets.imagesDoctorElement,
+            AppImages.imagesDoctorElement,
             width: 0.3.sw,
             fit: BoxFit.contain,
           ),

@@ -51,6 +51,7 @@ dependencies:
   hive_flutter: ^1.1.0
   intl: 0.20.2
   intl_phone_field: ^3.2.0
+  pusher_channels_flutter: ^2.5.0
   shared_preferences: ^2.5.3
   svg_flutter: ^0.0.1
 

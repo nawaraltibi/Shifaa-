@@ -8,10 +8,17 @@ class EndPoint {
   static const String verifyPassword = "patient/verify-password";
   static const String appointment = "appointments";
 
-  // ديناميكية
+  // ديناميكية - دكتور
   static String doctorDetails(String doctorId) => "doctors/$doctorId";
   static String doctorSchedules(String doctorId) =>
       "doctors/$doctorId/schedules";
+
+  // 👇👇 روابط الشات
+  static const String chat = "chat"; // POST لإنشاء محادثة جديدة
+
+  static String getMessages(int chatId) => "chat/$chatId/messages"; // GET رسائل
+  static String sendMessage(int chatId) =>
+      "chat/$chatId/messages"; // POST إرسال رسالة
 }
 
 class ApiKey {

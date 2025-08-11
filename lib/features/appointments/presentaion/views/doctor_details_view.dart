@@ -8,6 +8,8 @@ import 'package:shifaa/features/appointments/presentaion/cubits/doctor_schedule_
 import 'package:shifaa/features/appointments/presentaion/cubits/appointment_cubit/appointment_cubit.dart'; // Cubit الحجز
 import 'package:shifaa/features/appointments/presentaion/widgets/doctor_details_view_body.dart';
 import 'package:shifaa/core/functions/setup_service_locator.dart';
+import 'package:shifaa/features/chat/domain/usecases/create_chat_use_case.dart';
+import 'package:shifaa/features/chat/presentation/cubits/create_chat_cubit/create_chat_cubit.dart';
 
 class DoctorDetailsView extends StatelessWidget {
   const DoctorDetailsView({super.key, required this.doctorId});
@@ -33,6 +35,9 @@ class DoctorDetailsView extends StatelessWidget {
           BlocProvider(
             create: (context) =>
                 AppointmentCubit(getIt<BookAppointmentUseCase>()),
+          ),
+          BlocProvider(
+            create: (context) => CreateChatCubit(getIt<CreateChat>()),
           ),
         ],
         child: DoctorDetailsViewBody(doctorId: doctorId.toString()),

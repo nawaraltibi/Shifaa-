@@ -33,6 +33,7 @@ class ApiInterceptor extends Interceptor {
       if (!isUnauthenticated && token != null && token.isNotEmpty)
         'Authorization': 'Bearer $token',
     });
+    print("📛 Token Used: $token");
 
     print("➡️ API Request: ${options.method} ${options.uri}");
     print("Headers: ${options.headers}");
@@ -53,9 +54,27 @@ class ApiInterceptor extends Interceptor {
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
     print("❌ API Error: ${err.type} | ${err.message}");
-    if (err.response != null) {
-      print("Error Response Body: ${err.response?.data}");
+
+    final response = err.response;
+    if (response != null) {
+      print("⛔ Status Code: ${response.statusCode}");
+      print("⛔ Response Headers: ${response.headers}");
+
+      // Try printing raw data even if it's HTML or string
+      try {
+        print("⛔ Response Body: ${response.data}");
+      } catch (e) {
+        print("⚠️ Failed to parse response body: $e");
+      }
+
+      // Optional: print response as string if it's not a map
+      if (response.data is! Map && response.data is! List) {
+        print("⛔ Raw Response Body as String: ${response.data.toString()}");
+      }
+    } else {
+      print("❌ No response from server (might be a network issue).");
     }
+
     super.onError(err, handler);
   }
 }

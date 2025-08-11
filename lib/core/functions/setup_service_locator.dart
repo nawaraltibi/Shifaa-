@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shifaa/core/api/api_interceptor.dart';
 
 import 'package:shifaa/core/api/dio_consumer.dart';
 import 'package:shifaa/core/api/end_ponits.dart';
@@ -17,7 +18,6 @@ import 'package:shifaa/features/auth/domain/repos/auth_repo.dart';
 import 'package:shifaa/features/auth/domain/usecases/register_patient_usecase.dart';
 import 'package:shifaa/features/auth/domain/usecases/send_otp_usecase.dart';
 import 'package:shifaa/features/auth/domain/usecases/verify_otp_usecase.dart';
-// import 'package:shifaa/features/auth/domain/usecases/verify_password_usecase.dart';
 
 import 'package:shifaa/features/appointments/data/data_sources/doctor_details/doctor_remote_data_soucre.dart';
 import 'package:shifaa/features/appointments/data/data_sources/doctor_details/doctor_remote_data_soucre_impl.dart';
@@ -29,6 +29,14 @@ import 'package:shifaa/features/appointments/domain/usecases/get_doctor_details_
 import 'package:shifaa/features/appointments/data/data_sources/doctor_schedule/doctor_schedule_remote_data_source.dart';
 import 'package:shifaa/features/appointments/data/data_sources/doctor_schedule/doctor_schedule_remote_data_source_impl.dart';
 import 'package:shifaa/features/appointments/domain/usecases/get_doctor_schedule_use_case.dart';
+import 'package:shifaa/features/auth/domain/usecases/verify_password_usecase.dart';
+
+// Chat Feature Imports
+import 'package:shifaa/features/chat/data/data_sources/chat_remote_data_source.dart';
+import 'package:shifaa/features/chat/data/repositories/chat_repo_impl.dart';
+import 'package:shifaa/features/chat/domain/repositories/chat_repo.dart';
+import 'package:shifaa/features/chat/domain/usecases/create_chat_use_case.dart';
+import 'package:shifaa/features/chat/presentation/cubits/get_messages_cubit/get_messages_cubit.dart';
 
 final getIt = GetIt.instance;
 
@@ -37,6 +45,7 @@ void setupServiceLocator() {
   getIt.registerLazySingleton<Dio>(() {
     final dio = Dio();
     dio.options.baseUrl = EndPoint.baseUrl;
+    dio.interceptors.add(ApiInterceptor()); // ✅ أضف هذه السطر
     return dio;
   });
 
@@ -55,7 +64,9 @@ void setupServiceLocator() {
   getIt.registerLazySingleton(() => SendOtpUseCase(getIt<AuthRepository>()));
   getIt.registerLazySingleton(() => VerifyOtpUseCase(getIt<AuthRepository>()));
   getIt.registerLazySingleton(() => RegisterUseCase(getIt<AuthRepository>()));
-  // getIt.registerLazySingleton(() => VerifyPasswordUseCase(getIt<AuthRepository>()));
+  getIt.registerLazySingleton(
+    () => VerifyPasswordUseCase(getIt<AuthRepository>()),
+  );
 
   // Doctor Feature
   getIt.registerLazySingleton<DoctorRemoteDataSource>(
@@ -94,4 +105,17 @@ void setupServiceLocator() {
   getIt.registerLazySingleton(
     () => BookAppointmentUseCase(getIt<AppointmentRepository>()),
   );
+
+  // ✅ Chat Feature
+  getIt.registerLazySingleton<ChatRemoteDataSource>(
+    () => ChatRemoteDataSource(getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<ChatRepository>(
+    () => ChatRepositoryImpl(getIt<ChatRemoteDataSource>()),
+  );
+
+  getIt.registerLazySingleton(() => CreateChat(getIt<ChatRepository>()));
+
+  getIt.registerFactory(() => GetMessagesCubit(getIt<ChatRepository>()));
 }

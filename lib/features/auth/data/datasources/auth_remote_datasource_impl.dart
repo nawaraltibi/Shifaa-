@@ -46,4 +46,18 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
     return UserAuthModel.fromJson(response); // ✅ رجع الريسبونس
   }
+
+  @override
+  Future<UserAuthModel> verifyPassword({
+    required String phone,
+    required int otp,
+    required String password,
+  }) async {
+    final response = await api.post(
+      EndPoint.verifyPassword,
+      data: {"phone": phone, "otp": otp, "password": password},
+    );
+
+    return UserAuthModel.fromJson(response);
+  }
 }

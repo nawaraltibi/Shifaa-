@@ -62,4 +62,24 @@ class AuthRepositoryImpl implements AuthRepository {
       return Left(ServerFailure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, UserAuthModel>> verifyPassword({
+    required String phone,
+    required int otp,
+    required String password,
+  }) async {
+    try {
+      final result = await remote.verifyPassword(
+        phone: phone,
+        otp: otp,
+        password: password,
+      );
+      return Right(result);
+    } on DioException catch (e) {
+      return Left(ServerFailure.fromDiorError(e));
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
 }

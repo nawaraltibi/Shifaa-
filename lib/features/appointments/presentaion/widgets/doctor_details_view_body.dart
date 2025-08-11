@@ -6,7 +6,6 @@ import 'package:shifaa/core/utils/app_colors.dart';
 import 'package:shifaa/core/utils/app_images.dart';
 import 'package:shifaa/core/utils/app_text_styles.dart';
 import 'package:shifaa/core/widgets/custom_button.dart';
-import 'package:shifaa/features/appointments/data/models/doctor_schedule_model.dart';
 import 'package:shifaa/features/appointments/presentaion/cubits/appointment_cubit/appointment_cubit.dart';
 import 'package:shifaa/features/appointments/presentaion/cubits/appointment_cubit/appointment_state.dart';
 import 'package:shifaa/features/appointments/presentaion/cubits/doctor_details_cubit/doctor_details_cubit.dart';
@@ -22,6 +21,7 @@ import 'package:shifaa/features/appointments/presentaion/widgets/select_date_lis
 import 'package:shifaa/features/appointments/presentaion/widgets/select_date_title.dart';
 import 'package:shifaa/features/appointments/presentaion/widgets/select_time_title.dart';
 import 'package:shifaa/features/appointments/presentaion/widgets/time_slots_list.dart';
+import 'dart:ui' as ui;
 import 'package:shifaa/generated/l10n.dart';
 
 class DoctorDetailsViewBody extends StatefulWidget {
@@ -125,7 +125,9 @@ class _DoctorDetailsViewBodyState extends State<DoctorDetailsViewBody> {
           }
 
           if (scheduleState is DoctorScheduleError) {
-            return Center(child: Text('Error: ${scheduleState.message}'));
+            return Center(
+              child: Text('${S.of(context).error}: ${scheduleState.message}'),
+            );
           }
 
           return _buildContent();
@@ -171,10 +173,10 @@ class _DoctorDetailsViewBodyState extends State<DoctorDetailsViewBody> {
             return Column(
               children: [
                 SizedBox(height: 40.h),
-                const CustomDoctorDetailsAppBar(),
+                const CustomDoctorDetailsAppBar(doctorId: 1),
                 SizedBox(height: 22.h),
                 DoctorImportantInfo(
-                  image: doctor.avatar ?? Assets.imagesDoctor1,
+                  image: doctor.avatar ?? AppImages.imagesDoctor1,
                   name: doctor.fullName,
                   sessionPrice: doctor.consultationFee,
                   specialization: doctor.specialty,
@@ -263,7 +265,11 @@ class _DoctorDetailsViewBodyState extends State<DoctorDetailsViewBody> {
   void _showConfirmationDialog(BuildContext context) {
     if (_selectedDate == null || _selectedTimeSlot == null) return;
 
-    final formattedDate = DateFormat('EEEE, dd/MM/yyyy').format(_selectedDate!);
+    final locale = Localizations.localeOf(context).toString();
+    final formattedDate = DateFormat(
+      'EEEE, dd/MM/yyyy',
+      locale,
+    ).format(_selectedDate!);
     final fullDateTimeString = _selectedTimeSlot!;
     final time = fullDateTimeString.contains('-')
         ? fullDateTimeString.split('-').last.trim()
@@ -312,47 +318,56 @@ class _DoctorDetailsViewBodyState extends State<DoctorDetailsViewBody> {
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 20.h),
+
+              // الكود الصحيح للـ Row widget
               Row(
+                // ✅ تم تصحيح الخطأ الإملائي هنا
+                textDirection: ui.TextDirection.ltr,
                 children: [
                   SizedBox(
                     height: 40.h,
                     width: 110.w,
                     child: CustomButton(
-                      // ✅ تم ترجمة هذا النص
-                      text: S.of(context).cancel, // مفتاح جديد
+                      text: S.of(context).cancel,
                       onPressed: () => Navigator.pop(context),
                       borderRadius: 35.r,
                       color: const Color(0xFFFF6F61),
                     ),
                   ),
-                  const Spacer(),
+                  SizedBox(width: 30.w),
                   SizedBox(
                     height: 40.h,
                     width: 110.w,
                     child: CustomButton(
-                      // ✅ تم ترجمة هذا النص
-                      text: S.of(context).ok, // مفتاح جديد
+                      text: S.of(context).ok,
                       onPressed: () {
                         if (_selectedDate == null || _selectedTimeSlot == null)
                           return;
 
+                        // ✅ استخدم en_US دائماً عند تجهيز البيانات للإرسال
                         final datePart = DateFormat(
                           'yyyy-MM-dd',
+                          'en_US',
                         ).format(_selectedDate!);
 
                         final rawTime = _selectedTimeSlot!.contains('-')
                             ? _selectedTimeSlot!.split('-').last.trim()
                             : _selectedTimeSlot!;
 
-                        final parsedTime = DateFormat("h:mm a").parse(rawTime);
-                        final timePart = DateFormat("HH:mm").format(parsedTime);
+                        final parsedTime = DateFormat(
+                          'h:mm a',
+                          'en_US',
+                        ).parse(rawTime);
+                        final timePart = DateFormat(
+                          'HH:mm',
+                          'en_US',
+                        ).format(parsedTime);
 
                         final startTime = "$datePart $timePart";
 
                         final scheduleState = context
                             .read<DoctorScheduleCubit>()
                             .state;
-
                         int? doctorScheduleId;
 
                         if (scheduleState is DoctorScheduleSuccess) {
@@ -366,12 +381,25 @@ class _DoctorDetailsViewBodyState extends State<DoctorDetailsViewBody> {
                           }
                         }
 
+                        // ✅ طباعة بشكل مفهوم للمستخدم حسب اللغة الحالية
+                        final displayDate = DateFormat(
+                          'EEEE, dd/MM/yyyy',
+                          Intl.getCurrentLocale(),
+                        ).format(_selectedDate!);
+                        final displayTime = DateFormat(
+                          'h:mm a',
+                          Intl.getCurrentLocale(),
+                        ).format(parsedTime);
+                        print('📅 التاريخ: $displayDate');
+                        print('🕒 الوقت: $displayTime');
+                        print('📅 startTime (لـ API): $startTime');
+                        print('🆔 doctorScheduleId: $doctorScheduleId');
+
                         if (doctorScheduleId == null) {
-                          Navigator.pop(context); // يسكر الـ dialog
-                          // ✅ تم ترجمة هذا النص
+                          Navigator.pop(context);
                           _showSnackBar(
                             context,
-                            S.of(context).noScheduleFound, // مفتاح جديد
+                            S.of(context).noScheduleFound,
                             type: SnackBarType.error,
                           );
                           return;
@@ -382,7 +410,7 @@ class _DoctorDetailsViewBodyState extends State<DoctorDetailsViewBody> {
                           doctorScheduleId: doctorScheduleId,
                         );
 
-                        Navigator.pop(context); // يسكر فقط Dialog التأكيد
+                        Navigator.pop(context);
                       },
                       borderRadius: 35.r,
                     ),

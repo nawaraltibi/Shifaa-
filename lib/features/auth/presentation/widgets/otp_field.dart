@@ -44,6 +44,9 @@ class _OtpFieldState extends State<OtpField> {
             nextFocusNode: index < _focusNodes.length - 1
                 ? _focusNodes[index + 1]
                 : null,
+            previousFocusNode: index > 0
+                ? _focusNodes[index - 1]
+                : null, // 👈 جديد
           ),
         ),
       ),

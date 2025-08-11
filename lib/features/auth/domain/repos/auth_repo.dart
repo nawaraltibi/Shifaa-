@@ -16,4 +16,10 @@ abstract class AuthRepository {
     required int otp,
     required String dateOfBirth,
   });
+
+  Future<Either<Failure, UserAuthModel>> verifyPassword({
+    required String phone,
+    required int otp,
+    required String password,
+  });
 }

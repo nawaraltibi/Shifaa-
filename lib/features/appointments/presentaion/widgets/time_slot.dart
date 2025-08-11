@@ -36,6 +36,7 @@ class TimeSlot extends StatelessWidget {
             borderRadius: BorderRadius.circular(30.r),
           ),
           child: Text(
+            textDirection: TextDirection.ltr,
             time,
             style: AppTextStyles.regular12.copyWith(
               color: isSelected ? AppColors.primaryAppColor : Colors.black,

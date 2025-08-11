@@ -11,7 +11,7 @@ class SplashViewBody extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Center(child: Image.asset(Assets.imagesLogo)),
+        Center(child: Image.asset(AppImages.imagesLogo)),
         const SizedBox(height: 63),
         Text(
           'Shifaa Clinic',

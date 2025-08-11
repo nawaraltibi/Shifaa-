@@ -8,12 +8,14 @@ class OtpFieldItem extends StatelessWidget {
   final TextEditingController controller;
   final FocusNode focusNode;
   final FocusNode? nextFocusNode;
+  final FocusNode? previousFocusNode; // 👈 جديد
 
   const OtpFieldItem({
     super.key,
     required this.controller,
     required this.focusNode,
     this.nextFocusNode,
+    this.previousFocusNode,
   });
 
   @override
@@ -26,7 +28,9 @@ class OtpFieldItem extends StatelessWidget {
         controller: controller,
         focusNode: focusNode,
         onChanged: (value) {
-          if (value.length == 1 && nextFocusNode != null) {
+          if (value.isEmpty && previousFocusNode != null) {
+            FocusScope.of(context).requestFocus(previousFocusNode);
+          } else if (value.length == 1 && nextFocusNode != null) {
             FocusScope.of(context).requestFocus(nextFocusNode);
           }
         },

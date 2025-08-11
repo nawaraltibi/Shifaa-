@@ -6,6 +6,7 @@ import 'package:shifaa/features/auth/presentation/views/login_view.dart';
 import 'package:shifaa/features/auth/presentation/views/password_view.dart';
 import 'package:shifaa/features/auth/presentation/views/profile_setup_view.dart';
 import 'package:shifaa/features/auth/presentation/views/verify_otp_view.dart';
+import 'package:shifaa/features/chat/presentation/views/chat_view.dart';
 import 'package:shifaa/features/onboarding/presentation/views/on_boarding_view.dart';
 import 'package:shifaa/features/splash/presentation/views/splash_view.dart';
 
@@ -85,6 +86,11 @@ abstract class AppRouter {
         path: DoctorDetailsView.routeName,
         name: DoctorDetailsView.routeName,
         builder: (context, state) => const DoctorDetailsView(doctorId: 1),
+      ),
+      GoRoute(
+        path: ChatView.routeName,
+        name: ChatView.routeName,
+        builder: (context, state) => const ChatView(chatId: 1),
       ),
     ],
   );

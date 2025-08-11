@@ -27,7 +27,7 @@ class AuthTemplate extends StatelessWidget {
         children: [
           Align(
             alignment: Alignment.topLeft,
-            child: Image.asset(Assets.imagesNotebook),
+            child: Image.asset(AppImages.imagesNotebook),
           ),
           const Spacer(),
 

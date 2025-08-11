@@ -12,4 +12,10 @@ abstract class AuthRemoteDataSource {
     required int otp,
     required String dateOfBirth,
   });
+
+  Future<UserAuthModel> verifyPassword({
+    required String phone,
+    required int otp,
+    required String password,
+  });
 }

@@ -70,8 +70,10 @@ class DoctorScheduleCubit extends Cubit<DoctorScheduleState> {
 
     emit(DoctorScheduleDateLoading(_selectedDate));
 
-    final formattedDate = DateFormat('yyyy-MM-dd').format(newSelectedDate);
-
+    final formattedDate = DateFormat(
+      'yyyy-MM-dd',
+      'en_US',
+    ).format(newSelectedDate);
     final result = await getDoctorScheduleUseCase(
       doctorId: doctorId,
       date: formattedDate,

@@ -1,14 +1,15 @@
 // ignore_for_file: prefer_single_quotes
-class Assets {
-  Assets._();
-  
+class AppImages {
+  AppImages._();
+
   /// Assets for imagesBuisnessIcon
   /// assets/images/buisness_icon.png
   static const String imagesBuisnessIcon = "assets/images/buisness_icon.png";
 
   /// Assets for imagesChatBubbleIcon
   /// assets/images/chat_bubble_icon.png
-  static const String imagesChatBubbleIcon = "assets/images/chat_bubble_icon.png";
+  static const String imagesChatBubbleIcon =
+      "assets/images/chat_bubble_icon.png";
 
   /// Assets for imagesChatIcon
   /// assets/images/chat_icon.png
@@ -44,15 +45,18 @@ class Assets {
 
   /// Assets for imagesOnboardingScreen1
   /// assets/images/onboarding-screen-1.png
-  static const String imagesOnboardingScreen1 = "assets/images/onboarding-screen-1.png";
+  static const String imagesOnboardingScreen1 =
+      "assets/images/onboarding-screen-1.png";
 
   /// Assets for imagesOnboardingScreen2
   /// assets/images/onboarding-screen-2.png
-  static const String imagesOnboardingScreen2 = "assets/images/onboarding-screen-2.png";
+  static const String imagesOnboardingScreen2 =
+      "assets/images/onboarding-screen-2.png";
 
   /// Assets for imagesOnboardingScreen3
   /// assets/images/onboarding-screen-3.png
-  static const String imagesOnboardingScreen3 = "assets/images/onboarding-screen-3.png";
+  static const String imagesOnboardingScreen3 =
+      "assets/images/onboarding-screen-3.png";
 
   /// Assets for imagesPeopleIcon
   /// assets/images/people_icon.png
@@ -66,4 +70,3 @@ class Assets {
   /// assets/images/SyrianFlag.png
   static const String imagesSyrianFlag = "assets/images/SyrianFlag.png";
 }
-

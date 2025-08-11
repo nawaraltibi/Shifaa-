@@ -37,6 +37,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("ليس لديك حساب؟ "),
         "enterPassword":
             MessageLookupByLibrary.simpleMessage("يرجى إدخال كلمة المرور"),
+        "error": MessageLookupByLibrary.simpleMessage("حدث خطأ"),
         "errorTitle": MessageLookupByLibrary.simpleMessage("خطأ"),
         "experience": MessageLookupByLibrary.simpleMessage("الخبرة"),
         "female": MessageLookupByLibrary.simpleMessage("أنثى"),

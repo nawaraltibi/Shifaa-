@@ -1,3 +1,5 @@
+// هذا هو الكود المعدل لملف TimeSlotsList
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
@@ -28,6 +30,7 @@ class _TimeSlotsListState extends State<TimeSlotsList> {
   Widget build(BuildContext context) {
     final selectedDay = DateFormat(
       'EEEE',
+      Localizations.localeOf(context).languageCode,
     ).format(widget.selectedDate).toLowerCase();
 
     final filteredSchedules = widget.schedule
@@ -43,9 +46,9 @@ class _TimeSlotsListState extends State<TimeSlotsList> {
       return Text(S.of(context).no_slots);
     }
 
-    // صيغة التاريخ لليوم المحدد
-    final formattedDate = DateFormat(
+    final formattedDateForApi = DateFormat(
       'EEE, MMM d, yyyy',
+      'en_US',
     ).format(widget.selectedDate);
 
     return Container(
@@ -59,24 +62,26 @@ class _TimeSlotsListState extends State<TimeSlotsList> {
         spacing: 15.w,
         runSpacing: 10.h,
         children: slots.map((slot) {
-          // صيغة الوقت
-          final displayTime = DateFormat.jm().format(
-            DateFormat("HH:mm").parse(slot),
-          );
+          try {
+            final parsedTime = DateFormat("HH:mm", 'en_US').parse(slot);
 
-          // نجمع التاريخ + الوقت
-          final fullDateTime = "$formattedDate - $displayTime";
+            // ✅ صيغة الوقت للـ API وللعرض (بالأرقام الإنجليزية فقط)
+            final displayTime = DateFormat.jm('en_US').format(parsedTime);
 
-          return TimeSlot(
-            time: displayTime, // بيضل الوقت لحالو بالكارت
-            isSelected: selectedSlot == slot,
-            onTap: () {
-              setState(() => selectedSlot = slot);
-              widget.onSlotSelected?.call(
-                fullDateTime,
-              ); // بيرجع التاريخ + الوقت
-            },
-          );
+            final fullDateTimeForApi = "$formattedDateForApi - $displayTime";
+
+            return TimeSlot(
+              time: displayTime, // ✅ تم تغيير هذا السطر
+              isSelected: selectedSlot == slot,
+              onTap: () {
+                setState(() => selectedSlot = slot);
+                widget.onSlotSelected?.call(fullDateTimeForApi);
+              },
+            );
+          } catch (e) {
+            debugPrint("Error parsing slot '$slot': $e");
+            return const SizedBox.shrink();
+          }
         }).toList(),
       ),
     );

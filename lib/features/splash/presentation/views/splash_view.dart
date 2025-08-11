@@ -5,6 +5,7 @@ import 'package:shifaa/core/utils/app_colors.dart';
 import 'package:shifaa/core/utils/shared_prefs_helper.dart';
 import 'package:shifaa/features/appointments/presentaion/views/doctor_details_view.dart';
 import 'package:shifaa/features/auth/presentation/views/login_view.dart';
+import 'package:shifaa/features/chat/presentation/views/chat_view.dart';
 import 'package:shifaa/features/onboarding/presentation/views/on_boarding_view.dart';
 import 'package:shifaa/features/splash/presentation/views/widgets/splash_view_body.dart';
 import 'package:shifaa/features/auth/presentation/widgets/auth_template.dart';
@@ -38,20 +39,20 @@ class _SplashViewState extends State<SplashView> {
     final alreadyLaunched = prefs.getBool('alreadyLaunched') ?? false;
     final token = prefs.getString('token');
 
-    if (!alreadyLaunched) {
-      // أول مرة → OnBoarding
-      context.goNamed(OnBoardingView.routeName);
-    } else if (alreadyLaunched && (token == null || token.isEmpty)) {
-      // عمل OnBoarding بس ما عندو token → Login
-      context.goNamed(LoginView.routeName);
-    } else {
-      // عندو token → DoctorDetails
-      context.goNamed(DoctorDetailsView.routeName);
-    }
-    // goToLogin();
+    // if (!alreadyLaunched) {
+    //   // أول مرة → OnBoarding
+    //   context.goNamed(OnBoardingView.routeName);
+    // } else if (alreadyLaunched && (token == null || token.isEmpty)) {
+    //   // عمل OnBoarding بس ما عندو token → Login
+    //   context.goNamed(LoginView.routeName);
+    // } else {
+    //   // عندو token → DoctorDetails
+    //   context.goNamed(DoctorDetailsView.routeName);
+    // }
+    goToLogin();
   }
 
   void goToLogin() {
-    context.goNamed(LoginView.routeName);
+    context.goNamed(ChatView.routeName);
   }
 }
