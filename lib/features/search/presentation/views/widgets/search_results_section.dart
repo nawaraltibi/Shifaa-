@@ -34,7 +34,7 @@ class SearchResultsSection extends StatelessWidget {
                 name: doctor.fullName,
                 specialty: doctor.specialtyName,
                 rating: doctor.rating,
-                imageUrl: doctor.imageUrl ?? 'https://placehold.co/400x600/cccccc/ffffff?text=No+Image', // صورة افتراضية
+                imageUrl: doctor.imageUrl ?? 'https://placehold.co/400x600/cccccc/ffffff?text=No+Image',
                 onTap: () {},
               );
             },

@@ -72,7 +72,7 @@ class PhoneNumberField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Directionality(
-      textDirection: TextDirection.ltr, // يجبر ترتيب العناصر LTR
+      textDirection: TextDirection.ltr,
       child: CustomTextField(
         controller: controller,
         validator: validator,
@@ -95,7 +95,7 @@ class PhoneNumberField extends StatelessWidget {
             ),
           ),
         ),
-        textDirection: TextDirection.ltr, // اتجاه النص داخل الحقل مثلاً عربي
+        textDirection: TextDirection.ltr,
         hintText: S.of(context).syrianPhoneHint,
         keyboardType: TextInputType.number,
         inputFormatters: [

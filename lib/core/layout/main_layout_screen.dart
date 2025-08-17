@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-// قم باستيراد الملفات الضرورية من مشروعك
+
 import 'package:shifaa/core/utils/app_colors.dart';
 import 'package:shifaa/features/home/presentation/views/widgets/home_view_body.dart';
 import 'package:shifaa/features/search/presentation/views/search_screen.dart';

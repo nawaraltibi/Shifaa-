@@ -3,15 +3,15 @@ import 'package:equatable/equatable.dart';
 import 'package:shifaa/features/search/domain/usecases/search_for_doctors_usecase.dart';
 import 'package:shifaa/features/search/domain/usecases/search_for_specialties_usecase.dart';
 
-part 'search_state.dart'; // افترض أن search_state.dart موجود وصحيح
+part 'search_state.dart';
 
 class SearchCubit extends Cubit<SearchLoadSuccess> {
   final SearchForSpecialtiesUseCase searchForSpecialtiesUseCase;
-  final SearchForDoctorsUseCase searchForDoctorsUseCase; // إضافة الـ UseCase الجديد
+  final SearchForDoctorsUseCase searchForDoctorsUseCase;
 
   SearchCubit({
     required this.searchForSpecialtiesUseCase,
-    required this.searchForDoctorsUseCase, // حقن الـ UseCase الجديد
+    required this.searchForDoctorsUseCase,
   }) : super(const SearchLoadSuccess());
 
   void changeSearchType(SearchType type) {

@@ -7,13 +7,8 @@ import 'package:shifaa/dependency_injection.dart';
 import 'generated/l10n.dart';
 
 void main() async {
-  // تأكد من تهيئة كل شيء قبل تشغيل التطبيق
   WidgetsFlutterBinding.ensureInitialized();
-
-  // إعداد حقن التبعية (DI)
   await setupServiceLocator();
-
-  // تهيئة خدمة الإشعارات
   await NotificationService.init();
 
   runApp(const Shifaa());

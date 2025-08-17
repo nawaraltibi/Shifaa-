@@ -35,19 +35,6 @@ class PreviousAppointmentCard extends StatelessWidget {
                 ],
               ),
               const Spacer(),
-              // Container(
-              //   width: 40,
-              //   height: 40,
-              //   decoration: BoxDecoration(
-              //     color: Colors.white.withOpacity(0.2),
-              //     shape: BoxShape.circle,
-              //   ),
-              //   child: IconButton(
-              //     onPressed: () {},
-              //     icon: const Icon(Icons.chat_bubble_outline,
-              //         color: Colors.white),
-              //   ),
-              // )
             ],
           ),
           const SizedBox(height: 16),

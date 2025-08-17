@@ -38,7 +38,6 @@ class DoctorCard extends StatelessWidget {
           child: Stack(
             fit: StackFit.expand,
             children: [
-              // 1. صورة الطبيب
               Image.network(
                 imageUrl,
                 fit: BoxFit.cover,
@@ -79,7 +78,6 @@ class DoctorCard extends StatelessWidget {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
-                          // تخصص الطبيب
                           Text(
                             specialty,
                             style: const TextStyle( 
@@ -90,7 +88,7 @@ class DoctorCard extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                           ),
                           const SizedBox(height: 8),
-                          // التقييم والزر
+
                           Row(
                             children: [
                               const Icon(Icons.star, color: Color(0xFFFFC107), size: 18),
@@ -104,7 +102,7 @@ class DoctorCard extends StatelessWidget {
                                 ),
                               ),
                               const Spacer(),
-                              // زر السهم
+
                               Container(
                                 width: 36,
                                 height: 36,
