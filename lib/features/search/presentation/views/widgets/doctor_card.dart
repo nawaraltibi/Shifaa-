@@ -47,7 +47,7 @@ class DoctorCard extends StatelessWidget {
                 errorBuilder: (context, error, stack) =>
                     const Center(child: Icon(Icons.person, color: Colors.grey, size: 60)),
               ),
-              // 2. المحتوى الزجاجي في الأسفل
+          
               Positioned(
                 bottom: 0,
                 left: 0,
@@ -67,11 +67,11 @@ class DoctorCard extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // اسم الطبيب
+                     
                           Text(
                             name,
-                            style: const TextStyle( // استخدم AppTextStyles.semiBold16
-                              color: Color(0xFF2f2f2f), // استخدم AppColors.primaryTextColor
+                            style: const TextStyle( 
+                              color: Color(0xFF2f2f2f), 
                               fontWeight: FontWeight.w600,
                               fontSize: 16,
                               shadows: [Shadow(blurRadius: 1, color: Colors.black12)],
@@ -82,8 +82,8 @@ class DoctorCard extends StatelessWidget {
                           // تخصص الطبيب
                           Text(
                             specialty,
-                            style: const TextStyle( // استخدم AppTextStyles.regular14
-                              color: Color(0xFF2f2f2f), // استخدم AppColors.primaryTextColor
+                            style: const TextStyle( 
+                              color: Color(0xFF2f2f2f), 
                               fontSize: 14,
                             ),
                             maxLines: 1,
@@ -97,8 +97,8 @@ class DoctorCard extends StatelessWidget {
                               const SizedBox(width: 4),
                               Text(
                                 rating.toString(),
-                                style: const TextStyle( // استخدم AppTextStyles.semiBold15
-                                  color: Color(0xFF2f2f2f), // استخدم AppColors.primaryTextColor
+                                style: const TextStyle( 
+                                  color: Color(0xFF2f2f2f), 
                                   fontWeight: FontWeight.w600,
                                   fontSize: 15,
                                 ),
@@ -112,7 +112,7 @@ class DoctorCard extends StatelessWidget {
                                   shape: BoxShape.circle,
                                   gradient: LinearGradient(
                                     colors: [
-                                      const Color(0xFF5c85d9).withOpacity(0.8), // استخدم AppColors.primaryAppColor
+                                      const Color(0xFF5c85d9).withOpacity(0.8), 
                                       const Color(0xFF5c85d9),
                                     ],
                                     begin: Alignment.topLeft,
@@ -141,7 +141,7 @@ class DoctorCard extends StatelessWidget {
   }
 }
 
-// ويدجت وهمية للتخصص
+
 class SpecialtyItem extends StatelessWidget {
   final IconData icon;
   final String name;

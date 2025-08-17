@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shifaa/core/services/notification_service.dart';
 import 'package:shifaa/core/utils/app_routes.dart';
 import 'package:shifaa/dependency_injection.dart';
 import 'generated/l10n.dart';
 
 void main() async {
-   WidgetsFlutterBinding.ensureInitialized();
+  // تأكد من تهيئة كل شيء قبل تشغيل التطبيق
+  WidgetsFlutterBinding.ensureInitialized();
 
+  // إعداد حقن التبعية (DI)
   await setupServiceLocator();
+
+  // تهيئة خدمة الإشعارات
+  await NotificationService.init();
+
   runApp(const Shifaa());
 }
+
 
 class Shifaa extends StatelessWidget {
   const Shifaa({super.key});

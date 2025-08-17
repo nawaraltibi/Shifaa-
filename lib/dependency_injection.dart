@@ -1,18 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
-
-// استيراد ملفات التخصصات
 import 'package:shifaa/features/search/data/datasources/specialty_remote_data_source.dart';
 import 'package:shifaa/features/search/data/repositories/specialty_repository_impl.dart';
 import 'package:shifaa/features/search/domain/repositories/specialty_repository.dart';
 import 'package:shifaa/features/search/domain/usecases/search_for_specialties_usecase.dart';
-
-// ==== استيراد الملفات الجديدة الخاصة بالأطباء ====
 import 'package:shifaa/features/search/data/datasources/doctor_remote_data_source.dart';
 import 'package:shifaa/features/search/data/repositories/doctor_repository_impl.dart';
 import 'package:shifaa/features/search/domain/repositories/doctor_repository.dart';
 import 'package:shifaa/features/search/domain/usecases/search_for_doctors_usecase.dart';
-// ==========================================
+
 
 import 'package:shifaa/features/search/presentation/manager/search_cubit.dart';
 
@@ -24,29 +20,26 @@ Future<String?> getTokenFromStorage() async {
   // final prefs = await SharedPreferences.getInstance();
   // return prefs.getString('user_token');
   
-  return '1|zhYIPOLGxdnoKfMJnx1YXTiWVTHku2JKy0TJj7B8dfb717d7';
+  return '1|5v61tmYAoVd70qcFLN5K20fX9Hpzpy0BzGYvj9ls860b6e78';
 }
 
 
 Future<void> setupServiceLocator() async {
-  // ================== Features - Search ==================
-
-  // Cubit
-  // تم تحديث هذا السطر ليمرر الـ UseCase الخاص بالأطباء أيضاً
+ 
   sl.registerFactory(() => SearchCubit(
         searchForSpecialtiesUseCase: sl(),
-        searchForDoctorsUseCase: sl(), // الإضافة الجديدة
+        searchForDoctorsUseCase: sl(), 
       ));
 
   // Use Cases
   sl.registerLazySingleton(() => SearchForSpecialtiesUseCase(sl()));
-  sl.registerLazySingleton(() => SearchForDoctorsUseCase(sl())); // الإضافة الجديدة
+  sl.registerLazySingleton(() => SearchForDoctorsUseCase(sl())); 
 
   // Repositories
   sl.registerLazySingleton<SpecialtyRepository>(
     () => SpecialtyRepositoryImpl(remoteDataSource: sl()),
   );
-  sl.registerLazySingleton<DoctorRepository>( // الإضافة الجديدة
+  sl.registerLazySingleton<DoctorRepository>( 
     () => DoctorRepositoryImpl(remoteDataSource: sl()),
   );
 
@@ -54,12 +47,10 @@ Future<void> setupServiceLocator() async {
   sl.registerLazySingleton<SpecialtyRemoteDataSource>(
     () => SpecialtyRemoteDataSourceImpl(dio: sl()),
   );
-  sl.registerLazySingleton<DoctorRemoteDataSource>( // الإضافة الجديدة
+  sl.registerLazySingleton<DoctorRemoteDataSource>( 
     () => DoctorRemoteDataSourceImpl(dio: sl()),
   );
 
-
-  // ================== Core / External ==================
   sl.registerLazySingleton(() {
     final dio = Dio(
       BaseOptions(
@@ -73,7 +64,6 @@ Future<void> setupServiceLocator() async {
       ),
     );
 
-    // الـ Interceptor الخاص بك لإضافة التوكين (تم الحفاظ عليه)
     dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
@@ -92,7 +82,6 @@ Future<void> setupServiceLocator() async {
       ),
     );
   
-    // الـ Interceptor الخاص بك لطباعة الـ Logs (تم الحفاظ عليه)
     dio.interceptors.add(
       LogInterceptor(
         requestBody: true,

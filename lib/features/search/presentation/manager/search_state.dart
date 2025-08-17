@@ -10,10 +10,10 @@ abstract class SearchState extends Equatable {
   List<Object> get props => [];
 }
 
-// الحالة الكاملة للشاشة، تحتوي على كل المعلومات
+
 class SearchLoadSuccess extends SearchState {
   final SearchType searchType;
-  final List<dynamic> results; // يمكن أن تكون قائمة أطباء أو تخصصات
+  final List<dynamic> results; 
   final bool isLoading;
   final String? errorMessage;
   final String query;
@@ -26,7 +26,7 @@ class SearchLoadSuccess extends SearchState {
     this.query = '',
   });
 
-  // دالة مساعدة لنسخ الحالة مع تعديلات بسيطة
+ 
   SearchLoadSuccess copyWith({
     SearchType? searchType,
     List<dynamic>? results,

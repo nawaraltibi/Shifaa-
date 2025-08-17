@@ -35,19 +35,19 @@ class PreviousAppointmentCard extends StatelessWidget {
                 ],
               ),
               const Spacer(),
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
-                  shape: BoxShape.circle,
-                ),
-                child: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.chat_bubble_outline,
-                      color: Colors.white),
-                ),
-              )
+              // Container(
+              //   width: 40,
+              //   height: 40,
+              //   decoration: BoxDecoration(
+              //     color: Colors.white.withOpacity(0.2),
+              //     shape: BoxShape.circle,
+              //   ),
+              //   child: IconButton(
+              //     onPressed: () {},
+              //     icon: const Icon(Icons.chat_bubble_outline,
+              //         color: Colors.white),
+              //   ),
+              // )
             ],
           ),
           const SizedBox(height: 16),
@@ -67,14 +67,25 @@ class PreviousAppointmentCard extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
+                    backgroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(20),
                     ),
                   ),
-                  child: Text(
-                    'Completed',
-                    style: AppTextStyles.medium12.copyWith(color: Colors.white),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Chat',
+                        style: AppTextStyles.medium12.copyWith(color: AppColors.primaryAppColor),
+                      ),
+                      const SizedBox(width: 4),
+                      Icon(
+                        Icons.chat_bubble_outline,
+                        color: AppColors.primaryAppColor,
+                        size: 16,
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -83,9 +94,9 @@ class PreviousAppointmentCard extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primaryAppColor,
+                    backgroundColor: AppColors.secondaryAppColor,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(20),
                     ),
                   ),
                   child: Text(
@@ -104,7 +115,14 @@ class PreviousAppointmentCard extends StatelessWidget {
   Widget _buildInfoColumn(IconData icon, String title, String subtitle) {
     return Row(
       children: [
-        Icon(icon, color: Colors.white, size: 20),
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: AppColors.secondaryAppColor,
+            shape: BoxShape.circle,
+          ),
+          child: Icon(icon, color: Colors.white, size: 20),
+        ),
         const SizedBox(width: 8),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,

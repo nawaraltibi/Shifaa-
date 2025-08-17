@@ -39,13 +39,13 @@ class UpcomingAppointmentCard extends StatelessWidget {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
+                  color: Colors.white,
                   shape: BoxShape.circle,
                 ),
                 child: IconButton(
                   onPressed: () {},
                   icon: const Icon(Icons.chat_bubble_outline,
-                      color: Colors.white),
+                      color: AppColors.primaryAppColor),
                 ),
               )
             ],
@@ -69,7 +69,7 @@ class UpcomingAppointmentCard extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(20),
                     ),
                   ),
                   child: Text(
@@ -83,9 +83,9 @@ class UpcomingAppointmentCard extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {},
                    style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white.withOpacity(0.2),
+                    backgroundColor: AppColors.secondaryAppColor,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(20),
                     ),
                   ),
                   child: Text(
@@ -104,7 +104,14 @@ class UpcomingAppointmentCard extends StatelessWidget {
   Widget _buildInfoColumn(IconData icon, String title, String subtitle) {
     return Row(
       children: [
-        Icon(icon, color: Colors.white, size: 20),
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: AppColors.secondaryAppColor,
+            shape: BoxShape.circle,
+          ),
+          child: Icon(icon, color: Colors.white, size: 20),
+        ),
         const SizedBox(width: 8),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,

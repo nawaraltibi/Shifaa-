@@ -14,7 +14,7 @@ class SearchViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // نستخدم BlocBuilder هنا لنحصل على آخر قيمة للـ searchType
+    
     return BlocBuilder<SearchCubit, SearchLoadSuccess>(
       builder: (context, state) {
         return Padding(
@@ -32,7 +32,7 @@ class SearchViewBody extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               SearchFieldWidget(
-                // تغيير الـ Hint Text بناءً على الحالة
+      
                 hintText: state.searchType == SearchType.doctors
                     ? 'Search for a doctor'
                     : 'Search for a specialty',

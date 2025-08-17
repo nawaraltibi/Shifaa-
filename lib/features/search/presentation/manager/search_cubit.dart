@@ -26,7 +26,7 @@ class SearchCubit extends Cubit<SearchLoadSuccess> {
     emit(state.copyWith(isLoading: true, clearError: true, query: query));
 
     if (state.searchType == SearchType.doctors) {
-      // --- البحث عن الأطباء عبر الـ API الحقيقي ---
+   
       final result = await searchForDoctorsUseCase(SearchParams(query: query));
       result.fold(
         (failure) => emit(state.copyWith(isLoading: false, errorMessage: failure.message)),
@@ -39,7 +39,7 @@ class SearchCubit extends Cubit<SearchLoadSuccess> {
         },
       );
     } else {
-      // --- البحث عن التخصصات عبر الـ API الحقيقي ---
+  
       final result = await searchForSpecialtiesUseCase(SearchParams(query: query));
       result.fold(
         (failure) => emit(state.copyWith(isLoading: false, errorMessage: failure.message)),

@@ -29,7 +29,7 @@ class SearchResultsSection extends StatelessWidget {
               crossAxisCount: 2, crossAxisSpacing: 15, mainAxisSpacing: 15, childAspectRatio: 0.75,
             ),
             itemBuilder: (context, index) {
-              final doctor = state.results[index] as DoctorEntity; // <-- تحويل النوع إلى DoctorEntity
+              final doctor = state.results[index] as DoctorEntity; 
               return DoctorCard(
                 name: doctor.fullName,
                 specialty: doctor.specialtyName,
@@ -55,7 +55,7 @@ class SearchResultsSection extends StatelessWidget {
     );
   }
   IconData _mapSpecialtyNameToIcon(String specialtyName) {
-    // ... (نفس الدالة السابقة)
+
     return Icons.medical_services;
   }
 }
