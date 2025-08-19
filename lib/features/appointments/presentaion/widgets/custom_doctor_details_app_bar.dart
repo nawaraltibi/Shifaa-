@@ -12,6 +12,7 @@ import 'package:shifaa/features/chat/presentation/views/chat_view.dart';
 class CustomDoctorDetailsAppBar extends StatelessWidget {
   const CustomDoctorDetailsAppBar({super.key, required this.doctorId});
   final int doctorId;
+
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -37,14 +38,17 @@ class CustomDoctorDetailsAppBar extends StatelessWidget {
               final cubit = context.read<CreateChatCubit>();
 
               // استدعاء بدء المحادثة
-              await cubit.startChat(doctorId);
+              cubit.startChat(doctorId);
 
-              final state = cubit.state;
+              // انتظار حتى تصبح الحالة CreateChatSuccess أو CreateChatFailure
+              final state = await cubit.stream.firstWhere(
+                (state) =>
+                    state is CreateChatSuccess || state is CreateChatFailure,
+              );
 
               if (state is CreateChatSuccess) {
-                context.goNamed(ChatView.routeName, extra: state.chat);
+                context.pushNamed(ChatView.routeName, extra: state.chat);
               } else if (state is CreateChatFailure) {
-                // إذا ما عنده حجز، نظهر SnackBar
                 if (state.error == "chat.unauthorized") {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(

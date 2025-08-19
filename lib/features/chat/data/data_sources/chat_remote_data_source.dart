@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:shifaa/core/api/end_ponits.dart';
@@ -15,13 +16,12 @@ class ChatRemoteDataSource {
 
   Future<Chat> createChat(int doctorId) async {
     final res = await dio.post(EndPoint.chat, data: {"doctor_id": doctorId});
-
+    print("DEBUG: Full response from createChat: ${jsonEncode(res.data)}");
     if (res.data["success"] == false) {
       final message = res.data["message"];
 
       if (message == "chat.already_exists") {
-        // رجّع الشات الموجود من نفس الريسبونس
-        return ChatModel.fromJson(res.data["data"]);
+        return ChatModel.fromJson(res.data["data"]["chat"]);
       }
 
       if (message == "chat.unauthorized") {
@@ -31,37 +31,84 @@ class ChatRemoteDataSource {
       throw Exception("Unknown error: $message");
     }
 
-    // المحادثة تم إنشاؤها للتو
-    return ChatModel.fromJson(res.data["data"]);
+    return ChatModel.fromJson(res.data["data"]["chat"]);
   }
 
-  Future<List<Message>> getMessages(int chatId) async {
-    try {
-      print("📤 Requesting messages...");
-      print(
-        "📤 Full URL: ${dio.options.baseUrl}${EndPoint.getMessages(chatId)}",
-      );
-      print("📤 Headers: ${dio.options.headers}");
+  // في ملف ChatRemoteDataSource.dart
 
-      final res = await dio.get(EndPoint.getMessages(chatId));
-      print('✅ getMessages response: ${res.data}');
-      return (res.data["data"]["chat"]["messages"] as List)
-          .map((e) => MessageModel.fromJson(e))
-          .toList();
+  // ✅✅✅ --- تم تعديل هذه الدالة بالكامل --- ✅✅✅
+  // في ملف ChatRemoteDataSource.dart
+
+  Future<ChatModel> getChatDetails(int chatId) async {
+    try {
+      print("📤 Requesting chat details...");
+      final res = await dio.get(EndPoint.getChatDetails(chatId));
+
+      // ✅✅✅ --- DEBUGGING --- ✅✅✅
+      // سنقوم بطباعة ال-JSON الخام الذي وصل من الخادم قبل أي محاولة تحليل
+      print("🕵️‍♂️ [getChatDetails Response Body]: ${jsonEncode(res.data)}");
+
+      // هذا هو السطر الذي يسبب الخطأ على الأغلب
+      return ChatModel.fromJson(res.data["data"]["chat"]);
     } catch (e) {
-      print('❌ getMessages ERROR: $e');
+      print('❌ getChatDetails ERROR: $e');
       rethrow;
     }
   }
 
-  Future<Message> sendMessage(int chatId, {String? text, File? file}) async {
-    final formData = FormData.fromMap({
-      if (text != null) "text": text,
-      if (file != null) "file": await MultipartFile.fromFile(file.path),
-    });
+  // ✅✅✅ --- تم تعديل هذه الدالة بالكامل --- ✅✅✅
+  // في ملف ChatRemoteDataSource.dart، داخل دالة sendMessage
 
+  // في ملف ChatRemoteDataSource.dart
+
+  Future<Message> sendMessage(
+    int chatId, {
+    String? text,
+    File? file,
+    String? originalFileName,
+    List<Map<String, String>> encryptedKeysPayload = const [],
+  }) async {
+    // ✅✅✅ --- الإصلاح هنا: نبني FormData مباشرة --- ✅✅✅
+
+    // 1. أنشئ كائن FormData فارغاً
+    final formData = FormData();
+
+    // 2. أضف حقل النص إذا كان موجوداً
+    if (text != null) {
+      formData.fields.add(MapEntry('text', text));
+    }
+
+    // 3. أضف حقل الملف إذا كان موجوداً
+    if (file != null && originalFileName != null) {
+      formData.files.add(
+        MapEntry(
+          'file',
+          await MultipartFile.fromFile(file.path, filename: originalFileName),
+        ),
+      );
+    }
+
+    // 4. أضف حقول encrypted_keys مباشرة إلى formData.fields
+    for (int i = 0; i < encryptedKeysPayload.length; i++) {
+      final keyMap = encryptedKeysPayload[i];
+      formData.fields.add(
+        MapEntry('encrypted_keys[$i][device_id]', keyMap['device_id']!),
+      );
+      formData.fields.add(
+        MapEntry('encrypted_keys[$i][encrypted_key]', keyMap['encrypted_key']!),
+      );
+    }
+
+    // (يمكنك إبقاء أوامر الطباعة للـ debugging إذا أردت)
+    print(
+      "🕵️‍♂️ [DataSource] Sending FormData with files: ${formData.files.map((f) => f.value.filename).toList()}",
+    );
+    print(
+      "🕵️‍♂️ [DataSource] Sending FormData with fields: ${formData.fields}",
+    );
+
+    // 5. أرسل الطلب
     final res = await dio.post(EndPoint.sendMessage(chatId), data: formData);
-
     return MessageModel.fromJson(res.data["data"]);
   }
 }

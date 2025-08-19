@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:shifaa/core/errors/failure.dart';
 
 import 'package:shifaa/core/utils/shared_prefs_helper.dart';
 import 'package:shifaa/features/auth/domain/usecases/verify_otp_usecase.dart';
@@ -18,20 +17,15 @@ class VerifyOtpCubit extends Cubit<VerifyOtpState> {
   Future<void> verifyOtp(
     String phoneNumber,
     String otp,
-    BuildContext context, {
-    bool retry = true,
-  }) async {
+    BuildContext context,
+  ) async {
     emit(VerifyOtpLoading());
 
     final result = await verifyOtpUseCase(phoneNumber, otp);
 
     result.fold(
-      (failure) async {
-        if (failure is ServerFailure && failure.statusCode == 500 && retry) {
-          await verifyOtp(phoneNumber, otp, context, retry: false);
-          return;
-        }
-
+      (failure) {
+        // ❌ أي خطأ → يطلع Snackbar مباشر
         final (title, message, type) = _mapErrorToSnackbar(
           failure.message,
           context,
@@ -53,11 +47,7 @@ class VerifyOtpCubit extends Cubit<VerifyOtpState> {
         } else if (verifyResult.twoFactorEnabled) {
           emit(VerifyOtpSuccess(goToPassword: true));
         } else if (verifyResult.user == null) {
-          if (retry) {
-            await verifyOtp(phoneNumber, otp, context, retry: false);
-          } else {
-            emit(VerifyOtpError('User data is missing'));
-          }
+          emit(VerifyOtpError('User data is missing'));
         } else {
           emit(VerifyOtpSuccess(goToDoctorDetails: true));
         }

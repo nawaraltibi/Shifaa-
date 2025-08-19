@@ -8,10 +8,11 @@ import 'package:shifaa/features/chat/data/models/message.dart';
 
 abstract class ChatRepository {
   Future<Either<Failure, Chat>> createChat(int doctorId);
-  Future<Either<Failure, List<Message>>> getMessages(int chatId);
+  Future<Either<Failure, ChatModel>> getChatDetails(int chatId);
   Future<Either<Failure, Message>> sendMessage(
     int chatId, {
     String? text,
     File? file,
+    List<Map<String, String>> encryptedKeysPayload = const [],
   });
 }

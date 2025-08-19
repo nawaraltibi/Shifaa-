@@ -4,12 +4,12 @@ import 'package:shifaa/core/utils/app_colors.dart';
 import 'package:shifaa/core/utils/app_text_styles.dart';
 import 'package:shifaa/features/chat/presentation/widgets/doctor_chat_image.dart';
 
-class ChatMessage extends StatelessWidget {
+class ChatMessageWidget extends StatelessWidget {
   final bool isMe;
   final String text;
   final String? profileImage;
 
-  const ChatMessage({
+  const ChatMessageWidget({
     super.key,
     required this.isMe,
     required this.text,

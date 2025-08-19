@@ -7,7 +7,7 @@ import 'package:shifaa/features/appointments/presentaion/cubits/doctor_details_c
 import 'package:shifaa/features/appointments/presentaion/cubits/doctor_schedule_cubit/doctor_schedule_cubit.dart';
 import 'package:shifaa/features/appointments/presentaion/cubits/appointment_cubit/appointment_cubit.dart'; // Cubit الحجز
 import 'package:shifaa/features/appointments/presentaion/widgets/doctor_details_view_body.dart';
-import 'package:shifaa/core/functions/setup_service_locator.dart';
+import 'package:shifaa/core/utils/functions/setup_service_locator.dart';
 import 'package:shifaa/features/chat/domain/usecases/create_chat_use_case.dart';
 import 'package:shifaa/features/chat/presentation/cubits/create_chat_cubit/create_chat_cubit.dart';
 

@@ -6,6 +6,7 @@ import 'package:shifaa/core/utils/shared_prefs_helper.dart';
 import 'package:shifaa/features/appointments/presentaion/views/doctor_details_view.dart';
 import 'package:shifaa/features/auth/presentation/views/login_view.dart';
 import 'package:shifaa/features/chat/presentation/views/chat_view.dart';
+import 'package:shifaa/features/home/presentation/views/home_view.dart';
 import 'package:shifaa/features/onboarding/presentation/views/on_boarding_view.dart';
 import 'package:shifaa/features/splash/presentation/views/widgets/splash_view_body.dart';
 import 'package:shifaa/features/auth/presentation/widgets/auth_template.dart';
@@ -53,6 +54,10 @@ class _SplashViewState extends State<SplashView> {
   }
 
   void goToLogin() {
-    context.goNamed(ChatView.routeName);
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const HomeView()),
+    );
+    // context.goNamed(LoginView.routeName);
   }
 }

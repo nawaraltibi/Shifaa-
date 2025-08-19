@@ -7,18 +7,19 @@ class EndPoint {
   static const String register = "patient/register";
   static const String verifyPassword = "patient/verify-password";
   static const String appointment = "appointments";
+  static const String publicKey = "devices";
 
   // ديناميكية - دكتور
-  static String doctorDetails(String doctorId) => "doctors/$doctorId";
+  static String doctorDetails(String doctorId) => "doctor/$doctorId";
   static String doctorSchedules(String doctorId) =>
-      "doctors/$doctorId/schedules";
+      "doctor/$doctorId/schedules";
 
   // 👇👇 روابط الشات
-  static const String chat = "chat"; // POST لإنشاء محادثة جديدة
-
-  static String getMessages(int chatId) => "chat/$chatId/messages"; // GET رسائل
+  static const String chat = "chats"; // POST لإنشاء محادثة جديدة
+  // GET للحصول على تفاصيل المحادثة (بما في ذلك الرسائل)
+  static String getChatDetails(int chatId) => "chats/$chatId";
   static String sendMessage(int chatId) =>
-      "chat/$chatId/messages"; // POST إرسال رسالة
+      "chats/$chatId/messages"; // POST إرسال رسالة
 }
 
 class ApiKey {

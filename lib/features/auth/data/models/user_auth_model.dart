@@ -13,9 +13,19 @@ class UserAuthModel {
 
   factory UserAuthModel.fromJson(Map<String, dynamic> json) {
     final data = json['data'] ?? {};
+
+    bool parseBool(dynamic value) {
+      if (value is bool) return value;
+      if (value is int) return value == 1;
+      if (value is String) {
+        return value.toLowerCase() == 'true' || value == '1';
+      }
+      return false;
+    }
+
     return UserAuthModel(
       hasAccount: data['has_account'] ?? false,
-      twoFactorEnabled: data['two_factor_enabled'] ?? false,
+      twoFactorEnabled: parseBool(data['two_factor_enabled']),
       token: data['token'],
       user: data['user'],
     );
