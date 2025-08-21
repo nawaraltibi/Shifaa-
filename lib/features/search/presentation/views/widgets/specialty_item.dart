@@ -32,7 +32,6 @@ class SpecialtyItem extends StatelessWidget {
         const SizedBox(height: 8),
         Text(
           name,
-          // style: AppTextStyles.regular12.copyWith(color: AppColors.secondaryTextColor),
           textAlign: TextAlign.center,
           maxLines: 2,
           overflow: TextOverflow.ellipsis,

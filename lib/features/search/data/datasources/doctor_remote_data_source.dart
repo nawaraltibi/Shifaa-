@@ -14,7 +14,7 @@ class DoctorRemoteDataSourceImpl implements DoctorRemoteDataSource {
   @override
   Future<List<DoctorModel>> searchForDoctors(String query) async {
     final response = await dio.get(
-      'doctors',
+      'doctor',
       queryParameters: {'search': query},
     );
 

@@ -10,7 +10,7 @@ class SpecialtyRepositoryImpl implements SpecialtyRepository {
 
   SpecialtyRepositoryImpl({
     required this.remoteDataSource,
-    // required this.networkInfo,
+    
   });
 
   @override

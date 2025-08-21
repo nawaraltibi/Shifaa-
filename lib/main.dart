@@ -10,7 +10,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await setupServiceLocator();
   await NotificationService.init();
-
   runApp(const Shifaa());
 }
 

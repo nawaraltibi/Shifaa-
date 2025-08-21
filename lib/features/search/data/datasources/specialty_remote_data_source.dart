@@ -19,7 +19,7 @@ class SpecialtyRemoteDataSourceImpl implements SpecialtyRemoteDataSource {
       'specialties', 
       queryParameters: {'search': query}, 
     );
-    // ================================================
+    
 
     if (response.statusCode == 200 && response.data['success'] == true) {
       final List<dynamic> specialtiesJson = response.data['data']['specialties'];

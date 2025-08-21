@@ -38,7 +38,7 @@ class UpcomingAppointmentCard extends StatelessWidget {
               Container(
                 width: 40,
                 height: 40,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.white,
                   shape: BoxShape.circle,
                 ),
@@ -106,7 +106,7 @@ class UpcomingAppointmentCard extends StatelessWidget {
       children: [
         Container(
           padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: AppColors.secondaryAppColor,
             shape: BoxShape.circle,
           ),

@@ -10,25 +10,25 @@ class HomeViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
             child: Column(
               children: [
-                const SizedBox(height: 16),
-                const HomeAppBar(),
-                const SizedBox(height: 24),
-                const RandomTipsSection(),
-                const SizedBox(height: 24),
-                const UpcomingAppointmentsSection(),
-                const SizedBox(height: 16),
-                const PreviousAppointmentsSection(),
-                const SizedBox(height: 24),
-                const SpecialtiesSection(),
-                const SizedBox(height: 24),
+                SizedBox(height: 16),
+                HomeAppBar(),
+                SizedBox(height: 24),
+                RandomTipsSection(),
+                SizedBox(height: 24),
+                UpcomingAppointmentsSection(),
+                SizedBox(height: 16),
+                PreviousAppointmentsSection(),
+                SizedBox(height: 24),
+                SpecialtiesSection(),
+                SizedBox(height: 24),
               ],
             ),
           ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shifaa/core/utils/app_colors.dart';
 import 'package:shifaa/core/utils/app_text_styles.dart';
+import 'package:shifaa/features/notifications/presentation/view/screens/notifications_screen.dart';
 
 class HomeAppBar extends StatelessWidget {
   const HomeAppBar({super.key});
@@ -27,7 +29,7 @@ class HomeAppBar extends StatelessWidget {
         Row(
           children: [
             IconButton(
-              onPressed: () {},
+              onPressed: () => context.goNamed('/notifications'),
               icon: const Icon(Icons.notifications_none_outlined, size: 28),
             ),
             IconButton(

@@ -67,7 +67,7 @@ class PreviousAppointmentCard extends StatelessWidget {
                         style: AppTextStyles.medium12.copyWith(color: AppColors.primaryAppColor),
                       ),
                       const SizedBox(width: 4),
-                      Icon(
+                      const Icon(
                         Icons.chat_bubble_outline,
                         color: AppColors.primaryAppColor,
                         size: 16,
@@ -104,7 +104,7 @@ class PreviousAppointmentCard extends StatelessWidget {
       children: [
         Container(
           padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: AppColors.secondaryAppColor,
             shape: BoxShape.circle,
           ),

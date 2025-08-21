@@ -1,65 +1,42 @@
 import 'package:flutter/material.dart';
-
+import 'package:go_router/go_router.dart';
 import 'package:shifaa/core/utils/app_colors.dart';
-import 'package:shifaa/features/home/presentation/views/widgets/home_view_body.dart';
-import 'package:shifaa/features/search/presentation/views/search_screen.dart';
 
-
-class MainLayoutScreen extends StatefulWidget {
-  const MainLayoutScreen({super.key});
-
-  @override
-  State<MainLayoutScreen> createState() => _MainLayoutScreenState();
-}
-
-class _MainLayoutScreenState extends State<MainLayoutScreen> {
-  int _selectedIndex = 0;
-  late PageController _pageController;
-
-  @override
-  void initState() {
-    super.initState();
-    _pageController = PageController(initialPage: _selectedIndex);
-  }
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
-  }
-
- 
-  static const List<Widget> _screenOptions = <Widget>[
-    HomeViewBody(), 
-    SearchScreen(), 
-   
-  ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-    _pageController.jumpToPage(index); 
-  }
+class MainLayoutScreen extends StatelessWidget {
+  final Widget child;
+  final int selectedIndex;
+  
+  const MainLayoutScreen({
+    super.key,
+    required this.child,
+    this.selectedIndex = 0,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final location = GoRouterState.of(context).location;
+    // final showBottomNav = !location.contains('/notifications');
+    
     return Scaffold(
-  
-      body: PageView(
-        controller: _pageController,
-        onPageChanged: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
+      body: child,
+      bottomNavigationBar:  BottomNavigationBar(
+        currentIndex: selectedIndex,
+        onTap: (index) {
+          switch (index) {
+            case 0:
+              context.go('/home');
+              break;
+            case 1:
+              context.go('/search');
+              break;
+            case 2:
+              context.go('/appointments');
+              break;
+            case 3:
+              context.go('/profile');
+              break;
+          }
         },
-        children: _screenOptions,
-        physics: const NeverScrollableScrollPhysics(),
-      ),
-
-  
-  
-      bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,
         selectedItemColor: AppColors.primaryAppColor,
@@ -82,10 +59,7 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
             label: 'Profile',
           ),
         ],
-      
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-      ),
+      ) ,
     );
   }
 }

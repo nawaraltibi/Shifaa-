@@ -11,7 +11,7 @@ class NotificationService {
   }
 
   static String? _getAuthToken() {
-    return '1|4sYXAgddePgPPUHOUFZVyBqETh39RKWqdWpzYAgTf2998f82';
+    return '2|NiB0JRjofbZBxQ3DIqtNjX9CQOUpqa9WYILMuIcLee2992a8';
   }
 
   static const _instanceId = '779f8602-f480-4c8a-a429-29f3bd06b930';
