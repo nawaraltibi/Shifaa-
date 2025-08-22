@@ -23,13 +23,23 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "Shifaa": MessageLookupByLibrary.simpleMessage("شفاء!"),
+        "about_doctor": MessageLookupByLibrary.simpleMessage("لمحة عن الطبيب"),
         "age": MessageLookupByLibrary.simpleMessage("العمر"),
+        "book": MessageLookupByLibrary.simpleMessage("احجز"),
+        "bookSuccess": MessageLookupByLibrary.simpleMessage("تم الحجز بنجاح!"),
+        "cancel": MessageLookupByLibrary.simpleMessage("إلغاء"),
+        "confirmBooking": MessageLookupByLibrary.simpleMessage("تأكيد الحجز"),
+        "confirmBookingMessage": MessageLookupByLibrary.simpleMessage(
+            "هل أنت متأكد من حجز الموعد في:"),
         "continueText": MessageLookupByLibrary.simpleMessage("استمرار"),
         "done": MessageLookupByLibrary.simpleMessage("استمرار"),
         "dontHaveAccount":
             MessageLookupByLibrary.simpleMessage("ليس لديك حساب؟ "),
         "enterPassword":
             MessageLookupByLibrary.simpleMessage("يرجى إدخال كلمة المرور"),
+        "error": MessageLookupByLibrary.simpleMessage("حدث خطأ"),
+        "errorTitle": MessageLookupByLibrary.simpleMessage("خطأ"),
+        "experience": MessageLookupByLibrary.simpleMessage("الخبرة"),
         "female": MessageLookupByLibrary.simpleMessage("أنثى"),
         "firstName": MessageLookupByLibrary.simpleMessage("الاسم الأول"),
         "forgotPassword":
@@ -37,11 +47,21 @@ class MessageLookup extends MessageLookupByLibrary {
         "gender": MessageLookupByLibrary.simpleMessage("الجنس"),
         "haveAnAccount":
             MessageLookupByLibrary.simpleMessage("هل لديك حساب بالفعل؟"),
-        "invalidPhoneFormat": MessageLookupByLibrary.simpleMessage(
-            "يرجى إدخال رقم سوري صحيح مثل 9XX XXX XXX"),
+        "invalidOtp":
+            MessageLookupByLibrary.simpleMessage("رمز التحقق غير صحيح"),
+        "invalidPhoneFormat":
+            MessageLookupByLibrary.simpleMessage("يرجى إدخال رقم صحيح"),
         "lastName": MessageLookupByLibrary.simpleMessage("اسم العائلة"),
+        "loading_bio": MessageLookupByLibrary.simpleMessage("يتم التحميل"),
         "login": MessageLookupByLibrary.simpleMessage("تسجيل الدخول"),
         "male": MessageLookupByLibrary.simpleMessage("ذكر"),
+        "noInternet":
+            MessageLookupByLibrary.simpleMessage("لا يوجد اتصال بالإنترنت"),
+        "noScheduleFound": MessageLookupByLibrary.simpleMessage(
+            "لم يتم العثور على فترة مناسبة للحجز"),
+        "no_slots": MessageLookupByLibrary.simpleMessage(
+            "لا توجد أوقات متاحة في هذا اليوم."),
+        "ok": MessageLookupByLibrary.simpleMessage("تأكيد"),
         "onBoardingSubtitle1": MessageLookupByLibrary.simpleMessage(
             "احجز المواعيد، استعرض السجلات، وتابع صحتك في تطبيق واحد."),
         "onBoardingSubtitle2": MessageLookupByLibrary.simpleMessage(
@@ -55,6 +75,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "onBoardingTitle3":
             MessageLookupByLibrary.simpleMessage("صحتك، بين يديك"),
         "password": MessageLookupByLibrary.simpleMessage("كلمة المرور"),
+        "patients": MessageLookupByLibrary.simpleMessage("المرضى"),
         "phoneNumber": MessageLookupByLibrary.simpleMessage("رقم الهاتف"),
         "pleaseEnterAge":
             MessageLookupByLibrary.simpleMessage("يرجى اختيار تاريخ الميلاد"),
@@ -68,12 +89,21 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("يرجى إدخال رقم الهاتف"),
         "profileSetup":
             MessageLookupByLibrary.simpleMessage("إعداد الملف الشخصي"),
+        "rating": MessageLookupByLibrary.simpleMessage("التقييم"),
         "resendCodeIn":
             MessageLookupByLibrary.simpleMessage("إعادة إرسال الرمز خلال "),
+        "resendOtp": MessageLookupByLibrary.simpleMessage("إعادة إرسال الرمز"),
+        "reviews": MessageLookupByLibrary.simpleMessage("المراجعات"),
+        "select_date": MessageLookupByLibrary.simpleMessage("اختر يوماً"),
+        "select_time": MessageLookupByLibrary.simpleMessage("اختر وقتاً"),
+        "session": MessageLookupByLibrary.simpleMessage("للجلسة"),
         "signup": MessageLookupByLibrary.simpleMessage("إنشاء حساب"),
         "singUpNow": MessageLookupByLibrary.simpleMessage("أنشئ حساب "),
         "syrianPhoneHint": MessageLookupByLibrary.simpleMessage("9XX XXX XXX"),
+        "timeout": MessageLookupByLibrary.simpleMessage(
+            "انتهت مهلة الاتصال، حاول مجددًا"),
         "verifyOtp": MessageLookupByLibrary.simpleMessage("تأكيد الرمز"),
+        "warningTitle": MessageLookupByLibrary.simpleMessage("تحذير"),
         "weSentCodeTo":
             MessageLookupByLibrary.simpleMessage("لقد أرسلنا رمزًا إلى"),
         "welcome": MessageLookupByLibrary.simpleMessage("مرحباً بك في")

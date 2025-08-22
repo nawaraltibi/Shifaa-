@@ -27,7 +27,7 @@ class AuthTemplate extends StatelessWidget {
         children: [
           Align(
             alignment: Alignment.topLeft,
-            child: Image.asset(Assets.imagesNotebook),
+            child: Image.asset(AppImages.imagesNotebook),
           ),
           const Spacer(),
 
@@ -37,11 +37,15 @@ class AuthTemplate extends StatelessWidget {
 
           CustomWhiteContainer(
             height: containerHeight,
-            child: SingleChildScrollView(
-              padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom,
+            child: Material(
+              // ✅ هذا هو المهم
+              color: Colors.transparent,
+              child: SingleChildScrollView(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                ),
+                child: child,
               ),
-              child: child,
             ),
           ),
         ],

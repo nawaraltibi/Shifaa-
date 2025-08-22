@@ -21,17 +21,17 @@ class _OnBoardingViewBodyState extends State<OnBoardingViewBody> {
 
   final List<OnBoardingData> onboardingPages = [
     OnBoardingData(
-      image: Assets.imagesOnboardingScreen1,
+      image: AppImages.imagesOnboardingScreen1,
       title: (context) => S.of(context).onBoardingTitle1,
       subtitle: (context) => S.of(context).onBoardingSubtitle1,
     ),
     OnBoardingData(
-      image: Assets.imagesOnboardingScreen2,
+      image: AppImages.imagesOnboardingScreen2,
       title: (context) => S.of(context).onBoardingTitle2,
       subtitle: (context) => S.of(context).onBoardingSubtitle2,
     ),
     OnBoardingData(
-      image: Assets.imagesOnboardingScreen3,
+      image: AppImages.imagesOnboardingScreen3,
       title: (context) => S.of(context).onBoardingTitle3,
       subtitle: (context) => S.of(context).onBoardingSubtitle3,
     ),

@@ -1,20 +1,64 @@
 import 'package:dio/dio.dart';
+import 'package:intl/intl.dart';
+import 'package:shifaa/core/api/end_ponits.dart';
+import 'package:shifaa/core/utils/shared_prefs_helper.dart';
 
 class ApiInterceptor extends Interceptor {
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    // Set common headers if needed
-    options.headers.addAll({
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      // 'Accept-Language': 'ar', // Optionally set dynamically from locale
-    });
+  void onRequest(
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) async {
+    // --- لا تغيير هنا ---
+    final token = await SharedPrefsHelper.instance.getToken();
+    final locale = Intl.getCurrentLocale();
 
-    // You can also log the request
-    print("➡️ API Request: ${options.method} ${options.uri}");
-    print("Headers: ${options.headers}");
-    print("Body: ${options.data}");
+    final unauthenticatedEndpoints = [
+      EndPoint.sendOtp,
+      EndPoint.verifyOtp,
+      EndPoint.register,
+      EndPoint.verifyPassword,
+    ];
 
+    final isUnauthenticated = unauthenticatedEndpoints.any(
+      (unauth) => options.path.contains(unauth),
+    );
+    // --------------------
+
+    // --- هنا التعديل ---
+    // 1. أضف الهيدرز الأساسية
+    options.headers['Accept'] = 'application/json';
+    options.headers['Accept-Language'] = locale == 'ar' ? 'ar' : 'en';
+    if (!isUnauthenticated && token != null && token.isNotEmpty) {
+      options.headers['Authorization'] = 'Bearer $token';
+    }
+
+    // 2. (التغيير الحاسم) لا تقم بتعيين Content-Type يدوياً إذا كان الطلب من نوع FormData.
+    //    مكتبة Dio ستقوم بتعيينه إلى 'multipart/form-data' تلقائياً وهو المطلوب.
+    if (options.data is! FormData) {
+      options.headers['Content-Type'] = 'application/json';
+    }
+    // --------------------
+
+    // --- لا تغيير هنا ---
+
+    print("➡️➡️➡️ --- Request --- ⬅️⬅️⬅️");
+    print("URI: ${options.uri}");
+    print("METHOD: ${options.method}");
+    print("HEADERS: ${options.headers}");
+
+    // إذا كانت البيانات FormData، اطبع الحقول والملفات بشكل منفصل
+    if (options.data is FormData) {
+      final formData = options.data as FormData;
+      print("BODY (FormData Fields): ${formData.fields}");
+      print(
+        "BODY (FormData Files): ${formData.files.map((f) => f.value.filename)}",
+      );
+    } else {
+      // إذا كانت البيانات JSON عادية
+      print("BODY: ${options.data}");
+    }
+    print("➡️➡️➡️ --- End Request --- ⬅️⬅️⬅️");
     super.onRequest(options, handler);
   }
 
@@ -24,7 +68,6 @@ class ApiInterceptor extends Interceptor {
       "✅ API Response: ${response.statusCode} ${response.requestOptions.uri}",
     );
     print("Response Body: ${response.data}");
-
     super.onResponse(response, handler);
   }
 
@@ -32,9 +75,22 @@ class ApiInterceptor extends Interceptor {
   void onError(DioException err, ErrorInterceptorHandler handler) {
     print("❌ API Error: ${err.type} | ${err.message}");
 
-    // Optional: log full response if available
-    if (err.response != null) {
-      print("Error Response Body: ${err.response?.data}");
+    final response = err.response;
+    if (response != null) {
+      print("⛔ Status Code: ${response.statusCode}");
+      print("⛔ Response Headers: ${response.headers}");
+
+      try {
+        print("⛔ Response Body: ${response.data}");
+      } catch (e) {
+        print("⚠️ Failed to parse response body: $e");
+      }
+
+      if (response.data is! Map && response.data is! List) {
+        print("⛔ Raw Response Body as String: ${response.data.toString()}");
+      }
+    } else {
+      print("❌ No response from server (might be a network issue).");
     }
 
     super.onError(err, handler);

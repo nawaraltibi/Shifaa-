@@ -260,10 +260,10 @@ class S {
     );
   }
 
-  /// `Please enter a valid Syrian number like 9XX XXX XXX`
+  /// `Please enter a valid number`
   String get invalidPhoneFormat {
     return Intl.message(
-      'Please enter a valid Syrian number like 9XX XXX XXX',
+      'Please enter a valid number',
       name: 'invalidPhoneFormat',
       desc: '',
       args: [],
@@ -405,6 +405,246 @@ class S {
     return Intl.message(
       'Please select your date of birth',
       name: 'pleaseEnterAge',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No internet connection`
+  String get noInternet {
+    return Intl.message(
+      'No internet connection',
+      name: 'noInternet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connection timed out, please try again`
+  String get timeout {
+    return Intl.message(
+      'Connection timed out, please try again',
+      name: 'timeout',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error`
+  String get errorTitle {
+    return Intl.message(
+      'Error',
+      name: 'errorTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Warning`
+  String get warningTitle {
+    return Intl.message(
+      'Warning',
+      name: 'warningTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invali OTP`
+  String get invalidOtp {
+    return Intl.message(
+      'Invali OTP',
+      name: 'invalidOtp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Resend OTP`
+  String get resendOtp {
+    return Intl.message(
+      'Resend OTP',
+      name: 'resendOtp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Session`
+  String get session {
+    return Intl.message(
+      'Session',
+      name: 'session',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Patients`
+  String get patients {
+    return Intl.message(
+      'Patients',
+      name: 'patients',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Experience`
+  String get experience {
+    return Intl.message(
+      'Experience',
+      name: 'experience',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rating`
+  String get rating {
+    return Intl.message(
+      'Rating',
+      name: 'rating',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reviews`
+  String get reviews {
+    return Intl.message(
+      'Reviews',
+      name: 'reviews',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `About Doctor`
+  String get about_doctor {
+    return Intl.message(
+      'About Doctor',
+      name: 'about_doctor',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loading doctor bio...`
+  String get loading_bio {
+    return Intl.message(
+      'Loading doctor bio...',
+      name: 'loading_bio',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select Date`
+  String get select_date {
+    return Intl.message(
+      'Select Date',
+      name: 'select_date',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select Time`
+  String get select_time {
+    return Intl.message(
+      'Select Time',
+      name: 'select_time',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No available time slots for this day.`
+  String get no_slots {
+    return Intl.message(
+      'No available time slots for this day.',
+      name: 'no_slots',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Book`
+  String get book {
+    return Intl.message(
+      'Book',
+      name: 'book',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Booking successful!`
+  String get bookSuccess {
+    return Intl.message(
+      'Booking successful!',
+      name: 'bookSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm Booking`
+  String get confirmBooking {
+    return Intl.message(
+      'Confirm Booking',
+      name: 'confirmBooking',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to book the appointment on:`
+  String get confirmBookingMessage {
+    return Intl.message(
+      'Are you sure you want to book the appointment on:',
+      name: 'confirmBookingMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel`
+  String get cancel {
+    return Intl.message(
+      'Cancel',
+      name: 'cancel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ok`
+  String get ok {
+    return Intl.message(
+      'Ok',
+      name: 'ok',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No suitable schedule found for booking`
+  String get noScheduleFound {
+    return Intl.message(
+      'No suitable schedule found for booking',
+      name: 'noScheduleFound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error`
+  String get error {
+    return Intl.message(
+      'Error',
+      name: 'error',
       desc: '',
       args: [],
     );

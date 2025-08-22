@@ -1,19 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:shifaa/core/functions/setup_service_locator.dart';
+import 'package:shifaa/constants.dart';
+import 'package:shifaa/core/utils/functions/setup_service_locator.dart';
 import 'package:shifaa/core/utils/app_routes.dart';
+import 'package:shifaa/core/utils/shared_prefs_helper.dart';
+import 'package:shifaa/core/utils/simple_bloc_observer.dart';
 import 'generated/l10n.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Hide system UI overlays globally
+  // إعداد مراقب الـ Bloc
+  Bloc.observer = SimpleBlocObserver();
+
+  // إخفاء الـ System UI
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
+  // إعداد الـ Service Locator
   setupServiceLocator();
 
+  // تحميل التوكن
+  loadToken();
+  await SharedPrefsHelper.instance.saveToken(
+    "1|Y4qDFlo7UmcrPVNC9obeWk3KV8ejKsQ9CNxr6gcJb41c0f9a",
+  );
+
+  // تشغيل التطبيق
   runApp(const Shifaa());
 }
 
