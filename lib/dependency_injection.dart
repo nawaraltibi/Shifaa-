@@ -1,77 +1,83 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shifaa/core/platform/network_info.dart';
+import 'package:shifaa/core/services/database_service.dart';
+import 'package:shifaa/features/appointments/data/datasources/appointment_local_data_source.dart';
 import 'package:shifaa/features/appointments/data/datasources/appointment_remote_data_source.dart';
 import 'package:shifaa/features/appointments/data/repositories/appointment_repository_impl.dart';
 import 'package:shifaa/features/appointments/domain/repositories/appointment_repository.dart';
 import 'package:shifaa/features/appointments/domain/usecases/get_previous_appointments.dart';
 import 'package:shifaa/features/appointments/domain/usecases/get_upcoming_appointments.dart';
 import 'package:shifaa/features/appointments/presentation/manager/appointments_cubit.dart';
-import 'package:shifaa/features/search/data/datasources/specialty_remote_data_source.dart';
-import 'package:shifaa/features/search/data/repositories/specialty_repository_impl.dart';
-import 'package:shifaa/features/search/domain/repositories/specialty_repository.dart';
-import 'package:shifaa/features/search/domain/usecases/search_for_specialties_usecase.dart';
 import 'package:shifaa/features/search/data/datasources/doctor_remote_data_source.dart';
+import 'package:shifaa/features/search/data/datasources/specialty_remote_data_source.dart';
 import 'package:shifaa/features/search/data/repositories/doctor_repository_impl.dart';
+import 'package:shifaa/features/search/data/repositories/specialty_repository_impl.dart';
 import 'package:shifaa/features/search/domain/repositories/doctor_repository.dart';
+import 'package:shifaa/features/search/domain/repositories/specialty_repository.dart';
 import 'package:shifaa/features/search/domain/usecases/search_for_doctors_usecase.dart';
-
+import 'package:shifaa/features/search/domain/usecases/search_for_specialties_usecase.dart';
 import 'package:shifaa/features/search/presentation/manager/search_cubit.dart';
-
 
 final sl = GetIt.instance;
 
 
 Future<String?> getTokenFromStorage() async {
-  // final prefs = await SharedPreferences.getInstance();
-  // return prefs.getString('user_token');
-  
   return '2|NiB0JRjofbZBxQ3DIqtNjX9CQOUpqa9WYILMuIcLee2992a8';
 }
 
 
 Future<void> setupServiceLocator() async {
-  // Cubits
-  
-  
+  // ================== Features - Search ==================
   sl.registerFactory(() => SearchCubit(
         searchForSpecialtiesUseCase: sl(),
         searchForDoctorsUseCase: sl(), 
       ));
-  
-  sl.registerFactory(() => AppointmentsCubit(
-    getUpcomingAppointmentsUseCase: sl(),
-    getPreviousAppointmentsUseCase: sl(),
-));
-
-  // Use Cases
   sl.registerLazySingleton(() => SearchForSpecialtiesUseCase(sl()));
   sl.registerLazySingleton(() => SearchForDoctorsUseCase(sl())); 
-
-  sl.registerLazySingleton(() => GetUpcomingAppointmentsUseCase(sl()));
-  sl.registerLazySingleton(() => GetPreviousAppointmentsUseCase(sl()));
-
-  // Repositories
   sl.registerLazySingleton<SpecialtyRepository>(
     () => SpecialtyRepositoryImpl(remoteDataSource: sl()),
   );
   sl.registerLazySingleton<DoctorRepository>( 
     () => DoctorRepositoryImpl(remoteDataSource: sl()),
   );
-  sl.registerLazySingleton<AppointmentRepository>(
-    () => AppointmentRepositoryImpl(remoteDataSource: sl()),
-);
-
-
-  // Data Sources
   sl.registerLazySingleton<SpecialtyRemoteDataSource>(
     () => SpecialtyRemoteDataSourceImpl(dio: sl()),
   );
   sl.registerLazySingleton<DoctorRemoteDataSource>( 
     () => DoctorRemoteDataSourceImpl(dio: sl()),
   );
+
+  // ================== Features - Appointments ==================
+  sl.registerFactory(() => AppointmentsCubit(
+    getUpcomingAppointmentsUseCase: sl(),
+    getPreviousAppointmentsUseCase: sl(),
+  ));
+  sl.registerLazySingleton(() => GetUpcomingAppointmentsUseCase(sl()));
+  sl.registerLazySingleton(() => GetPreviousAppointmentsUseCase(sl()));
+  sl.registerLazySingleton<AppointmentRepository>(
+    // تم تحديث هذا السطر ليأخذ كل الـ Dependencies
+    () => AppointmentRepositoryImpl(
+      remoteDataSource: sl(),
+      localDataSource: sl(),
+      networkInfo: sl(), // <-- إضافة جديدة
+    ),
+  );
   sl.registerLazySingleton<AppointmentRemoteDataSource>(
     () => AppointmentRemoteDataSourceImpl(dio: sl()),
-);
+  );
+  // تمت إضافة تسجيل المصدر المحلي
+  sl.registerLazySingleton<AppointmentLocalDataSource>(
+    () => AppointmentLocalDataSourceImpl(databaseService: sl()),
+  );
+
+  // ================== Core / External ==================
+  sl.registerLazySingleton(() => DatabaseService.instance);
+  
+  // تمت إضافة تسجيل NetworkInfo
+  sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
+  sl.registerLazySingleton(() => Connectivity());
 
   sl.registerLazySingleton(() {
     final dio = Dio(

@@ -1,5 +1,6 @@
 part of 'appointments_cubit.dart';
 
+
 enum AppointmentType { upcoming, previous }
 
 sealed class AppointmentsState extends Equatable {
@@ -11,7 +12,7 @@ sealed class AppointmentsState extends Equatable {
 
 class AppointmentsLoadSuccess extends AppointmentsState {
   final AppointmentType appointmentType;
-  final List<AppointmentEntity> appointments; // تم تحديد النوع ليكون أكثر أماناً
+  final List<AppointmentEntity> appointments;
   final bool isLoading;
   final String? errorMessage;
 

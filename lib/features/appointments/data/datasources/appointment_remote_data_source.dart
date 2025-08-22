@@ -14,7 +14,9 @@ class AppointmentRemoteDataSourceImpl implements AppointmentRemoteDataSource {
   Future<List<AppointmentModel>> getAppointments(String timeType) async {
     final response = await dio.get(
       'appointments',
-      queryParameters: {'time': timeType}, // 'upcoming' or 'past'
+      queryParameters: {'time': timeType,
+                         'per_page': 100
+                        }, // 'upcoming' or 'past'
     );
 
     if (response.statusCode == 200 && response.data['success'] == true) {

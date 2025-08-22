@@ -4,9 +4,10 @@ class AppointmentEntity extends Equatable {
   final int id;
   final String doctorName;
   final String specialty;
-  final String? imageUrl; 
-  final String date;
-  final String time;
+  final String? imageUrl;
+  final String date;  // للعرض
+  final String time;  // للعرض
+  final String startTime; // للترتيب والمنطق
 
   const AppointmentEntity({
     required this.id,
@@ -15,8 +16,9 @@ class AppointmentEntity extends Equatable {
     this.imageUrl,
     required this.date,
     required this.time,
+    required this.startTime,
   });
 
   @override
-  List<Object?> get props => [id, doctorName, specialty, imageUrl, date, time];
+  List<Object?> get props => [id, doctorName, specialty, imageUrl, date, time, startTime];
 }

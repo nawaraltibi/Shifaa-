@@ -14,13 +14,14 @@ class AppointmentView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => sl<AppointmentsCubit>(), // تأكد من تسجيله في DI
+      create: (context) => sl<AppointmentsCubit>(), 
       child: Scaffold(
         appBar: AppBar(
           title: const Center(
-            child: Text('My appointments'), // style: AppTextStyles.semiBold22
+            child: Text('My appointments'), 
           ),
         backgroundColor: Colors.white,
+        scrolledUnderElevation: 0,
         ),
         body: const Padding(
           padding: EdgeInsets.all(20.0),

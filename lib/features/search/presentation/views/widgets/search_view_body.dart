@@ -23,6 +23,7 @@ class SearchViewBody extends StatelessWidget {
               ),
             ),
             backgroundColor: Colors.white,
+            scrolledUnderElevation: 0,
             elevation: 0,
           ),
           body: Padding(

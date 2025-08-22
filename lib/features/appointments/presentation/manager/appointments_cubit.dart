@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:shifaa/core/usecase/usecase.dart';
 import 'package:shifaa/features/appointments/domain/entities/appointment_entity.dart';
 import 'package:shifaa/features/appointments/domain/usecases/get_previous_appointments.dart';
 import 'package:shifaa/features/appointments/domain/usecases/get_upcoming_appointments.dart';
@@ -15,28 +14,27 @@ class AppointmentsCubit extends Cubit<AppointmentsLoadSuccess> {
     required this.getUpcomingAppointmentsUseCase,
     required this.getPreviousAppointmentsUseCase,
   }) : super(const AppointmentsLoadSuccess()) {
-    fetchAppointments();
+    fetchAppointments(isInitialLoad: true);
   }
 
   void changeAppointmentType(AppointmentType type) {
     emit(state.copyWith(appointmentType: type));
-    fetchAppointments();
+    fetchAppointments(isInitialLoad: true);
   }
 
-  Future<void> fetchAppointments() async {
-    emit(state.copyWith(isLoading: true, clearError: true, appointments: []));
+  Future<void> fetchAppointments({bool forceRefresh = false, bool isInitialLoad = false}) async {
+    if (forceRefresh || isInitialLoad) {
+      emit(state.copyWith(isLoading: true, clearError: true));
+    }
     
+    final params = GetAppointmentsParams(forceRefresh: forceRefresh);
     final result = state.appointmentType == AppointmentType.upcoming
-        ? await getUpcomingAppointmentsUseCase(NoParams())
-        : await getPreviousAppointmentsUseCase(NoParams());
+        ? await getUpcomingAppointmentsUseCase(params)
+        : await getPreviousAppointmentsUseCase(params);
 
     result.fold(
-      (failure) {
-        emit(state.copyWith(isLoading: false, errorMessage: failure.message));
-      },
-      (appointments) {
-        emit(state.copyWith(isLoading: false, appointments: appointments));
-      },
+      (failure) => emit(state.copyWith(isLoading: false, errorMessage: failure.message)),
+      (appointments) => emit(state.copyWith(isLoading: false, appointments: appointments)),
     );
   }
 }
