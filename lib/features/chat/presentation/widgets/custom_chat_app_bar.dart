@@ -1,10 +1,23 @@
+// lib/features/chat/presentation/widgets/custom_chat_app_bar.dart
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shifaa/core/utils/app_text_styles.dart';
+import 'package:shifaa/features/chat/presentation/cubits/mute_chat_cubit/chat_mute_cubit.dart';
 import 'package:shifaa/features/chat/presentation/widgets/doctor_chat_image.dart';
 
 class CustomChatAppBar extends StatelessWidget {
-  const CustomChatAppBar({super.key});
+  final int chatId;
+  final String doctorName;
+  final String? doctorImage;
+
+  const CustomChatAppBar({
+    super.key,
+    required this.chatId,
+    required this.doctorName,
+    this.doctorImage,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,21 +31,79 @@ class CustomChatAppBar extends StatelessWidget {
       child: Row(
         children: [
           GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
+            onTap: () => Navigator.pop(context),
             child: Icon(Icons.arrow_back_ios, color: Colors.black, size: 24.w),
           ),
           SizedBox(width: 20.w),
-          const DoctorChatImage(),
+          DoctorChatImage(imageUrl: doctorImage, width: 40, height: 40),
           SizedBox(width: 10.w),
           Expanded(
             child: Text(
-              'Dr. George Doe',
+              doctorName,
               style: AppTextStyles.bold12.copyWith(fontSize: 16.sp),
+              overflow: TextOverflow.ellipsis,
             ),
           ),
-          Icon(Icons.more_horiz, color: Colors.black, size: 24.w),
+          BlocConsumer<ChatMuteCubit, ChatMuteState>(
+            // ✅ الشرط الذكي: شغّل الـ listener فقط عند الانتقال من التحميل للنجاح
+            listenWhen: (previous, current) {
+              return previous is ChatMuteLoading && current is ChatMuteSuccess;
+            },
+            listener: (context, state) {
+              // هذا الكود الآن آمن ولن يعمل إلا بعد ضغط المستخدم
+              if (state is ChatMuteSuccess) {
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                final snackBar = SnackBar(
+                  content: Text(
+                    state.isMuted ? 'Chat Muted' : 'Chat Unmuted',
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                  backgroundColor: state.isMuted
+                      ? Colors.redAccent
+                      : Colors.green,
+                  duration: const Duration(seconds: 2),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              }
+            },
+            builder: (context, state) {
+              bool isLoading = state is ChatMuteLoading;
+              bool isMuted = false;
+
+              // استخرج الحالة الحالية للكتم لعرض الأيقونة الصحيحة دائماً
+              if (state is ChatMuteSuccess) {
+                isMuted = state.isMuted;
+              } else if (context.read<ChatMuteCubit>().state
+                  is ChatMuteSuccess) {
+                // في حالة التحميل، اعرض الحالة التي كانت قبل الضغط
+                isMuted =
+                    (context.read<ChatMuteCubit>().state as ChatMuteSuccess)
+                        .isMuted;
+              }
+
+              if (isLoading) {
+                return SizedBox(
+                  width: 24.w,
+                  height: 24.w,
+                  child: const CircularProgressIndicator(strokeWidth: 2.0),
+                );
+              }
+
+              return GestureDetector(
+                onTap: () {
+                  // لا تسمح بالضغط المتكرر أثناء التحميل
+                  if (!isLoading) {
+                    context.read<ChatMuteCubit>().toggleMute(chatId);
+                  }
+                },
+                child: Icon(
+                  isMuted ? Icons.volume_off : Icons.volume_up,
+                  color: isMuted ? Colors.red : Colors.black,
+                  size: 24.w,
+                ),
+              );
+            },
+          ),
         ],
       ),
     );

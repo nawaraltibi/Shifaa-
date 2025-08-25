@@ -20,6 +20,7 @@ class EndPoint {
   static String getChatDetails(int chatId) => "chats/$chatId";
   static String sendMessage(int chatId) =>
       "chats/$chatId/messages"; // POST إرسال رسالة
+  static String muteChat(int chatId) => "chats/$chatId/mute";
 }
 
 class ApiKey {

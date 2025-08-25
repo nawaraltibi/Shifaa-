@@ -279,7 +279,7 @@ class _DoctorDetailsViewBodyState extends State<DoctorDetailsViewBody> {
 
     showDialog(
       context: context,
-      builder: (_) {
+      builder: (dialogContext) {
         return AlertDialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
@@ -329,7 +329,7 @@ class _DoctorDetailsViewBodyState extends State<DoctorDetailsViewBody> {
                     width: 110.w,
                     child: CustomButton(
                       text: S.of(context).cancel,
-                      onPressed: () => Navigator.pop(context),
+                      onPressed: () => Navigator.pop(dialogContext),
                       borderRadius: 35.r,
                       color: const Color(0xFFFF6F61),
                     ),
@@ -409,9 +409,9 @@ class _DoctorDetailsViewBodyState extends State<DoctorDetailsViewBody> {
                           startTime: startTime,
                           doctorScheduleId: doctorScheduleId,
                         );
-
-                        Navigator.pop(context);
+                        Navigator.pop(dialogContext);
                       },
+
                       borderRadius: 35.r,
                     ),
                   ),

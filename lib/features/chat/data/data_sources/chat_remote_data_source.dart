@@ -61,55 +61,51 @@ class ChatRemoteDataSource {
 
   // في ملف ChatRemoteDataSource.dart
 
+  // في ملف: ChatRemoteDataSource.dart
+
+  // في ملف: ChatRemoteDataSource.dart
+
   Future<Message> sendMessage(
     int chatId, {
     String? text,
     File? file,
-    String? originalFileName,
+    String? originalFileName, // سنستخدمه لاسم الملف
     List<Map<String, String>> encryptedKeysPayload = const [],
   }) async {
-    // ✅✅✅ --- الإصلاح هنا: نبني FormData مباشرة --- ✅✅✅
+    // 1. قم ببناء Map عادية، تماماً مثل الكود الشغال
+    final Map<String, dynamic> dataMap = {
+      // Dio يتجاهل الـ keys التي قيمتها null تلقائياً
+      'text': text,
+      'encrypted_keys': encryptedKeysPayload,
+    };
 
-    // 1. أنشئ كائن FormData فارغاً
-    final formData = FormData();
-
-    // 2. أضف حقل النص إذا كان موجوداً
-    if (text != null) {
-      formData.fields.add(MapEntry('text', text));
-    }
-
-    // 3. أضف حقل الملف إذا كان موجوداً
+    // 2. أضف الملف إلى الـ Map فقط إذا كان موجوداً
     if (file != null && originalFileName != null) {
-      formData.files.add(
-        MapEntry(
-          'file',
-          await MultipartFile.fromFile(file.path, filename: originalFileName),
-        ),
+      dataMap['file'] = await MultipartFile.fromFile(
+        file.path,
+        filename: originalFileName,
       );
     }
 
-    // 4. أضف حقول encrypted_keys مباشرة إلى formData.fields
-    for (int i = 0; i < encryptedKeysPayload.length; i++) {
-      final keyMap = encryptedKeysPayload[i];
-      formData.fields.add(
-        MapEntry('encrypted_keys[$i][device_id]', keyMap['device_id']!),
-      );
-      formData.fields.add(
-        MapEntry('encrypted_keys[$i][encrypted_key]', keyMap['encrypted_key']!),
-      );
+    // 3. استخدم FormData.fromMap الموثوقة
+    final formData = FormData.fromMap(dataMap);
+
+    // (أوامر الطباعة للتحقق النهائي)
+    print("📤 [FINAL CHECK] Sending FormData built with fromMap:");
+    print("   - Fields: ${formData.fields}");
+    print(
+      "   - Files: ${formData.files.map((f) => 'Key: ${f.key}, Filename: ${f.value.filename}').toList()}",
+    );
+
+    try {
+      // 4. أرسل الطلب
+      final res = await dio.post(EndPoint.sendMessage(chatId), data: formData);
+      print("✅✅✅ SUCCESS! API Response: ${res.data}");
+      return MessageModel.fromJson(res.data["data"]);
+    } on DioException catch (e) {
+      print("⛔️ DioException Response Body: ${e.response?.data}");
+      rethrow;
     }
-
-    // (يمكنك إبقاء أوامر الطباعة للـ debugging إذا أردت)
-    print(
-      "🕵️‍♂️ [DataSource] Sending FormData with files: ${formData.files.map((f) => f.value.filename).toList()}",
-    );
-    print(
-      "🕵️‍♂️ [DataSource] Sending FormData with fields: ${formData.fields}",
-    );
-
-    // 5. أرسل الطلب
-    final res = await dio.post(EndPoint.sendMessage(chatId), data: formData);
-    return MessageModel.fromJson(res.data["data"]);
   }
 
   Future<List<ChatSummary>> getChats() async {
@@ -125,6 +121,16 @@ class ChatRemoteDataSource {
     } catch (e) {
       print('❌ getChats ERROR: $e');
       rethrow; // أعد رمي الخطأ ليتم التعامل معه في الـ Repository
+    }
+  }
+
+  Future<Chat> muteChat(int chatId) async {
+    try {
+      final response = await dio.post(EndPoint.muteChat(chatId));
+      return ChatModel.fromJson(response.data['data']['chat']);
+    } catch (e) {
+      print('❌ muteChat ERROR: $e');
+      rethrow;
     }
   }
 }

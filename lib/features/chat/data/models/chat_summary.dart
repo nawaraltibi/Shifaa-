@@ -1,6 +1,9 @@
 // file: lib/features/chat/data/models/chat_summary.dart
 
 // موديل بسيط لمعلومات الطرف الآخر في المحادثة (في حالتك، الطبيب)
+import 'package:shifaa/features/book_appointments/data/models/doctor_model.dart';
+import 'package:shifaa/features/chat/data/models/message.dart';
+
 class ChatParticipant {
   final int id;
   final String firstName;
@@ -47,28 +50,45 @@ class LastMessage {
 // الموديل الرئيسي الذي يمثل كل عنصر في قائمة المحادثات
 class ChatSummary {
   final int id;
-  final ChatParticipant doctor; // الطرف الآخر هو الطبيب
-  final LastMessage? lastMessage; // قد تكون المحادثة جديدة (nullable)
-  // ملاحظة: الـ API لا يرسل عدد الرسائل غير المقروءة حالياً
+  // ✅ 1. حدد النوع الصحيح هنا (افترضت أنه Doctor)
+  final DoctorModel doctor;
+  // ✅ 2. حدد النوع الصحيح هنا
+  final Message? lastMessage;
   final int unreadCount;
 
   ChatSummary({
     required this.id,
     required this.doctor,
     this.lastMessage,
-    this.unreadCount = 0, // سنفترض أنها صفر حالياً
+    required this.unreadCount,
   });
 
-  // الـ Factory constructor الرئيسي الذي يجمع كل الأجزاء
+  // ✅ 3. تأكد من أن دالة fromJson تستخدم الأنواع الصحيحة أيضاً
   factory ChatSummary.fromJson(Map<String, dynamic> json) {
     return ChatSummary(
-      id: json['id'] ?? 0,
-      doctor: ChatParticipant.fromJson(json['doctor']),
-      // تحقق إذا كانت آخر رسالة موجودة قبل محاولة تحليلها
+      id: json['id'],
+      // تأكد من أنك تستدعي fromJson للكلاس الصحيح
+      doctor: DoctorModel.fromJson(json['doctor']),
+      // تحقق إذا كانت الرسالة موجودة قبل تحليلها
       lastMessage: json['last_message'] != null
-          ? LastMessage.fromJson(json['last_message'])
+          ? MessageModel.fromJson(json['last_message'])
           : null,
-      // unreadCount: json['unread_messages_count'] ?? 0, // أبقِ هذا جاهزاً للمستقبل
+      unreadCount: json['unread_count'] ?? 0,
+    );
+  }
+
+  // ✅ 4. الآن دالة copyWith ستعمل بشكل صحيح لأن الأنواع متطابقة
+  ChatSummary copyWith({
+    int? id,
+    DoctorModel? doctor, // <-- النوع الصحيح
+    Message? lastMessage, // <-- النوع الصحيح
+    int? unreadCount,
+  }) {
+    return ChatSummary(
+      id: id ?? this.id,
+      doctor: doctor ?? this.doctor,
+      lastMessage: lastMessage ?? this.lastMessage,
+      unreadCount: unreadCount ?? this.unreadCount,
     );
   }
 }

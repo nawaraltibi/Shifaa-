@@ -48,28 +48,30 @@ class ChatRepositoryImpl implements ChatRepository {
 
   // في ملف ChatRepositoryImpl.dart، داخل دالة sendMessage
 
+  // في ملف ChatRepositoryImpl.dart
+
   @override
   Future<Either<Failure, Message>> sendMessage(
     int chatId, {
     String? text,
     File? file,
+    String? originalFileName, // <--- أضف هذا السطر
     List<Map<String, String>> encryptedKeysPayload = const [],
   }) async {
     try {
-      String? originalFileName;
-      if (file != null) {
-        final encryptedFileName = file.path.split('/').last;
-        originalFileName = encryptedFileName.replaceAll('.enc', '');
-
-        // ✅✅✅ --- DEBUGGING --- ✅✅✅
-        print("🕵️‍♂️ [Repo] Encrypted file name: $encryptedFileName");
-        print("🕵️‍♂️ [Repo] Original file name extracted: $originalFileName");
-      }
+      // 🕵️‍♂️ نقطة تفتيش 5: هل وصلت البيانات إلى الـ Repository؟
+      print(
+        "🕵️‍♂️ [5. REPO IMPL] Received data in repository implementation:",
+      );
+      print("   - Text: ${text != null ? 'Present' : 'null'}");
+      print("   - File: ${file?.path ?? 'null'}");
+      print("   - Original Name: ${originalFileName ?? 'null'}");
 
       final msg = await remote.sendMessage(
         chatId,
         text: text,
         file: file,
+        // ✅ مرر الاسم الذي استقبلته مباشرة إلى remote data source
         originalFileName: originalFileName,
         encryptedKeysPayload: encryptedKeysPayload,
       );
@@ -93,6 +95,18 @@ class ChatRepositoryImpl implements ChatRepository {
       return Left(ServerFailure.fromDiorError(e));
     } catch (e) {
       // لأي خطأ آخر، قم بإرجاعه كـ ServerFailure
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Chat>> muteChat(int chatId) async {
+    try {
+      final chat = await remote.muteChat(chatId);
+      return Right(chat);
+    } on DioException catch (e) {
+      return Left(ServerFailure.fromDiorError(e));
+    } catch (e) {
       return Left(ServerFailure(e.toString()));
     }
   }

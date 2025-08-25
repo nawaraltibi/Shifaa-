@@ -1,4 +1,5 @@
-import 'package:dartz/dartz_streaming.dart' hide Text;
+// في ملف: lib/core/routing/app_router.dart (أو ما يماثله)
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shifaa/core/layout/main_layout_screen.dart';
@@ -8,7 +9,6 @@ import 'package:shifaa/features/auth/presentation/views/login_view.dart';
 import 'package:shifaa/features/auth/presentation/views/password_view.dart';
 import 'package:shifaa/features/auth/presentation/views/profile_setup_view.dart';
 import 'package:shifaa/features/auth/presentation/views/verify_otp_view.dart';
-import 'package:shifaa/features/chat/data/models/chat.dart';
 import 'package:shifaa/features/chat/presentation/views/chat_view.dart';
 import 'package:shifaa/features/chat/presentation/views/chats_list_view.dart';
 import 'package:shifaa/features/home/presentation/views/home_view.dart';
@@ -18,23 +18,30 @@ import 'package:shifaa/features/search/presentation/views/search_screen.dart';
 import 'package:shifaa/features/splash/presentation/views/splash_view.dart';
 
 abstract class AppRouter {
-  static final _shellNavigatorKey = GlobalKey<NavigatorState>();
+  // مفتاح Navigator رئيسي للتطبيق كله
+  static final _rootNavigatorKey = GlobalKey<NavigatorState>(
+    debugLabel: 'Root',
+  );
 
   static final router = GoRouter(
+    navigatorKey: _rootNavigatorKey,
+    initialLocation: '/', // ابدأ من شاشة البداية
+
     routes: [
+      // --- المجموعة الأولى: مسارات بملء الشاشة (لا تحتوي على BottomNav) ---
+
+      // مسارات أولية (Splash, Onboarding, Auth)
       GoRoute(path: '/', builder: (context, state) => const SplashView()),
       GoRoute(
         path: OnBoardingView.routeName,
         name: OnBoardingView.routeName,
         builder: (context, state) => const OnBoardingView(),
       ),
-
       GoRoute(
         path: LoginView.routeName,
         name: LoginView.routeName,
         builder: (context, state) => const LoginView(),
       ),
-
       GoRoute(
         path: '/verify-otp-view',
         name: VerifyOtpView.routeName,
@@ -43,118 +50,106 @@ abstract class AppRouter {
           return VerifyOtpView(phoneNumber: phone);
         },
       ),
+      // ... (أكمل باقي مسارات المصادقة هنا بنفس الطريقة)
+
+      // مسارات داخلية تظهر بملء الشاشة
       GoRoute(
-        path: ProfileSetupView.routeName,
-        name: ProfileSetupView.routeName,
-        builder: (context, state) {
-          final phone = state.queryParams['phone'];
-          final otpString = state.queryParams['otp'];
-
-          if (phone == null || otpString == null) {
-            return const Scaffold(
-              body: Center(child: Text('Invalid profile setup data')),
-            );
-          }
-
-          final otp = int.tryParse(otpString);
-          if (otp == null) {
-            return const Scaffold(
-              body: Center(child: Text('Invalid OTP format')),
-            );
-          }
-
-          return ProfileSetupView(phoneNumber: phone, otp: otp);
-        },
-      ),
-
-      GoRoute(
-        path: PasswordView.routeName,
-        name: PasswordView.routeName,
-        builder: (context, state) {
-          final phone = state.queryParams['phone'];
-          final otpString = state.queryParams['otp'];
-
-          if (phone == null || otpString == null) {
-            return const Scaffold(
-              body: Center(child: Text('Invalid password data')),
-            );
-          }
-
-          final otp = int.tryParse(otpString);
-          if (otp == null) {
-            return const Scaffold(
-              body: Center(child: Text('Invalid OTP format')),
-            );
-          }
-
-          return PasswordView(phoneNumber: phone, otp: otp);
-        },
-      ),
-
-      GoRoute(
-        path: DoctorDetailsView.routeName,
+        path: DoctorDetailsView.routeName, // مثال: '/doctor-details'
         name: DoctorDetailsView.routeName,
-        builder: (context, state) => const DoctorDetailsView(doctorId: 1),
-      ),
-      GoRoute(
-        path: ChatsListView.routeName,
-        name: ChatsListView.routeName,
-        builder: (context, state) => const ChatsListView(),
-      ),
-      // --- الكود الجديد والصحيح ---
-      GoRoute(
-        path: ChatView.routeName,
-        name: ChatView.routeName,
+        // ⭐️ استخدم parentNavigatorKey ليظهر فوق الـ Shell
+        parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) {
-          // 1. اقرأ الـ extra وحوله إلى int
-          //    هذا الـ ID سيأتي إما من قائمة المحادثات أو بعد إنشاء محادثة جديدة
-          final chatId = state.extra as int;
+          // تأكد من تمرير الـ ID بشكل صحيح
+          final doctorId = state.extra as int? ?? 0;
+          return DoctorDetailsView(doctorId: doctorId);
+        },
+      ),
 
-          // 2. مرر الـ chatId إلى الـ constructor الجديد لـ ChatView
-          return ChatView(chatId: chatId);
+      // في ملف إعدادات GoRouter
+      GoRoute(
+        path: ChatView.routeName, // مثال: '/chat-view'
+        name: ChatView.routeName,
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) {
+          // ✅ --- التعديل هنا: استقبل الـ Map --- ✅
+          // 1. تحقق من أن extra هو من نوع Map
+          final args = state.extra as Map<String, dynamic>?;
+
+          // 2. استخرج البيانات مع قيم افتراضية آمنة
+          final chatId = args?['chatId'] as int? ?? 0;
+          final doctorName = args?['doctorName'] as String? ?? 'Doctor';
+          final doctorImage =
+              args?['doctorImage'] as String?; // يمكن أن يكون null
+          final isMuted = args?['isMuted'] as bool? ?? false;
+
+          // 3. مرر البيانات إلى ChatView
+          return ChatView(
+            chatId: chatId,
+            doctorName: doctorName,
+            doctorImage: doctorImage,
+          );
         },
       ),
 
       GoRoute(
         path: '/notifications',
         name: NotificationsScreen.routeName,
+        // ⭐️ استخدم parentNavigatorKey ليظهر فوق الـ Shell
+        parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const NotificationsScreen(),
       ),
+
+      // --- المجموعة الثانية: ShellRoute الذي يحتوي على كل الشاشات ذات الـ BottomNav ---
       ShellRoute(
-        navigatorKey: _shellNavigatorKey,
+        // لا حاجة لمفتاح خاص هنا، سيعمل بشكل صحيح
         builder: (context, state, child) {
-          int index = 0;
-          if (state.location.startsWith('/search')) {
-            index = 1;
-          } else if (state.location.startsWith('/appointments')) {
-            index = 2;
-          } else if (state.location.startsWith('/profile')) {
-            index = 3;
+          final location = state.location;
+          int selectedIndex = 0; // Home هو الافتراضي
+          if (location.startsWith('/search')) {
+            selectedIndex = 1;
+          } else if (location.startsWith('/appointments') ||
+              location.startsWith(ChatsListView.routeName)) {
+            // ⭐️ دمجنا شرط قائمة المحادثات مع المواعيد
+            selectedIndex = 2;
+          } else if (location.startsWith('/profile')) {
+            selectedIndex = 3;
           }
-          return MainLayoutScreen(selectedIndex: index, child: child);
+
+          return MainLayoutScreen(selectedIndex: selectedIndex, child: child);
         },
         routes: [
+          // كل هذه المسارات ستظهر داخل MainLayoutScreen
           GoRoute(
             path: '/home',
             name: HomeView.routeName,
-            pageBuilder: (context, state) => const NoTransitionPage(
-              child: HomeView(), // الصفحة التي ستُعرض
-            ),
+            pageBuilder: (context, state) =>
+                const NoTransitionPage(child: HomeView()),
           ),
           GoRoute(
             path: '/search',
+            name: 'search', // أعطِ اسماً للمسار
             pageBuilder: (context, state) =>
                 const NoTransitionPage(child: SearchScreen()),
           ),
           GoRoute(
             path: '/appointments',
+            name: 'appointments', // أعطِ اسماً للمسار
             pageBuilder: (context, state) =>
                 const NoTransitionPage(child: AppointmentView()),
           ),
           GoRoute(
+            path: ChatsListView.routeName, // مثال: '/chats'
+            name: ChatsListView.routeName,
+            pageBuilder: (context, state) =>
+                const NoTransitionPage(child: ChatsListView()),
+          ),
+          GoRoute(
             path: '/profile',
+            name: 'profile', // أعطِ اسماً للمسار
             pageBuilder: (context, state) => const NoTransitionPage(
-              child: Scaffold(body: Center(child: Text('Profile'))),
+              child: Scaffold(
+                body: Center(child: Text('Profile')),
+              ), // استبدلها بشاشة البروفايل
             ),
           ),
         ],

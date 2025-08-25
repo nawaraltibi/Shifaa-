@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shifaa/features/chat/presentation/cubits/cubit/get_chats_cubit.dart';
+import 'package:shifaa/core/utils/app_images.dart';
+import 'package:shifaa/features/chat/presentation/cubits/get_chats_cubit/get_chats_cubit.dart';
 import 'package:shifaa/features/chat/presentation/views/chat_view.dart';
 // استيراد الـ Cubit والحالات
 import 'package:shifaa/features/chat/presentation/widgets/chat_list_item.dart';
@@ -77,7 +78,7 @@ class _ChatsListViewBodyState extends State<ChatsListViewBody> {
                       final chat = state.chats[index];
                       return ChatListItem(
                         // 4. استخدم البيانات الحقيقية من الموديل
-                        imageUrl: chat.doctor.avatar,
+                        imageUrl: chat.doctor.avatar ?? AppImages.imagesDoctor1,
                         name: chat.doctor.fullName,
                         lastMessage: chat.lastMessage?.text ?? 'No messages',
                         // استخدم مكتبة timeago لعرض الوقت بشكل "منذ 5 دقائق"
@@ -90,7 +91,15 @@ class _ChatsListViewBodyState extends State<ChatsListViewBody> {
                           // TODO: هنا تضع الكود للانتقال إلى شاشة المحادثة
                           // Navigator.pushNamed(context, ChatDetailsScreen.routeName, arguments: chat.id);
                           print('Tapped on chat with ID: ${chat.id}');
-                          context.goNamed(ChatView.routeName, extra: chat.id);
+                          final chatArgs = {
+                            'chatId': chat.id,
+                            'doctorName': chat.doctor.fullName,
+                            'doctorImage': chat.doctor.avatar,
+                          };
+                          context.pushNamed(
+                            ChatView.routeName,
+                            extra: chatArgs,
+                          );
                         },
                       );
                     },

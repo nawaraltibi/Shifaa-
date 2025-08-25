@@ -14,7 +14,9 @@ abstract class ChatRepository {
     int chatId, {
     String? text,
     File? file,
+    String? originalFileName, // <--- أضف هذا السطر
     List<Map<String, String>> encryptedKeysPayload = const [],
   });
   Future<Either<Failure, List<ChatSummary>>> getChats();
+  Future<Either<Failure, Chat>> muteChat(int chatId);
 }

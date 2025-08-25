@@ -34,7 +34,7 @@ void main() async {
   // تحميل التوكن
   loadToken();
   await SharedPrefsHelper.instance.saveToken(
-    "1|sola7NpwG0N6qulpYTJr455Y7NkAJIapyY76iXQU6a937173",
+    "1|NfKEbLRXssJLsJSK3O013MatlVDccYuCR5QlOjGTb8d64845",
   );
 
   // الآن يمكنك تهيئة خدمة الإشعارات بأمان

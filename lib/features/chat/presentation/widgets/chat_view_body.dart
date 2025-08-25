@@ -22,7 +22,14 @@ import 'package:shifaa/features/chat/presentation/widgets/message_composer.dart'
 // ---------------- ChatViewBody ----------------
 class ChatViewBody extends StatefulWidget {
   final int chatId;
-  const ChatViewBody({super.key, required this.chatId});
+  final String doctorName;
+  final String? doctorImage;
+  const ChatViewBody({
+    super.key,
+    required this.chatId,
+    required this.doctorName,
+    this.doctorImage,
+  });
 
   @override
   State<ChatViewBody> createState() => _ChatViewBodyState();
@@ -71,7 +78,13 @@ class _ChatViewBodyState extends State<ChatViewBody> {
     );
     if (result != null && result.files.single.path != null) {
       File file = File(result.files.single.path!);
+      print("🕵️‍♂️ [1. PICKER] File picked successfully.");
+      print("   - Path: ${file.path}");
+      print("   - Exists: ${await file.exists()}");
+
       _sendMessage(file: file); // استدعاء الدالة العامة
+    } else {
+      print("❌ [1. PICKER] File picking was cancelled or failed.");
     }
   }
 
@@ -174,17 +187,26 @@ class _ChatViewBodyState extends State<ChatViewBody> {
       final aesKey = E2EE.generateAESKey();
       String? encryptedText;
       File? encryptedFile;
+      String? originalFileName; // ✅ 1. عرف متغير هنا للاحتفاظ باسم الملف
 
       if (tempMessage.text != null && tempMessage.text!.isNotEmpty) {
         encryptedText = E2EE.aesGcmEncryptToBase64(aesKey, tempMessage.text!);
       } else if (tempMessage.localFilePath != null) {
+        print("🕵️‍♂️ [2. PRE-ENCRYPT] Preparing file for encryption.");
+        print("   - Local Path: ${tempMessage.localFilePath}");
         final fileBytes = await File(tempMessage.localFilePath!).readAsBytes();
         final encryptedBytes = E2EE.aesGcmEncryptToBytes(aesKey, fileBytes);
         final tempDir = await getTemporaryDirectory();
+        originalFileName = tempMessage.localFilePath!.split('/').last;
         final fileName = tempMessage.localFilePath!.split('/').last;
         encryptedFile = await File(
           '${tempDir.path}/$fileName.enc',
         ).writeAsBytes(encryptedBytes);
+        // 🕵️‍♂️ نقطة تفتيش 3: هل تم تشفير الملف بنجاح؟
+        print("🕵️‍♂️ [3. POST-ENCRYPT] File encrypted.");
+        print("   - Encrypted Path: ${encryptedFile.path}");
+        print("   - Encrypted Exists: ${await encryptedFile.exists()}");
+        print("   - Original Name: $originalFileName");
       }
 
       print("🎯 Final final targets for encryption: ${targets.keys.toList()}");
@@ -193,12 +215,16 @@ class _ChatViewBodyState extends State<ChatViewBody> {
         targets: targets,
         aesKey: aesKey,
       );
-
+      print("🕵️‍♂️ [4. REPO CALL] Calling repository's sendMessage with:");
+      print("   - Text: ${encryptedText != null ? 'Present' : 'null'}");
+      print("   - File: ${encryptedFile?.path ?? 'null'}");
+      print("   - Original Name: ${originalFileName ?? 'null'}");
       // --- الخطوة 3: إرسال الطلب (تبقى كما هي) ---
       final result = await repo.sendMessage(
         widget.chatId,
         text: encryptedText,
         file: encryptedFile,
+        originalFileName: originalFileName, // <-- لم يعد هناك خطأ
         encryptedKeysPayload: encryptedKeysPayload,
       );
 
@@ -243,7 +269,12 @@ class _ChatViewBodyState extends State<ChatViewBody> {
       // غيرت الـ AppBar ليكون متوافقاً مع التصميم
       body: Column(
         children: [
-          const CustomChatAppBar(),
+          CustomChatAppBar(
+            chatId: widget.chatId,
+            doctorName: widget.doctorName,
+            // يمكنك تمرير الصورة هنا إذا كان الـ AppBar يحتاجها
+            doctorImage: widget.doctorImage,
+          ),
           Expanded(
             child: BlocBuilder<GetMessagesCubit, GetMessagesState>(
               builder: (context, state) {
