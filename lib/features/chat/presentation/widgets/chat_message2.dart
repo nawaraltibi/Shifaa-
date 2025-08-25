@@ -1,9 +1,17 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:path/path.dart';
 import 'package:shifaa/core/utils/app_colors.dart';
+import 'package:shifaa/core/utils/functions/e2ee_service.dart';
+import 'package:shifaa/core/utils/functions/crypto_helper.dart';
 import 'package:shifaa/features/chat/data/models/message.dart';
 import 'package:shifaa/features/chat/data/models/message_status.dart';
+import 'dart:convert';
+import 'dart:typed_data';
+
+import '../../../../core/utils/shared_prefs_helper.dart';
+
 
 class ChatMessage extends StatelessWidget {
   final Message message;
@@ -38,7 +46,7 @@ class ChatMessage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              _buildMessageContent(isMine),
+              _buildMessageContent(context, isMine),
               SizedBox(height: 4.h),
               _buildTimestampAndStatus(context, isMine),
             ],
@@ -48,7 +56,7 @@ class ChatMessage extends StatelessWidget {
     );
   }
 
-  Widget _buildMessageContent(bool isMine) {
+  Widget _buildMessageContent(BuildContext context, bool isMine) {
     final textColor = isMine ? Colors.white : Colors.black87;
 
     // تحديد نوع الملف
@@ -67,7 +75,7 @@ class ChatMessage extends StatelessWidget {
     }
 
     if (message.file != null || message.localFilePath != null) {
-      return _buildFileMessage(textColor);
+      return _buildFileMessage(context, textColor);
     }
 
     return Text(
@@ -138,15 +146,68 @@ class ChatMessage extends StatelessWidget {
     );
   }
 
-  Widget _buildFileMessage(Color textColor) {
+  Widget _buildFileMessage(BuildContext context, Color textColor) {
     final fileName =
         message.localFilePath?.split('/').last ??
         message.file?.split('/').last ??
         'File';
     return GestureDetector(
-      onTap: () {
-        // TODO: Implement file opening logic
+      onTap: () async {
+
+        final progressNotifier = ValueNotifier<int>(0);
+
+        // show dialog
+        showProgressDialog(context, progressNotifier);
+
         print("Opening file: ${message.file ?? message.localFilePath}");
+
+        final myDeviceId = await SharedPrefsHelper.instance.getMyDeviceId();
+
+        EncryptedKeyTarget? me;
+        me = message.encryptedKeys.firstWhere(
+              (keyTarget) => keyTarget.deviceId == myDeviceId,
+        );
+
+        final priv = await E2EE.loadPrivateKeyFromSecureStorage();
+
+        if(priv == null){
+          print('private key is null');
+          return;
+        }
+
+        Uint8List? aesKey;
+        aesKey = E2EE.rsaDecryptWithPrivateOAEP(priv, base64.decode(me.encryptedKey));
+
+        var fileUrl = message.file;
+
+        if(fileUrl == null){
+          print('message does not have a file');
+          return;
+        }
+
+        print("AES key length: ${aesKey.length}");
+
+
+        final file = await downloadDecryptAndOpenExternal(
+            fileUrl,
+            aesKey,
+            (received, total) {
+              if (total == null) {
+                // unknown total: show indeterminate or set to -1
+                progressNotifier.value = 0;
+              } else {
+                final pct = ((received / total) * 100).round();
+                progressNotifier.value = pct;
+              }
+            }
+        );
+
+        Navigator.of(context, rootNavigator: true).pop();
+
+        if(file == null){
+          print('file could not open');
+        }
+
       },
       child: Container(
         padding: EdgeInsets.all(8.w),

@@ -1,10 +1,20 @@
 import 'dart:typed_data';
 import 'dart:convert';
 import 'dart:math';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:pointycastle/export.dart' as pc;
 import 'package:shifaa/core/utils/functions/e2ee_service.dart';
 import 'package:shifaa/core/utils/shared_prefs_helper.dart';
 import 'package:shifaa/features/chat/data/models/message.dart';
+import 'dart:async';
+import 'dart:io';
+
+import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart'; // for compute
+import 'package:open_file/open_file.dart';
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 
 class CryptoHelper {
   static final _random = Random.secure();
@@ -189,4 +199,144 @@ Future<Message> decryptText(MessageModel msg, Uint8List aesKey) async {
   // --- الخطوة 7: إعادة بناء الموديل مع النص المفكوك ---
   // نستخدم copyWith لتحديث النص فقط
   return msg.copyWith(text: plainText);
+}
+
+
+Future<File?> downloadDecryptAndOpenExternal(String url, Uint8List aesKey, void Function(int received, int? total)? onProgress,) async {
+  print("[file] start downloadDecryptAndOpenExternal for file=${url}");
+
+  final cacheDir = await getTemporaryDirectory();
+  final basename = p.basename(Uri.tryParse(url)?.path ?? 'file');
+  final hashed = url.hashCode; // could also use md5 for stronger uniqueness
+  final outName = 'decrypted_${hashed}_$basename';
+  final outFile = File(p.join(cacheDir.path, outName));
+
+  if (await outFile.exists()) {
+    print('[file] cache hit -> using existing file: ${outFile.path}');
+    try {
+      final openResult = await OpenFile.open(outFile.path);
+      print('[file] OpenFile result: ${openResult.type} ${openResult.message}');
+    } catch (e) {
+      print('[file] OpenFile failed (cache hit): $e');
+    }
+    return outFile;
+  }
+
+  print("[file] encrypted file not in cache -> downloading: $url");
+  final token = await SharedPrefsHelper.instance.getToken(); // replace with your token getter
+  print("[file] auth token is: ${token}");
+  final headers = {
+    'Authorization': 'Bearer $token',
+    'Accept': 'application/octet-stream',
+  };
+
+  final dio = new Dio();
+  final resp = await dio.get(
+    url,
+    options: Options(
+        responseType: ResponseType.bytes,
+        headers: headers,
+    ),
+    onReceiveProgress: (received, total) {
+      // call the callback if provided
+      try {
+        if (onProgress != null) onProgress(received, total == -1 ? null : total);
+      } catch (_) {}
+    },
+  );
+
+  print("[file] download complete");
+
+  final Uint8List encryptedBytes = Uint8List.fromList((resp.data as List<int>));
+
+  print('[file] downloaded encrypted bytes len=${encryptedBytes.length}');
+
+  // validate AES key
+  if (!(aesKey.length == 16 || aesKey.length == 24 || aesKey.length == 32)) {
+    print('[file] invalid AES key length=${aesKey.length}');
+    return null;
+  }
+
+  // Decrypt in isolate to avoid UI jank
+  final decrypted = await compute< List<dynamic>, Uint8List? >(_decryptBytesIsolate, [encryptedBytes, aesKey]);
+
+  if (decrypted == null) {
+    print('[file] decryption failed (null)');
+    return null;
+  }
+  print('[file] decryption succeeded, bytes=${decrypted.length}');
+
+  await outFile.writeAsBytes(decrypted, flush: true);
+  print('[file] decrypted file written: ${outFile.path} (${await outFile.length()})');
+
+  // open externally
+  try {
+    final openResult = await OpenFile.open(outFile.path);
+    print('[file] OpenFile result: ${openResult.type} ${openResult.message}');
+  } catch (e) {
+    print('[file] OpenFile failed: $e');
+  }
+
+  return outFile;
+
+}
+
+
+Future<Uint8List?> _decryptBytesIsolate(List<dynamic> args) async {
+  final Uint8List encrypted = args[0] as Uint8List;
+  final Uint8List key = args[1] as Uint8List;
+
+  try {
+    if (encrypted.length <= 12) {
+      print('[isolate] encrypted payload too short: ${encrypted.length}');
+      return null;
+    }
+    // Extract IV and ciphertext+tag
+    final iv = encrypted.sublist(0, 12);
+    final cipherAndTag = encrypted.sublist(12);
+
+    // Key length must be 16/24/32
+    if (!(key.length == 16 || key.length == 24 || key.length == 32)) {
+      print('[isolate] invalid AES key length: ${key.length}');
+      return null;
+    }
+
+    final pc.GCMBlockCipher cipher = pc.GCMBlockCipher(pc.AESEngine());
+    final params = pc.AEADParameters(pc.KeyParameter(key), 128, iv, Uint8List(0));
+    cipher.init(false, params); // false = decrypt
+
+    final out = cipher.process(cipherAndTag); // may throw InvalidCipherTextException
+    return Uint8List.fromList(out);
+  } catch (e, st) {
+    print('[isolate] decrypt error: $e\n$st');
+    return null;
+  }
+}
+
+Future<T?> showProgressDialog<T>(
+    BuildContext context,
+    ValueNotifier<int> progress,
+    ) {
+  return showDialog<T>(
+    context: context,
+    barrierDismissible: false,
+    builder: (_) {
+      return ValueListenableBuilder<int>(
+        valueListenable: progress,
+        builder: (_, value, __) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CircularProgressIndicator(value: value / 100),
+                const SizedBox(height: 16),
+                Text("Downloading... $value%"),
+              ],
+            ),
+          );
+        },
+      );
+    },
+  );
 }

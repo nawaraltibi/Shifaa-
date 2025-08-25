@@ -25,7 +25,7 @@ void main() async {
   // تحميل التوكن
   loadToken();
   await SharedPrefsHelper.instance.saveToken(
-    "4|A5ToOet7ApV3jigDuDHObrKAEHsHCwKIFnWNsfrq5411cc6a",
+    "1|odM4qEjV1hTTHYmfHYuvp8boG0FpnAqO9q9J8akNb14db3b0",
   );
 
   // تشغيل التطبيق
