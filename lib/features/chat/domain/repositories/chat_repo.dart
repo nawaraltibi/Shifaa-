@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:shifaa/core/errors/failure.dart';
 import 'package:shifaa/features/chat/data/models/chat.dart';
+import 'package:shifaa/features/chat/data/models/chat_summary.dart';
 import 'package:shifaa/features/chat/data/models/message.dart';
 
 abstract class ChatRepository {
@@ -13,6 +14,9 @@ abstract class ChatRepository {
     int chatId, {
     String? text,
     File? file,
+    String? originalFileName, // <--- أضف هذا السطر
     List<Map<String, String>> encryptedKeysPayload = const [],
   });
+  Future<Either<Failure, List<ChatSummary>>> getChats();
+  Future<Either<Failure, Chat>> muteChat(int chatId);
 }

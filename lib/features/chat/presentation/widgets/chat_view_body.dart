@@ -1,6 +1,5 @@
 // ⭐️ لا تنسى إضافة هذا الاستيراد في الأعلى
 import 'dart:io';
-import 'package:dartz/dartz_unsafe.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart'; // ⭐️ استيراد مهم للملفات المؤقتة
 // ⭐️ ---
@@ -9,26 +8,28 @@ import 'dart:convert';
 import 'package:flutter/material.dart' hide Key;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:shifaa/core/errors/failure.dart';
-import 'package:shifaa/core/utils/app_colors.dart';
 import 'package:shifaa/core/utils/functions/e2ee_service.dart';
 import 'package:shifaa/core/utils/shared_prefs_helper.dart';
-import 'package:shifaa/features/chat/data/models/chat.dart';
 import 'package:shifaa/features/chat/data/models/message.dart';
 import 'package:shifaa/features/chat/data/models/message_status.dart'; // ⭐️ استيراد مهم للحالات
 import 'package:shifaa/features/chat/data/pusher/chat_pusher_service.dart';
-import 'package:shifaa/features/chat/data/repositories/device_cache_repo.dart';
 import 'package:shifaa/features/chat/domain/repositories/chat_repo.dart';
 import 'package:shifaa/features/chat/presentation/cubits/get_messages_cubit/get_messages_cubit.dart';
 import 'package:shifaa/features/chat/presentation/widgets/chat_message.dart';
-import 'package:shifaa/features/chat/presentation/widgets/chat_message2.dart';
 import 'package:shifaa/features/chat/presentation/widgets/custom_chat_app_bar.dart';
 import 'package:shifaa/features/chat/presentation/widgets/message_composer.dart';
 
 // ---------------- ChatViewBody ----------------
 class ChatViewBody extends StatefulWidget {
-  final Chat chat;
-  const ChatViewBody({super.key, required this.chat});
+  final int chatId;
+  final String doctorName;
+  final String? doctorImage;
+  const ChatViewBody({
+    super.key,
+    required this.chatId,
+    required this.doctorName,
+    this.doctorImage,
+  });
 
   @override
   State<ChatViewBody> createState() => _ChatViewBodyState();
@@ -44,7 +45,6 @@ class _ChatViewBodyState extends State<ChatViewBody> {
     super.initState();
     _messageController = TextEditingController();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await _fetchMessages();
       _scrollToBottom();
       _initPusher();
     });
@@ -57,14 +57,10 @@ class _ChatViewBodyState extends State<ChatViewBody> {
     super.dispose();
   }
 
-  Future<void> _fetchMessages() async {
-    await context.read<GetMessagesCubit>().fetchMessages(widget.chat.id);
-  }
-
   void _initPusher() async {
     final getMessagesCubit = context.read<GetMessagesCubit>();
     await _pusherService.initPusher(
-      widget.chat.id,
+      widget.chatId,
       onMessageReceived: (event) {
         final data = jsonDecode(event.data ?? '{}');
         final msgData = data['message'] ?? {};
@@ -82,7 +78,13 @@ class _ChatViewBodyState extends State<ChatViewBody> {
     );
     if (result != null && result.files.single.path != null) {
       File file = File(result.files.single.path!);
+      print("🕵️‍♂️ [1. PICKER] File picked successfully.");
+      print("   - Path: ${file.path}");
+      print("   - Exists: ${await file.exists()}");
+
       _sendMessage(file: file); // استدعاء الدالة العامة
+    } else {
+      print("❌ [1. PICKER] File picking was cancelled or failed.");
     }
   }
 
@@ -127,7 +129,7 @@ class _ChatViewBodyState extends State<ChatViewBody> {
     try {
       // --- الخطوة 1 (الجديدة): جلب أحدث بيانات المحادثة من الـ API ---
       print("🔄 Fetching latest chat details from API before sending...");
-      final latestChatResult = await repo.getChatDetails(widget.chat.id);
+      final latestChatResult = await repo.getChatDetails(widget.chatId);
 
       final Map<int, String> targets = latestChatResult.fold(
         (failure) {
@@ -185,17 +187,26 @@ class _ChatViewBodyState extends State<ChatViewBody> {
       final aesKey = E2EE.generateAESKey();
       String? encryptedText;
       File? encryptedFile;
+      String? originalFileName; // ✅ 1. عرف متغير هنا للاحتفاظ باسم الملف
 
       if (tempMessage.text != null && tempMessage.text!.isNotEmpty) {
         encryptedText = E2EE.aesGcmEncryptToBase64(aesKey, tempMessage.text!);
       } else if (tempMessage.localFilePath != null) {
+        print("🕵️‍♂️ [2. PRE-ENCRYPT] Preparing file for encryption.");
+        print("   - Local Path: ${tempMessage.localFilePath}");
         final fileBytes = await File(tempMessage.localFilePath!).readAsBytes();
         final encryptedBytes = E2EE.aesGcmEncryptToBytes(aesKey, fileBytes);
         final tempDir = await getTemporaryDirectory();
+        originalFileName = tempMessage.localFilePath!.split('/').last;
         final fileName = tempMessage.localFilePath!.split('/').last;
         encryptedFile = await File(
           '${tempDir.path}/$fileName.enc',
         ).writeAsBytes(encryptedBytes);
+        // 🕵️‍♂️ نقطة تفتيش 3: هل تم تشفير الملف بنجاح؟
+        print("🕵️‍♂️ [3. POST-ENCRYPT] File encrypted.");
+        print("   - Encrypted Path: ${encryptedFile.path}");
+        print("   - Encrypted Exists: ${await encryptedFile.exists()}");
+        print("   - Original Name: $originalFileName");
       }
 
       print("🎯 Final final targets for encryption: ${targets.keys.toList()}");
@@ -204,12 +215,16 @@ class _ChatViewBodyState extends State<ChatViewBody> {
         targets: targets,
         aesKey: aesKey,
       );
-
+      print("🕵️‍♂️ [4. REPO CALL] Calling repository's sendMessage with:");
+      print("   - Text: ${encryptedText != null ? 'Present' : 'null'}");
+      print("   - File: ${encryptedFile?.path ?? 'null'}");
+      print("   - Original Name: ${originalFileName ?? 'null'}");
       // --- الخطوة 3: إرسال الطلب (تبقى كما هي) ---
       final result = await repo.sendMessage(
-        widget.chat.id,
+        widget.chatId,
         text: encryptedText,
         file: encryptedFile,
+        originalFileName: originalFileName, // <-- لم يعد هناك خطأ
         encryptedKeysPayload: encryptedKeysPayload,
       );
 
@@ -222,9 +237,9 @@ class _ChatViewBodyState extends State<ChatViewBody> {
           messagesCubit.updateMessageStatus(tempId, MessageStatus.failed);
         },
         (sentMessage) {
-          print(
-            "✅ Message request sent successfully. Waiting for Pusher to confirm.",
-          );
+          print("✅ Message sent to server. Updating UI immediately.");
+          // استدعِ الدالة الجديدة لتحديث الواجهة فوراً
+          messagesCubit.replaceTempMessageWithSentMessage(tempId, sentMessage);
         },
       );
     } catch (e) {
@@ -254,7 +269,12 @@ class _ChatViewBodyState extends State<ChatViewBody> {
       // غيرت الـ AppBar ليكون متوافقاً مع التصميم
       body: Column(
         children: [
-          const CustomChatAppBar(),
+          CustomChatAppBar(
+            chatId: widget.chatId,
+            doctorName: widget.doctorName,
+            // يمكنك تمرير الصورة هنا إذا كان الـ AppBar يحتاجها
+            doctorImage: widget.doctorImage,
+          ),
           Expanded(
             child: BlocBuilder<GetMessagesCubit, GetMessagesState>(
               builder: (context, state) {

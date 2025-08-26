@@ -3,15 +3,23 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+// --- استيراد مكتبة Firebase Core ---
+import 'package:firebase_core/firebase_core.dart';
 import 'package:shifaa/constants.dart';
+import 'package:shifaa/core/services/notification_service.dart';
 import 'package:shifaa/core/utils/functions/setup_service_locator.dart';
 import 'package:shifaa/core/utils/app_routes.dart';
 import 'package:shifaa/core/utils/shared_prefs_helper.dart';
 import 'package:shifaa/core/utils/simple_bloc_observer.dart';
+import 'package:shifaa/dependency_injection.dart';
+import 'package:shifaa/firebase_options.dart';
 import 'generated/l10n.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // --- 3. قم بتهيئة Firebase باستخدام الطريقة الحديثة (ملف Options) ---
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   // إعداد مراقب الـ Bloc
   Bloc.observer = SimpleBlocObserver();
@@ -21,12 +29,16 @@ void main() async {
 
   // إعداد الـ Service Locator
   setupServiceLocator();
+  await setupServiceLocatorAshour();
 
   // تحميل التوكن
   loadToken();
   await SharedPrefsHelper.instance.saveToken(
     "1|NfKEbLRXssJLsJSK3O013MatlVDccYuCR5QlOjGTb8d64845",
   );
+
+  // الآن يمكنك تهيئة خدمة الإشعارات بأمان
+  await NotificationService.init();
 
   // تشغيل التطبيق
   runApp(const Shifaa());
