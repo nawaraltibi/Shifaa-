@@ -9,6 +9,7 @@ import 'package:shifaa/features/auth/presentation/views/login_view.dart';
 import 'package:shifaa/features/auth/presentation/views/password_view.dart';
 import 'package:shifaa/features/auth/presentation/views/profile_setup_view.dart';
 import 'package:shifaa/features/auth/presentation/views/verify_otp_view.dart';
+import 'package:shifaa/features/book_appointments/presentaion/views/re_sched_appointment_view.dart';
 import 'package:shifaa/features/chat/presentation/views/chat_view.dart';
 import 'package:shifaa/features/chat/presentation/views/chats_list_view.dart';
 import 'package:shifaa/features/home/presentation/views/home_view.dart';
@@ -41,6 +42,11 @@ abstract class AppRouter {
         path: LoginView.routeName,
         name: LoginView.routeName,
         builder: (context, state) => const LoginView(),
+      ),
+      GoRoute(
+        path: ReSchedAppointmentView.routeName,
+        name: ReSchedAppointmentView.routeName,
+        builder: (context, state) => const ReSchedAppointmentView(),
       ),
       GoRoute(
         path: '/verify-otp-view',
