@@ -43,9 +43,9 @@ The project is architected using **Clean Architecture**, emphasizing the separat
 └─────────────────┬───────────────────────┘
                   │
 ┌─────────────────▼───────────────────────┐
-│     Data Layer (Repositories & Sources)│
-│  - Remote Data Sources (API)           │
-│  - Local Data Sources (SQLite/Cache)   │
+│     Data Layer (Repositories & Sources) │
+│  - Remote Data Sources (API)            │
+│  - Local Data Sources (SQLite/Cache)    │
 │  - Repository Implementations           │
 └─────────────────────────────────────────┘
 ```
@@ -283,4 +283,5 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - **LinkedIn:** [Nawar Al-Tibi](https://www.linkedin.com/in/nawar-al-tibi/)
 
 ---
+
 
