@@ -223,38 +223,6 @@ The application uses **BLoC (Business Logic Component)** and **Cubit** patterns 
   - Camera (for image picker, if used)
   - Notifications (for push notifications)
 
-## Screenshots/GIFs
-
-### Appointment Booking Flow
-
-![Appointment Booking Flow](docs/screenshots/booking-flow.gif)
-
-_Interactive appointment booking interface with date and time selection, doctor availability display, and confirmation flow._
-
-### Secure Chat Interface
-
-![Secure Chat Interface](docs/screenshots/chat-interface.png)
-
-_End-to-end encrypted messaging interface with real-time message delivery, file attachment support, and message status indicators._
-
-### Offline Mode
-
-![Offline Mode](docs/screenshots/offline-mode.png)
-
-_Offline appointment viewing with cached data, showing seamless access to previously loaded appointments without network connectivity._
-
-### Authentication Flow
-
-![Authentication Flow](docs/screenshots/auth-flow.png)
-
-_Secure OTP-based authentication with two-factor authentication support and profile setup._
-
-### Appointment Management
-
-![Appointment Management](docs/screenshots/appointments.png)
-
-_Comprehensive appointment list view with upcoming and previous appointments, rescheduling, and cancellation options._
-
 ## Project Structure
 
 ```
@@ -316,4 +284,3 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ---
 
-_Built with ❤️ using Flutter and Clean Architecture principles._
